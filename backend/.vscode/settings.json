@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
         "arist",
+        "dotenv",
         "jdbc",
+        "jsonify",
         "SQLALCHEMY"
     ]
 }
