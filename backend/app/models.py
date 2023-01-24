@@ -25,6 +25,8 @@ class Formula(db.Model):
 
     inside = db.Column(db.BigInteger(), nullable=True)
 
+    session_id = db.Column(db.Integer, db.ForeignKey('session.id'), nullable=False)
+
     def to_json(self):
         return {
             'id': self.id,
@@ -49,4 +51,4 @@ class Session(db.Model):
     __tablename__ = "session"
 
     id = db.Column(db.Integer, primary_key=True)
-    # formula = db.relationship(Formula)
+    formula = db.relationship('Formula', backref='formula', lazy=True)
