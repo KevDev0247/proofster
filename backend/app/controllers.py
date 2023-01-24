@@ -1,6 +1,6 @@
 from flask import jsonify, request, abort
 from app import db
-from models import Formula
+from models import Session, Formula
 
 
 def create_function_atom():
@@ -66,6 +66,16 @@ def create_unary():
     db.session.add(unary)
     db.session.commit()
     return jsonify(unary.to_json()), 201
+
+def create_session():
+    if not request.json():
+        abort(400)
+
+    data = request.get_json()
+    session = Session(name=data['name'])
+    db.session.add(session)
+    db.session.commit()
+    
 
 def index():
     return "<p>Hello, World!</p>"
