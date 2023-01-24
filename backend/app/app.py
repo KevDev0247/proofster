@@ -1,9 +1,7 @@
-import os
 from flask_migrate import Migrate
 from dotenv import load_dotenv
-from flask import Flask, abort, jsonify, request
+from flask import Flask
 from config import configure_db, db
-from models import Formula
 from controllers import create_function_atom, create_function_function, create_binary, create_unary, index
 
 load_dotenv()
