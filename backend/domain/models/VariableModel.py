@@ -3,7 +3,7 @@ from Enums import Type
 from models.FormulaModel import Formula
 
 
-class Variable(Formula):
+class VariableModel(Formula):
     def __init__(self, var_name):
         super().__init__(Type.VARIABLE)
         self._var_name = var_name

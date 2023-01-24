@@ -2,7 +2,7 @@ from typing import Dict
 from backend.app.models import Formula
 from Enums import Connective, Type
 
-class Binary(Formula):
+class BinaryModel(Formula):
     def __init__(
             self,
             left: Formula,

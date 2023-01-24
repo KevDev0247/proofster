@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 from Enums import Type, Quantifier
 
 
-class Formula(ABC):
+class FormulaModel(ABC):
     def __init__(self, formula_type: Type):
         self._formula_type = formula_type
         self._var_count = {}

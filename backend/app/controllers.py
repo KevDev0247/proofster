@@ -1,6 +1,7 @@
 from flask import jsonify, request, abort
 from app import db
-from models import Session, Formula
+from models.Session import Session
+from models.Formula import Formula
 
 
 def create_function_atom():

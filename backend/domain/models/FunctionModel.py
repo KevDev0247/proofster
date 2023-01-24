@@ -3,7 +3,7 @@ from Enums import Type
 from models.FormulaModel import Formula
 
 
-class Function(Formula):
+class FunctionModel(Formula):
     def __init__(self, name: str, inside: Formula):
         super().__init__(Type.FUNCTION)
         self._func_name = name

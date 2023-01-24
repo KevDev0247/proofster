@@ -2,7 +2,7 @@ from typing import Dict
 from backend.app.models import Formula
 from Enums import Type, Quantifier
 
-class Unary(Formula):
+class UnaryModel(Formula):
     def __init__(
             self,
             inside: Formula,

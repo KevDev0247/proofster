@@ -25,7 +25,7 @@ class Formula(db.Model):
 
     inside = db.Column(db.BigInteger(), nullable=True)
 
-    session_id = db.Column(db.Integer, db.ForeignKey('session.id'), nullable=False)
+    # session_id = db.Column(db.Integer, db.ForeignKey('session.id'), nullable=False)
 
     def to_json(self):
         return {
@@ -45,18 +45,4 @@ class Formula(db.Model):
             'function_name': self.function_name,
             'variable_name': self.variable_name,
             'inside': self.inside
-        }
-
-class Session(db.Model):
-    __tablename__ = "session"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-
-    formula = db.relationship('Formula', backref='formula', lazy=True)
-
-    def to_json(self):
-        return {
-            'id': self.id,
-            'name': self.name
         }
