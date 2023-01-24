@@ -1,6 +1,5 @@
 import os
 from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from flask import Flask, abort, jsonify, request
 from config import configure_db, db
@@ -9,13 +8,12 @@ from models import Formula
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:wzj20020407@localhost:5432/arist_lab"
 configure_db(app)
 migrate = Migrate(app, db)
 
 
 @app.route('/function-atom', methods=['POST'])
-def create_function():
+def create_function_atom():
     if not request.is_json:
         abort(400)
     
@@ -31,12 +29,19 @@ def create_function():
     db.session.commit()
     return jsonify(function.to_json()), 201
 
+@app.route('/function-function', methods=['POST'])
+def create_function_function():
+    if not request.is_json:
+        abort(400)
+    
+    data = request.get_json()
+
 @app.route('/binary', methods=['POST'])
 def create_binary():
     if not request.json():
         abort(400)
 
-    # need a factory
+    data = request.get_json()
     binary = Formula(
         is_conclusion=False,
         is_binary=True,
@@ -46,9 +51,9 @@ def create_binary():
     db.session.add(binary)
     db.session.commit()
 
-@app.route('/formula', methods=['GET'])
-def get_formulas():
-    pass                                                                                                                                                   
+@app.route('/unary', methods=['POST'])
+def create_unary():
+    pass
 
 @app.route("/")
 def index():

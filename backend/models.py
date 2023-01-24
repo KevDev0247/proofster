@@ -49,4 +49,4 @@ class Session(db.Model):
     __tablename__ = "session"
 
     id = db.Column(db.Integer, primary_key=True)
-    # formula = db.relationship(Formula)
+    formula = db.relationship(Formula)

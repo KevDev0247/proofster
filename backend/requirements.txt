@@ -2,5 +2,5 @@ flask
 python-dotenv
 psycopg2-binary
 sqlalchemy-orm
-Flask-SQLAlchemy
-Flask-Migrate
+flask_sqlalchemy
+flask_migrate
