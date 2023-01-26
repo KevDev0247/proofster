@@ -1,0 +1,12 @@
+{
+    "cSpell.words": [
+        "backref",
+        "BICONDITIONAL",
+        "dotenv",
+        "jsonify",
+        "sqlalchemy"
+    ],
+    "python.analysis.extraPaths": [
+        "./backend/domain"
+    ]
+}
