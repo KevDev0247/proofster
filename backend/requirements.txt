@@ -1,6 +1,0 @@
-flask
-python-dotenv
-psycopg2-binary
-sqlalchemy-orm
-flask_sqlalchemy
-flask_migrate
