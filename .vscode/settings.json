@@ -3,6 +3,7 @@
         "backref",
         "BICONDITIONAL",
         "dotenv",
+        "FORALL",
         "jsonify",
         "sqlalchemy"
     ],
