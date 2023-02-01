@@ -5,6 +5,7 @@
         "dotenv",
         "FORALL",
         "jsonify",
+        "reduxjs",
         "sqlalchemy"
     ],
     "python.analysis.extraPaths": [
