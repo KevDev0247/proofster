@@ -28,3 +28,5 @@ export const formulaSlice = createSlice({
         }
     }
 });
+
+export default formulaSlice.reducer;
