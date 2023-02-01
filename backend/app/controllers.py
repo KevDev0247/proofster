@@ -4,6 +4,9 @@ from models.Session import Session
 from models.Formula import Formula
 
 
+def create_formula():
+    pass
+
 def create_function_atom():
     if not request.is_json:
         abort(400)
