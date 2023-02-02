@@ -1,4 +1,4 @@
-from config import db
+from ..config import db
 
 class Session(db.Model):
     __tablename__ = "session"
