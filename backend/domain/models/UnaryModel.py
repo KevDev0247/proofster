@@ -1,11 +1,11 @@
 from typing import Dict
-from backend.app.models import Formula
-from Enums import Type, Quantifier
+from .FormulaModel import FormulaModel
+from .Enums import Type, Quantifier
 
-class UnaryModel(Formula):
+class UnaryModel(FormulaModel):
     def __init__(
             self,
-            inside: Formula,
+            inside: FormulaModel,
             quantifier: Quantifier,
             negation: bool,
             quant_var: str
@@ -30,7 +30,7 @@ class UnaryModel(Formula):
     def get_quantifier(self) -> Quantifier:
         return self._quantifier
 
-    def get_inside(self) -> Formula:
+    def get_inside(self) -> FormulaModel:
         return self._inside
 
     def get_quant_var(self) -> str:
@@ -49,7 +49,7 @@ class UnaryModel(Formula):
     def set_quantifier(self, quantifier: Quantifier):
         self._quantifier = quantifier
 
-    def set_inside(self, inside: Formula):
+    def set_inside(self, inside: FormulaModel):
         self._inside = inside
 
     def set_quant_var(self, quant_var: str):

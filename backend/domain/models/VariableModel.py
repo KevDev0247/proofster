@@ -1,9 +1,9 @@
 from typing import Dict
-from Enums import Type
-from models.FormulaModel import Formula
+from .Enums import Type
+from .FormulaModel import FormulaModel
 
 
-class VariableModel(Formula):
+class VariableModel(FormulaModel):
     def __init__(self, var_name):
         super().__init__(Type.VARIABLE)
         self._var_name = var_name

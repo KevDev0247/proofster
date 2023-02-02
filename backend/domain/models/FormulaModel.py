@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple
-from Enums import Type, Quantifier
+from .Enums import Type, Quantifier
 
 
 class FormulaModel(ABC):

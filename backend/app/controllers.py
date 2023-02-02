@@ -1,12 +1,12 @@
 from flask import jsonify, request, abort
 from app import db
-# from containers import Container
+from containers import Container
 from models.Session import Session
 from models.Formula import Formula
 from dependency_injector.wiring import inject, Provide
-# import sys
-# sys.path.append("C:\Users\Kevin\Projects\/arist-labs\/backend")
-# from domain.services.TranspilerService import TranspilerService
+import sys
+sys.path.append("C:\\Users\\Kevin\\Projects\\arist-labs\\backend")
+from domain.services.TranspilerService import TranspilerService
 
 
 @inject

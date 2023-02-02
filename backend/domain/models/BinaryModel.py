@@ -1,12 +1,12 @@
 from typing import Dict
-from backend.app.models import Formula
-from Enums import Connective, Type
+from .Enums import Connective, Type
+from .FormulaModel import FormulaModel
 
-class BinaryModel(Formula):
+class BinaryModel(FormulaModel):
     def __init__(
             self,
-            left: Formula,
-            right: Formula,
+            left: FormulaModel,
+            right: FormulaModel,
             connective: Connective
     ):
         super().__init__(Type.BINARY)
@@ -29,13 +29,13 @@ class BinaryModel(Formula):
         result += ")"
         return result
 
-    def get_left(self) -> Formula:
+    def get_left(self) -> FormulaModel:
         return self._left
 
     def get_connective(self) -> Connective:
         return self._connective
 
-    def get_right(self) -> Formula:
+    def get_right(self) -> FormulaModel:
         return self._right
 
     def get_is_clause(self) -> bool:
@@ -50,13 +50,13 @@ class BinaryModel(Formula):
         self._left.set_var_count(var_count)
         self._right.set_var_count(var_count)
 
-    def set_left(self, left: Formula):
+    def set_left(self, left: FormulaModel):
         self._left = left
 
     def set_connective(self, connective: Connective):
         self._connective = connective
 
-    def set_right(self, right: Formula):
+    def set_right(self, right: FormulaModel):
         self._right = right
 
     def set_is_clause(self, is_clause: bool):

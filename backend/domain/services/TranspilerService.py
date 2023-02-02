@@ -1,10 +1,10 @@
 from typing import List
-from models.BinaryModel import BinaryModel
-from models.Enums import Connective, Quantifier
-from models.FormulaModel import FormulaModel
-from models.FunctionModel import FunctionModel
-from models.UnaryModel import UnaryModel
-from models.VariableModel import VariableModel
+from ..models.BinaryModel import BinaryModel
+from ..models.Enums import Connective, Quantifier
+from ..models.FormulaModel import FormulaModel
+from ..models.FunctionModel import FunctionModel
+from ..models.UnaryModel import UnaryModel
+from ..models.VariableModel import VariableModel
 
 
 class TranspilerService:

@@ -1,10 +1,10 @@
 from typing import Dict
-from Enums import Type
-from models.FormulaModel import Formula
+from .Enums import Type
+from .FormulaModel import FormulaModel
 
 
-class FunctionModel(Formula):
-    def __init__(self, name: str, inside: Formula):
+class FunctionModel(FormulaModel):
+    def __init__(self, name: str, inside: FormulaModel):
         super().__init__(Type.FUNCTION)
         self._func_name = name
         self._inside = inside
@@ -24,7 +24,7 @@ class FunctionModel(Formula):
     def get_func_name(self) -> str:
         return self._func_name
 
-    def get_inside(self) -> Formula:
+    def get_inside(self) -> FormulaModel:
         return self._inside
 
     def get_negation(self) -> bool:
@@ -40,7 +40,7 @@ class FunctionModel(Formula):
     def set_var(self, var):
         self._inside.set_var(var)
 
-    def set_inside(self, inside: Formula):
+    def set_inside(self, inside: FormulaModel):
         self._inside = inside
 
     def set_negation(self, negation: bool):
