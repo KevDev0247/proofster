@@ -8,8 +8,8 @@ class VariableModel(Formula):
         super().__init__(Type.VARIABLE)
         self._var_name = var_name
 
-    def print_formula(self):
-        print(self._var_name, end="")
+    def to_string(self) -> str:
+        return self._var_name
 
     def get_var_name(self) -> str:
         return self._var_name

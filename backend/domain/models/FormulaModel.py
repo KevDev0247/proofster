@@ -9,8 +9,11 @@ class FormulaModel(ABC):
         self._var_count = {}
         self._quant_list = []
 
-    @abstractmethod
     def print_formula(self):
+        print(self.to_string(), end="")
+
+    @abstractmethod
+    def to_string(self) -> str:
         pass
 
     @abstractmethod

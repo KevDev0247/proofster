@@ -15,19 +15,19 @@ class BinaryModel(Formula):
         self._right = right
         self._is_clause = False
 
-    def print_formula(self):
-        print("(", end="")
-        self._left.print_formula()
+    def to_string(self) -> str:
+        result = "(" + self._left.to_string()
         if self._connective == Connective.IMPLICATION:
-            print(" ⇒ ", end="")
+            result += " ⇒ "
         if self._connective == Connective.BICONDITIONAL:
-            print(" ⇔ ", end="")
+            result += " ⇔ "
         if self._connective == Connective.AND:
-            print(" ∧ ", end="")
+            result += " ∧ "
         if self._connective == Connective.OR:
-            print(" ∨ ", end="")
-        self._right.print_formula()
-        print(")", end="")
+            result += " ∨ "
+        result += self._right.to_string()
+        result += ")"
+        return result
 
     def get_left(self) -> Formula:
         return self._left

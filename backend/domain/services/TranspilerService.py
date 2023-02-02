@@ -1,13 +1,17 @@
 from typing import List
 from models.BinaryModel import BinaryModel
 from models.Enums import Connective, Quantifier
+from models.FormulaModel import FormulaModel
 from models.FunctionModel import FunctionModel
 from models.UnaryModel import UnaryModel
 from models.VariableModel import VariableModel
 
 
 class TranspilerService:
-    def transpile(formula_input: List[str]):
+    def __init__(self) -> None:
+        pass
+
+    def transpile(self, formula_input: List[str]) -> FormulaModel:
         formula_holder = []
         var_count = {}
 

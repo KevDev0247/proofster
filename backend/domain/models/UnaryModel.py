@@ -16,14 +16,16 @@ class UnaryModel(Formula):
         self._quant_var = quant_var
         self._negation = negation
 
-    def print_formula(self):
+    def to_string(self) -> str:
+        result = ""
         if self._negation:
-            print("¬", end="")
+            result += "¬"
         if self._quantifier == Quantifier.EXISTENTIAL:
-            print("∃" + self._quant_var, end="")
+            result += "∃"
         if self._quantifier == Quantifier.UNIVERSAL:
-            print("∀" + self._quant_var, end="")
-        self._inside.print_formula()
+            result += "∀"
+        result += self._inside.to_string()
+        return result
 
     def get_quantifier(self) -> Quantifier:
         return self._quantifier

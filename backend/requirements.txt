@@ -1,4 +1,5 @@
 flask
+dependency-injector
 python-dotenv
 psycopg2-binary
 sqlalchemy-orm

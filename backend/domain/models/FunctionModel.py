@@ -11,12 +11,15 @@ class FunctionModel(Formula):
         self._negation = False
         self._assigned = True
 
-    def print_formula(self):
+    def to_string(self) -> str:
+        result = ""
         if self._negation:
-            print("¬", end="")
-        print(self._func_name + "(", end="")
-        self._inside.print_formula()
-        print(")", end="")
+            result += "¬"
+        result += self._func_name
+        result += "("
+        result += self._inside.to_string()
+        result += ")"
+        return result
 
     def get_func_name(self) -> str:
         return self._func_name

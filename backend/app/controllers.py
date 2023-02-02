@@ -1,75 +1,35 @@
 from flask import jsonify, request, abort
 from app import db
+# from containers import Container
 from models.Session import Session
 from models.Formula import Formula
+from dependency_injector.wiring import inject, Provide
+# import sys
+# sys.path.append("C:\Users\Kevin\Projects\/arist-labs\/backend")
+# from domain.services.TranspilerService import TranspilerService
 
 
-def create_formula():
-    pass
-
-def create_function_atom():
+@inject
+def create_formula(
+    # transpiler_service: TranspilerService = Provide[Container.transpiler_service]
+):
     if not request.is_json:
         abort(400)
-    
-    data = request.get_json()
-    function = Formula(
-        is_conclusion=False,
-        is_function=True,
-        has_atom_inside=True,
-        function_name=data['function_name'],
-        variable_name=data['variable_name'],
-    )
-    db.session.add(function)
-    db.session.commit()
-    return jsonify(function.to_json()), 201
-
-def create_function_function():
-    if not request.is_json:
-        abort(400)
-    
-    data = request.get_json()
-    function = Formula(
-        is_conclusion=False,
-        is_function=True,
-        has_atom_inside=False,
-        function_name=data['function_name'],
-        inside=data['inside']
-    )
-    db.session.add(function)
-    db.session.commit()
-    return jsonify(function.to_json()), 201
-
-def create_binary():
-    if not request.json():
-        abort(400)
 
     data = request.get_json()
-    binary = Formula(
-        is_conclusion=False,
-        is_binary=True,
-        left=data['left'],
-        right=data['right'],
-        connective=data['connective']
-    )
-    db.session.add(binary)
-    db.session.commit()
-    return jsonify(binary.to_json()), 201
+    input_list = data['content'].split()
+    # formula_model = transpiler_service.transpile(input_list)
+    # content = formula_model.to_string()
 
-def create_unary():
-    if not request.json():
-        abort(400)
-
-    data = request.get_json()
-    unary = Formula(
-        is_conclusion=False,
-        is_unary=True,
-        quantifier=data['quantifier'],
-        quantifier_variable=data['quantifier_variable'],
-        negation=data['negation']
+    formula = Formula(
+        is_conclusion=data['is_conclusion'],
+        name=data['name'],
+        content=""
     )
-    db.session.add(unary)
+    db.session.add(formula)
     db.session.commit()
-    return jsonify(unary.to_json()), 201
+    return jsonify(formula.to_json()), 201
+
 
 def create_session():
     if not request.json():
