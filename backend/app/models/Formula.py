@@ -12,7 +12,8 @@ class Formula(db.Model):
         default=False
     )
     name = db.Column(db.String)
-    content = db.Column(db.String)
+    formula_text = db.Column(db.String)
+    formula_raw = db.Column(db.String)
     
     workspace_id = db.Column(
         db.Integer, 
@@ -24,6 +25,7 @@ class Formula(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'content': self.content,
+            'formula_text': self.formula_text,
+            'formula_raw': self.formula_raw,
             'is_conclusion': self.is_conclusion
         }

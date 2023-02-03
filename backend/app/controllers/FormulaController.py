@@ -15,14 +15,15 @@ def create_formula(
         abort(400)
 
     data = request.get_json()
-    input_list = data['content'].split()
+    input_list = data['formula_raw'].split()
     formula_model = transpiler_service.transpile(input_list)
-    content = formula_model.to_string()
+    formula_text = formula_model.to_string()
 
     formula = Formula(
         is_conclusion=data['is_conclusion'],
         name=data['name'],
-        content=content,
+        formula_text=formula_text,
+        formula_raw=data['formula_raw'],
         workspace_id=data['workspace_id']
     )
     db.session.add(formula)
