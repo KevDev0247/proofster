@@ -6,6 +6,7 @@
         "dotenv",
         "FORALL",
         "jsonify",
+        "ondelete",
         "reduxjs",
         "sqlalchemy"
     ],

@@ -6,7 +6,11 @@ class Session(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
-    # formula = db.relationship('Formula', backref='formula', lazy=True)
+    formulas = db.relationship(
+        'Formula', 
+        backref='formula', 
+        lazy=True
+    )
 
     def to_json(self):
         return {
