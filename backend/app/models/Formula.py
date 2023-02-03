@@ -3,11 +3,17 @@ from ..config import db
 class Formula(db.Model):
     __tablename__ = 'formula'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer, 
+        primary_key=True
+    )
+    is_conclusion = db.Column(
+        db.Boolean(), 
+        default=False
+    )
     name = db.Column(db.String)
     content = db.Column(db.String)
-    is_conclusion = db.Column(db.Boolean(), default=False)
-
+    
     workspace_id = db.Column(
         db.Integer, 
         db.ForeignKey('workspace.id', ondelete='CASCADE'), 
