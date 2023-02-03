@@ -1,7 +1,7 @@
 from flask import jsonify, request, abort
 from .app import db
 from .containers import Container
-from .models.Session import Session
+from .models.Workspace import Workspace
 from .models.Formula import Formula
 from dependency_injector.wiring import inject, Provide
 import sys
@@ -31,15 +31,15 @@ def create_formula(
     return jsonify(formula.to_json()), 201
 
 
-def create_session():
-    if not request.json():
+def create_workspace():
+    if not request.json:
         abort(400)
 
     data = request.get_json()
-    session = Session(name=data['name'])
-    db.session.add(session)
+    workspace = Workspace(name=data['name'])
+    db.session.add(workspace)
     db.session.commit()
-    
+    return jsonify(workspace.to_json()), 201
 
 def index():
     return "<p>Hello, World!</p>"

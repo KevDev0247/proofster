@@ -8,9 +8,9 @@ class Formula(db.Model):
     content = db.Column(db.String)
     is_conclusion = db.Column(db.Boolean(), default=False)
 
-    session_id = db.Column(
+    workspace_id = db.Column(
         db.Integer, 
-        db.ForeignKey('session.id', ondelete='CASCADE'), 
+        db.ForeignKey('workspace.id', ondelete='CASCADE'), 
         nullable=False
     )
 

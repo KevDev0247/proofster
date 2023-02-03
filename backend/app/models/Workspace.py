@@ -1,7 +1,7 @@
 from ..config import db
 
-class Session(db.Model):
-    __tablename__ = "session"
+class Workspace(db.Model):
+    __tablename__ = "workspace"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
