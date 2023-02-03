@@ -12,8 +12,8 @@ def register():
     if existing_user is None:
         user = User(
             email=data['email'],
-            password=data['password']
         )
+        user.set_password(data['password'])
         db.session.add(user)
         db.session.commit()
         return jsonify(user.to_json()), 201
