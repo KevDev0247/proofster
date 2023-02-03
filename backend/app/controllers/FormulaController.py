@@ -22,7 +22,8 @@ def create_formula(
     formula = Formula(
         is_conclusion=data['is_conclusion'],
         name=data['name'],
-        content=content
+        content=content,
+        workspace_id=data['workspace_id']
     )
     db.session.add(formula)
     db.session.commit()
