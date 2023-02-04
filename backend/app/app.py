@@ -16,7 +16,7 @@ app.container = container
 configure_db(app)
 migrate = Migrate(app, db)
 
-app.route("/formula", methods=["GET"])(get_formulas_by_workspace)
+app.route("/formulas", methods=["GET"])(get_formulas_by_workspace)
 app.route("/formula/create", methods=['POST'])(create_formula)
 app.route("/formula/update/<int:formula_id>", methods=["PUT"])(update_formula)
 app.route("/formula/delete/<int:formula_id>", methods=["DELETE"])(delete_formula)

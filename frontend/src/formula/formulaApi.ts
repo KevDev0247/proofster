@@ -2,14 +2,17 @@ import API from "../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IFormula } from "./../models/formula";
 
-export const getFormulas = createAsyncThunk("formula/get", async () => {
-  try {
-    const response = await API.get("formulas")
-    return response.data
-  } catch (error) {
-    console.log(error);
+export const getFormulas = createAsyncThunk(
+  "formulas/get", 
+  async () => {
+    try {
+      const response = await API.get("formulas?workspace_id=2")
+      return response.data
+    } catch (error) {
+      console.log(error);
+    }
   }
-})
+);
 
 export const createFormula = createAsyncThunk(
   "formula/create",

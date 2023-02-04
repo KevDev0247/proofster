@@ -100,6 +100,13 @@ export default function Formula() {
   };
 
   return (
-    <div>Formula</div>
+    <>
+      <div className="form-container">
+        <h1 className="title">
+          Formula &nbsp;
+          <span className="tag is-link">{formulaList?.length}</span>
+        </h1>
+      </div>
+    </>
   )
 }

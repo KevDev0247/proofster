@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createFormula } from "./formulaApi";
+import { getFormulas, createFormula } from "./formulaApi";
 
 export const formulaSlice = createSlice({
   name: "formula",
@@ -16,6 +16,20 @@ export const formulaSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
+    // Async reducers, mostly calling backend api endpoints
+    [getFormulas.pending.type]: (state, action) => {
+      state.list.status = "pending",
+      state.list.isLoading = true
+    },
+    [getFormulas.fulfilled.type]: (state, { payload }) => {
+      state.list.status = "pending"
+      state.list.values = payload
+      state.list.isLoading = false
+    },
+    [getFormulas.rejected.type]: (state, action) => {
+      state.list.status = "failed",
+      state.list.isLoading = false
+    },
     [createFormula.pending.type]: (state, action) => {
       state.save.isSaving = true;
     },
