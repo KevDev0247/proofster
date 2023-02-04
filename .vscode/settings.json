@@ -9,6 +9,7 @@
         "ondelete",
         "reduxjs",
         "sqlalchemy",
+        "toastify",
         "werkzeug"
     ],
     "python.analysis.extraPaths": [

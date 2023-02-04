@@ -5,3 +5,4 @@ psycopg2-binary
 sqlalchemy-orm
 flask_sqlalchemy
 flask_migrate
+flask-cors
