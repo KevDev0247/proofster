@@ -2,6 +2,7 @@ from flask import jsonify, request, abort
 from ..app import db
 from ..models.User import User
 
+
 def register():
     if not request.json:
         abort(400)
