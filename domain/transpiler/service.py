@@ -1,3 +1,4 @@
+import json
 from typing import List
 from models.Binary import Binary
 from models.Enums import Connective, Quantifier
@@ -88,13 +89,9 @@ def transpile(formula_input: List[str]) -> Formula:
 def lambda_handler(event, context):
     body = event.get('body')
     formula_input = body.get('formula_raw').split()
-    formula = transpile(formula_input).to_json()
+    formula_json = transpile(formula_input).to_json()
 
     return {
         'statusCode': 200,
-        'body': formula
+        'body': formula_json
     }
-
-formula_input = "FORM F y FORM G y AND FORM F x FORM G x -> OR EXIST y FORALL x".split()
-formula = transpile(formula_input)
-formula.print_formula()

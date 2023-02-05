@@ -20,21 +20,11 @@ class Variable(Formula):
 
     def to_json(self) -> json:
         return {
+            'formula_type': self._formula_type.value,
             'var_name': self._var_name,
             'var_count': self._var_count,
             'quant_list': self._quant_list
         }
-
-    def from_json(self, json_data) -> Formula:
-        var_name = self._var_name
-        var_count = json_data['var_count']
-        quant_list = json_data['quant_list']
-
-        return Variable(
-            var_name,
-            var_count,
-            quant_list
-        )
 
     def to_string(self) -> str:
         return self._var_name

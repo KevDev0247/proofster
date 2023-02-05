@@ -30,10 +30,6 @@ class Formula(ABC):
         pass
 
     @abstractmethod
-    def from_json(self, json_data) -> 'Formula':
-        pass
-
-    @abstractmethod
     def to_string(self) -> str:
         pass
 

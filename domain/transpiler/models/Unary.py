@@ -3,6 +3,7 @@ from typing import Dict
 from .Formula import Formula
 from .Enums import Type, Quantifier
 
+
 class Unary(Formula):
     def __init__(
             self,
@@ -25,30 +26,14 @@ class Unary(Formula):
 
     def to_json(self) -> json:
         return {
+            'formula_type': self._formula_type.value,
             'inside': self._inside.to_json(),
-            'quantifier': self._quantifier,
+            'quantifier': self._quantifier.value,
             'negation': self._negation,
             'quant_var': self._quant_var,
             'var_count': self._var_count,
             'quant_list': self._quant_list
         }
-
-    def from_json(self, json_data) -> Formula:
-        inside = self._inside.to_json()
-        quantifier = self._quantifier
-        negation = self._negation
-        quant_var = self._quant_var
-        var_count = json_data['var_count']
-        quant_list = json_data['quant_list']
-
-        return Unary(
-            inside,
-            quantifier,
-            negation,
-            quant_var,
-            var_count,
-            quant_list
-        )
 
     def to_string(self) -> str:
         result = ""

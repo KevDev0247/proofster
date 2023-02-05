@@ -26,6 +26,7 @@ class Function(Formula):
 
     def to_json(self) -> json:
         return {
+            'formula_type': self._formula_type.value,
             'func_name': self._func_name,
             'inside': self._inside.to_json(),
             'negation': self._negation,
@@ -33,23 +34,6 @@ class Function(Formula):
             'var_count': self._var_count,
             'quant_list': self._quant_list
         }
-
-    def from_json(self, json_data) -> Formula:
-        func_name = self._func_name
-        inside = self._inside.to_json()
-        negation = self._negation
-        assigned = self._assigned
-        var_count = json_data['var_count']
-        quant_list = json_data['quant_list']
-
-        return Function(
-            func_name,
-            inside,
-            negation,
-            assigned,
-            var_count,
-            quant_list
-        )
 
     def to_string(self) -> str:
         result = ""
