@@ -1,20 +1,54 @@
+import json
 from typing import Dict
-from .FormulaModel import FormulaModel
+from .Formula import Formula
 from .Enums import Type, Quantifier
 
-class UnaryModel(FormulaModel):
+class Unary(Formula):
     def __init__(
             self,
-            inside: FormulaModel,
+            inside: Formula,
             quantifier: Quantifier,
             negation: bool,
-            quant_var: str
+            quant_var: str,
+            var_count=None,
+            quant_list=None
     ):
-        super().__init__(Type.UNARY)
-        self._quantifier = quantifier
+        super().__init__(
+            Type.UNARY,
+            var_count,
+            quant_list
+        )
         self._inside = inside
-        self._quant_var = quant_var
+        self._quantifier = quantifier
         self._negation = negation
+        self._quant_var = quant_var
+
+    def to_json(self) -> json:
+        return {
+            'inside': self._inside.to_json(),
+            'quantifier': self._quantifier,
+            'negation': self._negation,
+            'quant_var': self._quant_var,
+            'var_count': self._var_count,
+            'quant_list': self._quant_list
+        }
+
+    def from_json(self, json_data) -> Formula:
+        inside = self._inside.to_json()
+        quantifier = self._quantifier
+        negation = self._negation
+        quant_var = self._quant_var
+        var_count = json_data['var_count']
+        quant_list = json_data['quant_list']
+
+        return Unary(
+            inside,
+            quantifier,
+            negation,
+            quant_var,
+            var_count,
+            quant_list
+        )
 
     def to_string(self) -> str:
         result = ""
@@ -30,7 +64,7 @@ class UnaryModel(FormulaModel):
     def get_quantifier(self) -> Quantifier:
         return self._quantifier
 
-    def get_inside(self) -> FormulaModel:
+    def get_inside(self) -> Formula:
         return self._inside
 
     def get_quant_var(self) -> str:
@@ -49,7 +83,7 @@ class UnaryModel(FormulaModel):
     def set_quantifier(self, quantifier: Quantifier):
         self._quantifier = quantifier
 
-    def set_inside(self, inside: FormulaModel):
+    def set_inside(self, inside: Formula):
         self._inside = inside
 
     def set_quant_var(self, quant_var: str):

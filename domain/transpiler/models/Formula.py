@@ -1,16 +1,37 @@
 from abc import ABC, abstractmethod
+import json
 from typing import Dict, List, Tuple
 from .Enums import Type, Quantifier
 
 
-class FormulaModel(ABC):
-    def __init__(self, formula_type: Type):
+class Formula(ABC):
+    def __init__(
+            self,
+            formula_type: Type,
+            var_count=None,
+            quant_list=None
+    ):
+        if var_count is None:
+            var_count = {}
+        if quant_list is None:
+            quant_list = []
         self._formula_type = formula_type
-        self._var_count = {}
-        self._quant_list = []
+        self._var_count = var_count
+        self._quant_list = quant_list
+
+    def print_json(self):
+        print(self.to_json())
 
     def print_formula(self):
         print(self.to_string(), end="")
+
+    @abstractmethod
+    def to_json(self) -> json:
+        pass
+
+    @abstractmethod
+    def from_json(self, json_data) -> 'Formula':
+        pass
 
     @abstractmethod
     def to_string(self) -> str:
