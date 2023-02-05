@@ -7,6 +7,11 @@ from models.Function import Function
 from models.Unary import Unary
 from models.Variable import Variable
 
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
 
 def transpile(formula_input: List[str]) -> Formula:
     formula_holder = []
@@ -87,11 +92,16 @@ def transpile(formula_input: List[str]) -> Formula:
     return formula
 
 def lambda_handler(event, context):
-    body = event.get('body')
-    formula_input = body.get('formula_raw').split()
+    # logger.debug(event)
+    formula_raw = event.get("queryStringParameters", {}).get("formula_raw").replace('"', '')
+    formula_input = formula_raw.split()
     formula_json = transpile(formula_input).to_json()
+    # logger.debug(formula_json)
 
     return {
         'statusCode': 200,
-        'body': formula_json
+        'headers': {
+            'Content-Type': 'application/json'
+        },
+        'body': json.dumps(formula_json)
     }
