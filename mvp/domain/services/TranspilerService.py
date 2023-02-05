@@ -1,17 +1,17 @@
 from typing import List
-from ..models.BinaryModel import BinaryModel
+from ..models.Binary import Binary
 from ..models.Enums import Connective, Quantifier
-from ..models.FormulaModel import FormulaModel
-from ..models.FunctionModel import FunctionModel
-from ..models.UnaryModel import UnaryModel
-from ..models.VariableModel import VariableModel
+from ..models.Formula import Formula
+from ..models.Function import Function
+from ..models.Unary import Unary
+from ..models.Variable import Variable
 
 
 class TranspilerService:
     def __init__(self) -> None:
         pass
 
-    def transpile(self, formula_input: List[str]) -> FormulaModel:
+    def transpile(self, formula_input: List[str]) -> Formula:
         formula_holder = []
         var_count = {}
 
@@ -21,28 +21,28 @@ class TranspilerService:
                 left = formula_holder.pop()
 
                 formula_holder.append(
-                    BinaryModel(left, right, Connective.IMPLICATION)
+                    Binary(left, right, Connective.IMPLICATION)
                 )
             if part == "<->":
                 right = formula_holder.pop()
                 left = formula_holder.pop()
 
                 formula_holder.append(
-                    BinaryModel(left, right, Connective.BICONDITIONAL)
+                    Binary(left, right, Connective.BICONDITIONAL)
                 )
             if part == "AND":
                 right = formula_holder.pop()
                 left = formula_holder.pop()
 
                 formula_holder.append(
-                    BinaryModel(left, right, Connective.AND)
+                    Binary(left, right, Connective.AND)
                 )
             if part == "OR":
                 right = formula_holder.pop()
                 left = formula_holder.pop()
 
                 formula_holder.append(
-                    BinaryModel(left, right, Connective.OR)
+                    Binary(left, right, Connective.OR)
                 )
             if part == "FORM":
                 func_name = formula_input[p + 1]
@@ -54,13 +54,13 @@ class TranspilerService:
                     var_count[var_name] += 1
 
                 formula_holder.append(
-                    FunctionModel(func_name, VariableModel(var_name))
+                    Function(func_name, Variable(var_name))
                 )
             if part == "NOT":
                 inside = formula_holder.pop()
 
                 formula_holder.append(
-                    UnaryModel(inside, Quantifier.NONE, True, "")
+                    Unary(inside, Quantifier.NONE, True, "")
                 )
             if part == "FORALL":
                 inside = formula_holder.pop()
@@ -70,7 +70,7 @@ class TranspilerService:
                     var_count[var_name] = 1
 
                 formula_holder.append(
-                    UnaryModel(inside, Quantifier.UNIVERSAL, False, var_name)
+                    Unary(inside, Quantifier.UNIVERSAL, False, var_name)
                 )
             if part == "EXIST":
                 inside = formula_holder.pop()
@@ -80,7 +80,7 @@ class TranspilerService:
                     var_count[var_name] = 1
 
                 formula_holder.append(
-                    UnaryModel(inside, Quantifier.EXISTENTIAL, False, var_name)
+                    Unary(inside, Quantifier.EXISTENTIAL, False, var_name)
                 )
             if part == "done":
                 break
