@@ -88,9 +88,13 @@ def transpile(formula_input: List[str]) -> Formula:
 def lambda_handler(event, context):
     formula_raw = event.get("queryStringParameters", {}).get("formula_raw").replace('"', '')
     formula_input = formula_raw.split()
-    formula_json = transpile(formula_input).to_json()
+    formula = transpile(formula_input)
+    body = {
+        'formula_json': formula.to_json(),
+        'formula_result': formula.to_string()
+    }
 
     return {
         'statusCode': 200,
-        'body': json.dumps(formula_json)
+        'body': json.dumps(body)
     }
