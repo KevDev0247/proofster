@@ -1,7 +1,8 @@
 from django.urls import path
-from api.views import Formulas, FormulaDetail
+from api.views import Formulas, FormulaAsync, FormulaDetail
 
 urlpatterns = [
-    path('', Formulas.as_view()),
+    path('', FormulaAsync.as_view()),
+    path('<str:workspace_id>', Formulas.as_view()),
     path('<str:pk>', FormulaDetail.as_view())
 ]

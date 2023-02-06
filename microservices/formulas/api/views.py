@@ -1,17 +1,17 @@
+import asyncio
+import json
+import aiohttp
 from rest_framework.response import Response
 from django.shortcuts import render
 from rest_framework import status, generics
 from api.models import Formula
 from api.serializers import FormulaSerializer
+from django.utils.decorators import classonlymethod
 from datetime import datetime
 
 
 class Formulas(generics.GenericAPIView):
     serializer_class = FormulaSerializer
-    queryset = Formula.objects.all()
-
-    async def transpile(formula_raw):
-        pass
 
     def get(self, request):
         workspace_id = request.GET.get("workspace_id")
@@ -25,16 +25,46 @@ class Formulas(generics.GenericAPIView):
             "formulas": serializer.data
         })
 
-    def post(self, request):
-        print(request.data.get("name"))
+
+class FormulaAsync(generics.GenericAPIView):
+
+    @classonlymethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        view._is_coroutine = asyncio.coroutines._is_coroutine
+        return view
+
+    async def transpile(formula_raw):
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(f"https://jtnjwf86j2.execute-api.us-east-2.amazonaws.com/test/?formula_raw={formula_raw}") as response:
+                    result = await response.text()
+                    return result
+        except Exception as e:
+            return None
+
+    async def post(self, request):
+        print(request.data)
+        result = await self.transpile(request.data.get("formula_raw"))
+        if not result:
+            return Response(
+                {
+                    "status": "fail", 
+                    "message": "Error Occurred during formula transpilation"
+                }, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        formula_json = result.get("body").get("formula_json") or {}
+        formula_result = result.get("body").get("formula_result") or ""
+        
         transpiled = {
             "name": request.data.get("name"),
             "is_conclusion": request.data.get("is_conclusion"), 
-            "formula_json": "a",
-            "formula_result": "a",
+            "formula_json": formula_json,
+            "formula_result": formula_result,
             "workspace_id": request.data.get("workspace_id")
         }
-        print(transpiled)
         serializer = self.serializer_class(data=transpiled)
 
         if serializer.is_valid():
