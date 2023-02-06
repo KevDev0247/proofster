@@ -10,6 +10,9 @@ class Formulas(generics.GenericAPIView):
     serializer_class = FormulaSerializer
     queryset = Formula.objects.all()
 
+    async def transpile(formula_raw):
+        pass
+
     def get(self, request):
         workspace_id = request.GET.get("workspace_id")
         formulas = Formula.objects.all()
@@ -23,7 +26,16 @@ class Formulas(generics.GenericAPIView):
         })
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        print(request.data.get("name"))
+        transpiled = {
+            "name": request.data.get("name"),
+            "is_conclusion": request.data.get("is_conclusion"), 
+            "formula_json": "a",
+            "formula_result": "a",
+            "workspace_id": request.data.get("workspace_id")
+        }
+        print(transpiled)
+        serializer = self.serializer_class(data=transpiled)
 
         if serializer.is_valid():
             serializer.save()
