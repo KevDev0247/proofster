@@ -12,14 +12,14 @@ class Workspace(models.Model):
         max_length=255, 
         unique=True
     )
-    createdAt = models.DateTimeField(auto_now_add=True)
-    updatedAt = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     user_id = models.UUIDField(default=uuid.uuid4)
 
     class Meta:
-        db_table = "formulas"
-        ordering = ['-createdAt']
+        db_table = "workspaces"
+        ordering = ['-created_at']
 
         def __str__(self) -> str:
             return self.title

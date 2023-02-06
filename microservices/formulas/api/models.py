@@ -14,14 +14,14 @@ class Formula(models.Model):
     )
     is_conclusion = models.BooleanField(default=False)
     formula_json = models.JSONField()
-    createdAt = models.DateTimeField(auto_now_add=True)
-    updatedAt = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     workspace_id = models.UUIDField(default=uuid.uuid4)
 
     class Meta:
         db_table = "formulas"
-        ordering = ['-createdAt']
+        ordering = ['-created_at']
 
         def __str__(self) -> str:
             return self.title
