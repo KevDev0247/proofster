@@ -15,7 +15,7 @@ class Workspace(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
-    user_id = models.UUIDField(default=uuid.uuid4)
+    user_id = models.IntegerField()
 
     class Meta:
         db_table = "workspaces"

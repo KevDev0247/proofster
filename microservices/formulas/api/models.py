@@ -8,12 +8,13 @@ class Formula(models.Model):
         default=uuid.uuid4, 
         editable=False
     )
-    name = models.CharField(
+    models.CharField(
         max_length=255, 
         unique=True
     )
     is_conclusion = models.BooleanField(default=False)
     formula_json = models.JSONField()
+    formula_result = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
