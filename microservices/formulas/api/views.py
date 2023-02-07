@@ -1,13 +1,12 @@
-import asyncio
 import json
 import aiohttp
+from django.http import JsonResponse
 from rest_framework.response import Response
-from django.shortcuts import render
 from rest_framework import status, generics
 from api.models import Formula
 from api.serializers import FormulaSerializer
-from django.utils.decorators import classonlymethod
-from datetime import datetime
+from django.views.generic import View
+from asgiref.sync import sync_to_async
 
 
 class Formulas(generics.GenericAPIView):
@@ -26,15 +25,10 @@ class Formulas(generics.GenericAPIView):
         })
 
 
-class FormulaAsync(generics.GenericAPIView):
+class FormulaAsync(View):
+    serializer_class = FormulaSerializer
 
-    @classonlymethod
-    def as_view(cls, **initkwargs):
-        view = super().as_view(**initkwargs)
-        view._is_coroutine = asyncio.coroutines._is_coroutine
-        return view
-
-    async def transpile(formula_raw):
+    async def transpile(self, formula_raw):
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"https://jtnjwf86j2.execute-api.us-east-2.amazonaws.com/test/?formula_raw={formula_raw}") as response:
@@ -43,10 +37,10 @@ class FormulaAsync(generics.GenericAPIView):
                     return result
         except Exception as e:
             return None
-
+    
     async def post(self, request):
-        print(request.data)
-        result = await self.transpile(request.data.get("formula_raw"))
+        data = json.loads(request.body.decode('utf-8'))
+        result = await self.transpile(data.get("formula_raw"))
         if not result:
             return Response(
                 {
@@ -56,34 +50,34 @@ class FormulaAsync(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        formula_json = result.get("body").get("formula_json") or {}
-        formula_result = result.get("body").get("formula_result") or ""
+        formula_json = result.get("formula_json") or {}
+        formula_result = result.get("formula_result") or ""
         
         transpiled = {
-            "name": request.data.get("name"),
-            "is_conclusion": request.data.get("is_conclusion"), 
+            "name": data.get("name"),
+            "is_conclusion": data.get("is_conclusion"), 
             "formula_json": formula_json,
             "formula_result": formula_result,
-            "workspace_id": request.data.get("workspace_id")
+            "workspace_id": data.get("workspace_id")
         }
         serializer = self.serializer_class(data=transpiled)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
+        
+        if await sync_to_async(serializer.is_valid)():
+            await sync_to_async(serializer.save)()
+            return JsonResponse(
                 {
                     "status": "success", 
-                    "formula": serializer.data
-                }, 
-                status=status.HTTP_201_CREATED
+                    "formula": serializer.data,
+                    "status": status.HTTP_201_CREATED
+                }
             )
         else:
-            return Response(
+            return JsonResponse(
                 {
                     "status": "fail", 
-                    "message": serializer.errors
-                }, 
-                status=status.HTTP_400_BAD_REQUEST
+                    "message": serializer.errors,
+                    "status": status.HTTP_400_BAD_REQUEST
+                }
             )
 
 
