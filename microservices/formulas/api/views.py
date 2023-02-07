@@ -39,6 +39,7 @@ class FormulaAsync(generics.GenericAPIView):
             async with aiohttp.ClientSession() as session:
                 async with session.get(f"https://jtnjwf86j2.execute-api.us-east-2.amazonaws.com/test/?formula_raw={formula_raw}") as response:
                     result = await response.text()
+                    result = json.loads(result)
                     return result
         except Exception as e:
             return None
