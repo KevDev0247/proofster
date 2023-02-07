@@ -1,4 +1,5 @@
 import json
+import os
 import aiohttp
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -9,32 +10,17 @@ from django.views.generic import View
 from asgiref.sync import sync_to_async
 
 
-class Formulas(generics.GenericAPIView):
-    serializer_class = FormulaSerializer
-
-    def get(self, request):
-        workspace_id = request.GET.get("workspace_id")
-        formulas = Formula.objects.all()
-
-        if workspace_id:
-            formulas = formulas.filter(workspace_id=workspace_id)
-        serializer = self.serializer_class(formulas, many=True)
-        return Response({
-            "status": "success",
-            "formulas": serializer.data
-        })
-
-
 class FormulaAsync(View):
     serializer_class = FormulaSerializer
 
     async def transpile(self, formula_raw):
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(f"https://jtnjwf86j2.execute-api.us-east-2.amazonaws.com/test/?formula_raw={formula_raw}") as response:
-                    result = await response.text()
-                    result = json.loads(result)
-                    return result
+                transpiler_url = os.getenv("TRANSPILER_LAMBDA_URL")
+                response = await session.get(f"{transpiler_url}?formula_raw={formula_raw}")
+                result = await response.text()
+                result = json.loads(result)
+                return result
         except Exception as e:
             return None
     
@@ -81,6 +67,21 @@ class FormulaAsync(View):
             )
 
 
+class Formulas(generics.GenericAPIView):
+    serializer_class = FormulaSerializer
+
+    def get(self, workspace_id):
+        formulas = Formula.objects.all()
+
+        if workspace_id:
+            formulas = formulas.filter(workspace_id=workspace_id)
+        serializer = self.serializer_class(formulas, many=True)
+        return Response({
+            "status": "success",
+            "formulas": serializer.data
+        })
+
+
 class FormulaDetail(generics.GenericAPIView):
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
@@ -91,7 +92,7 @@ class FormulaDetail(generics.GenericAPIView):
         except:
             return None
 
-    def patch(self, request, pk):
+    def patch(self, pk):
         formula = self.get_formula(pk=pk)
         if formula == None:
             return Response(
@@ -108,7 +109,7 @@ class FormulaDetail(generics.GenericAPIView):
             "formula": serializer.data
         })
 
-    def delete(self, request, pk):
+    def delete(self, pk):
         formula = self.get_formula(pk)
         if formula == None:
             return Response(
