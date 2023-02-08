@@ -21,8 +21,8 @@ function Checkbox({
             onChange={inputChange}
             checked={value}
           />
-          &nbsp
-          <span style={{ fontWeight: "bold", fontSize: "12px" }}></span>
+          &nbsp;&nbsp;
+          <span style={{ fontWeight: "bold", fontSize: "16px" }}>{title}</span>
         </label>
       </div>
     </>

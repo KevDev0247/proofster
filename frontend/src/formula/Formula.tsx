@@ -4,6 +4,8 @@ import { RootState, useAppDispatch } from './../store';
 import { createFormula, deleteFormula, getFormulas, updateFormula } from './formulaApi';
 import { IFormula } from './../models/formula';
 import { toast } from 'react-toastify';
+import Checkbox from '../components/Checkbox';
+import Input from '../components/Input';
 
 export default function Formula() {
   const dispatch = useAppDispatch();
@@ -28,7 +30,7 @@ export default function Formula() {
   const [formula, setFormula] = useState<IFormula>({
     formulaId: 0,
     name: "",
-    content: "",
+    formula_raw: "",
     isConclusion: false,
   });
   const [showValidation, setShowValidation] = useState<boolean>(false);
@@ -46,7 +48,7 @@ export default function Formula() {
     setFormula({
       formulaId: d.formulaId,
       name: d.name,
-      content: d.content,
+      formula_raw: d.formula_raw,
       isConclusion: d.isConclusion,
     });
   };
@@ -67,7 +69,7 @@ export default function Formula() {
   const submit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (formula.name == "") {
+    if (formula.name === "") {
       setShowValidation(true);
       return;
     }
@@ -93,7 +95,7 @@ export default function Formula() {
     setFormula({
       formulaId: 0,
       name: "",
-      content: "",
+      formula_raw: "",
       isConclusion: false,
     });
     setShowValidation(false);
@@ -103,9 +105,51 @@ export default function Formula() {
     <>
       <div className="form-container">
         <h1 className="title">
-          Formula &nbsp;
+          Arguments Panel &nbsp;
           <span className="tag is-link">{formulaList?.length}</span>
         </h1>
+        <div className="card">
+          <div className="card-content">
+            <div className="content">
+              <div className="columns">
+                <div className="column is-4">
+                  <Checkbox
+                    title="Conclusion"
+                    name="isConclusion"
+                    value={formula.isConclusion}
+                    inputChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              <div className="columns">
+                <div className="column is-4">
+                  <Input
+                    type="text"
+                    title="Name"
+                    name="name"
+                    placeholder="Enter name here"
+                    value={formula.name}
+                    inputChange={handleInputChange}
+                    showValidation={showValidation}
+                    isRequired={true}
+                  />
+                </div>
+                <div className="column is-4">
+                  <Input
+                    type="text"
+                    title="Reverse Polish Notation"
+                    name="name"
+                    placeholder="Enter formula in reverse polish notation"
+                    value={formula.formula_raw}
+                    inputChange={handleInputChange}
+                    showValidation={showValidation}
+                    isRequired={true}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   )

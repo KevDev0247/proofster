@@ -4,7 +4,7 @@ import Formula from './formula/Formula';
 function App() {
   return (
     <>
-      <nav className="navbar is-info">
+      <nav className="navbar is-dark">
         <div className="navbar-brand">
           <a className="navbar-item" href="#">Toolbar</a>
         </div>

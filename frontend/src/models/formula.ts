@@ -1,6 +1,6 @@
 export interface IFormula {
     formulaId: number;
     name: string;
-    content: string;
+    formula_raw: string;
     isConclusion: boolean;
 }
