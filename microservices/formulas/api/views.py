@@ -70,7 +70,7 @@ class FormulaAsync(View):
 class Formulas(generics.GenericAPIView):
     serializer_class = FormulaSerializer
 
-    def get(self, workspace_id):
+    def get(self, request, workspace_id):
         formulas = Formula.objects.all()
 
         if workspace_id:
@@ -92,7 +92,7 @@ class FormulaDetail(generics.GenericAPIView):
         except:
             return None
 
-    def patch(self, pk):
+    def patch(self, request, pk):
         formula = self.get_formula(pk=pk)
         if formula == None:
             return Response(
@@ -109,7 +109,7 @@ class FormulaDetail(generics.GenericAPIView):
             "formula": serializer.data
         })
 
-    def delete(self, pk):
+    def delete(self, request, pk):
         formula = self.get_formula(pk)
         if formula == None:
             return Response(
