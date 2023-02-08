@@ -22,7 +22,7 @@ function Input({
   return (
     <>
       <div className="field">
-        <label className="label is-small">{title}</label>
+        <label className="label" style={{ fontWeight: "bold", fontSize: "16px" }}>{title}</label>
         <div className="control">
           <input
             type={type}

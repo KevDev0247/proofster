@@ -16,7 +16,7 @@ function Button ({
   return (
     <button
       className={
-        loading ? "button is-small is-loading": "button is-small" + type
+        loading ? "button is-small is-loading " : "button is-small " + type
       }
       onClick={onClick}
       disabled={disabled}

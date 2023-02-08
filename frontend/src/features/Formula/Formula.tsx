@@ -6,6 +6,7 @@ import { IFormula } from '../../models/formula';
 import { toast } from 'react-toastify';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
+import Button from '../../components/Button';
 
 export default function Formula() {
   const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ export default function Formula() {
     formulaId: 0,
     name: "",
     formula_raw: "",
+    formula_result: "",
     isConclusion: false,
   });
   const [showValidation, setShowValidation] = useState<boolean>(false);
@@ -39,7 +41,7 @@ export default function Formula() {
     const { name, value, checked } = e.target;
     setFormula((prevState) => ({
       ...prevState,
-      [name]: name === "isActive" ? checked : value,
+      [name]: name === "isConclusion" ? checked : value,
     }));
   };
 
@@ -49,6 +51,7 @@ export default function Formula() {
       formulaId: d.formulaId,
       name: d.name,
       formula_raw: d.formula_raw,
+      formula_result: d.formula_result,
       isConclusion: d.isConclusion,
     });
   };
@@ -96,6 +99,7 @@ export default function Formula() {
       formulaId: 0,
       name: "",
       formula_raw: "",
+      formula_result: "",
       isConclusion: false,
     });
     setShowValidation(false);
@@ -106,7 +110,7 @@ export default function Formula() {
       <div className="form-container">
         <h1 className="title">
           Arguments Panel &nbsp;
-          <span className="tag is-link">{formulaList?.length}</span>
+          <span className="tag is-dark">{formulaList?.length}</span>
         </h1>
         <div className="card">
           <div className="card-content">
@@ -137,7 +141,7 @@ export default function Formula() {
                 <div className="column is-4">
                   <Input
                     type="text"
-                    title="Reverse Polish Notation"
+                    title="Formula"
                     name="name"
                     placeholder="Enter formula in reverse polish notation"
                     value={formula.formula_raw}
@@ -146,6 +150,64 @@ export default function Formula() {
                     isRequired={true}
                   />
                 </div>
+              </div>
+              <Button 
+                type="is-dark"
+                loading={isSaving}
+                title="Submit"
+                onClick={submit}
+                disabled={isSaving || isDeleting}
+              />
+              &nbsp;
+              {formula.formulaId !== 0 && (
+                <Button 
+                  title="Cancel"
+                  onClick={resetForm}
+                  disabled={isSaving || isDeleting}
+                />
+              )}
+              <hr />
+              {isLoadingTable && (
+                <div className="has-text-centered">Fetching...</div>
+              )}
+              <div className="table-container">
+                <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Formula</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {formulaList?.map((d: IFormula, index: number) => {
+                      return (
+                        <tr key={index}>
+                          <td>{d.name}</td>
+                          <td>{d.isConclusion ? "Conclusion" : "Premise"}</td>
+                          <td>{d.formula_result}</td>
+                          <td>
+                            <Button
+                              type="is-warning"
+                              title="Edit"
+                              onClick={() => selectFormula(d)}
+                              disabled={isSaving || isDeleting}
+                            />
+                            &nbsp;
+                            <Button
+                              type="is-danger"
+                              title="Delete"
+                              loading={isDeleting}
+                              onClick={() => removeFormula(d.formulaId)}
+                              disabled={isSaving || isDeleting}
+                            />
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
