@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import formulaSlice from './formula/formulaSlice';
+import formulaSlice from './features/Formula/formulaSlice';
 
 export const store = configureStore({
     reducer: {

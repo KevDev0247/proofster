@@ -1,7 +1,7 @@
-import { FORMULA_API } from "../api";
+import { FORMULA_API } from "../../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IFormula } from "./../models/formula";
-import AxiosError from "../errors";
+import { IFormula } from "../../models/formula";
+import AxiosError from "../../errors";
 
 export const getFormulas = createAsyncThunk(
   "formulas/get", 

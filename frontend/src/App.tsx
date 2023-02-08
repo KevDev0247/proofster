@@ -1,5 +1,5 @@
 import './App.css';
-import Formula from './formula/Formula';
+import Formula from './features/Formula/Formula';
 
 function App() {
   return (

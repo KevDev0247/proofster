@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from './../store';
+import { RootState, useAppDispatch } from '../../store';
 import { createFormula, deleteFormula, getFormulas, updateFormula } from './formulaApi';
-import { IFormula } from './../models/formula';
+import { IFormula } from '../../models/formula';
 import { toast } from 'react-toastify';
-import Checkbox from '../components/Checkbox';
-import Input from '../components/Input';
+import Checkbox from '../../components/Checkbox';
+import Input from '../../components/Input';
 
 export default function Formula() {
   const dispatch = useAppDispatch();
