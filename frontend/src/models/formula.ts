@@ -1,7 +1,7 @@
 export interface IFormula {
-    formulaId: number;
+    formula_id: number;
     name: string;
     formula_raw: string;
     formula_result: string;
-    isConclusion: boolean;
+    is_conclusion: boolean;
 }

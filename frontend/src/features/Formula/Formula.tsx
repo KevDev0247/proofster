@@ -29,11 +29,11 @@ export default function Formula() {
   );
 
   const [formula, setFormula] = useState<IFormula>({
-    formulaId: 0,
+    formula_id: 0,
     name: "",
     formula_raw: "",
     formula_result: "",
-    isConclusion: false,
+    is_conclusion: false,
   });
   const [showValidation, setShowValidation] = useState<boolean>(false);
 
@@ -41,18 +41,18 @@ export default function Formula() {
     const { name, value, checked } = e.target;
     setFormula((prevState) => ({
       ...prevState,
-      [name]: name === "isConclusion" ? checked : value,
+      [name]: name === "is_conclusion" ? checked : value,
     }));
   };
 
   const selectFormula = (d: IFormula) => {
     setShowValidation(false);
     setFormula({
-      formulaId: d.formulaId,
+      formula_id: d.formula_id,
       name: d.name,
       formula_raw: d.formula_raw,
       formula_result: d.formula_result,
-      isConclusion: d.isConclusion,
+      is_conclusion: d.is_conclusion,
     });
   };
 
@@ -78,7 +78,7 @@ export default function Formula() {
     }
 
     const action = 
-      formula.formulaId === 0 
+      formula.formula_id === 0 
         ? createFormula(formula) 
         : updateFormula(formula)
       
@@ -96,11 +96,11 @@ export default function Formula() {
 
   const resetForm = () => {
     setFormula({
-      formulaId: 0,
+      formula_id: 0,
       name: "",
       formula_raw: "",
       formula_result: "",
-      isConclusion: false,
+      is_conclusion: false,
     });
     setShowValidation(false);
   };
@@ -119,8 +119,8 @@ export default function Formula() {
                 <div className="column is-4">
                   <Checkbox
                     title="Conclusion"
-                    name="isConclusion"
-                    value={formula.isConclusion}
+                    name="is_conclusion"
+                    value={formula.is_conclusion}
                     inputChange={handleInputChange}
                   />
                 </div>
@@ -139,11 +139,11 @@ export default function Formula() {
                   />
                 </div>
                 <div className="column is-4">
-                  <Input
+                  <Input 
                     type="text"
                     title="Formula"
-                    name="name"
-                    placeholder="Enter formula in reverse polish notation"
+                    name="formula_raw"
+                    placeholder="Enter formula in reverse polish form"
                     value={formula.formula_raw}
                     inputChange={handleInputChange}
                     showValidation={showValidation}
@@ -159,7 +159,7 @@ export default function Formula() {
                 disabled={isSaving || isDeleting}
               />
               &nbsp;
-              {formula.formulaId !== 0 && (
+              {formula.formula_id !== 0 && (
                 <Button 
                   title="Cancel"
                   onClick={resetForm}
@@ -185,7 +185,7 @@ export default function Formula() {
                       return (
                         <tr key={index}>
                           <td>{d.name}</td>
-                          <td>{d.isConclusion ? "Conclusion" : "Premise"}</td>
+                          <td>{d.is_conclusion ? "Conclusion" : "Premise"}</td>
                           <td>{d.formula_result}</td>
                           <td>
                             <Button
@@ -199,7 +199,7 @@ export default function Formula() {
                               type="is-danger"
                               title="Delete"
                               loading={isDeleting}
-                              onClick={() => removeFormula(d.formulaId)}
+                              onClick={() => removeFormula(d.formula_id)}
                               disabled={isSaving || isDeleting}
                             />
                           </td>

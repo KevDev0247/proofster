@@ -21,7 +21,7 @@ export const createFormula = createAsyncThunk(
   "formula/create",
   async (formula: IFormula) => {
     try {
-      const response = await FORMULA_API.post("formulas", formula);
+      const response = await FORMULA_API.post("", formula);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -33,7 +33,7 @@ export const updateFormula = createAsyncThunk(
   "formula/update",
   async (formula: IFormula) => {
     try {
-      const response = await FORMULA_API.put(`formula/${formula.formulaId}`, formula);
+      const response = await FORMULA_API.put(`formula/${formula.formula_id}`, formula);
       return response.data
     } catch (error) {
       console.log(error)
