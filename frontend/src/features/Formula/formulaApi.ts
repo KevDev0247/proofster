@@ -8,7 +8,6 @@ export const getFormulas = createAsyncThunk(
   async () => {
     try {
       const response = await FORMULA_API.get("216da6d9-aead-4970-9465-69bfb55d4956")
-
       return response.data.formulas
     } catch (error) {
       console.log((error as AxiosError).config.url);

@@ -4,4 +4,5 @@ export interface IFormula {
     formula_raw: string;
     formula_result: string;
     is_conclusion: boolean;
+    workspace_id: string;
 }

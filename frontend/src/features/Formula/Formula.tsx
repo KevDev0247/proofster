@@ -34,6 +34,7 @@ export default function Formula() {
     formula_raw: "",
     formula_result: "",
     is_conclusion: false,
+    workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
   });
   const [showValidation, setShowValidation] = useState<boolean>(false);
 
@@ -53,6 +54,7 @@ export default function Formula() {
       formula_raw: d.formula_raw,
       formula_result: d.formula_result,
       is_conclusion: d.is_conclusion,
+      workspace_id: d.workspace_id,
     });
   };
 
@@ -101,6 +103,7 @@ export default function Formula() {
       formula_raw: "",
       formula_result: "",
       is_conclusion: false,
+      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
     });
     setShowValidation(false);
   };

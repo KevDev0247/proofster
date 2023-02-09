@@ -8,8 +8,11 @@ from api.models import Formula
 from api.serializers import FormulaSerializer
 from django.views.generic import View
 from asgiref.sync import sync_to_async
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class FormulaAsync(View):
     serializer_class = FormulaSerializer
 
