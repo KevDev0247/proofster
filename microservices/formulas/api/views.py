@@ -16,11 +16,11 @@ from django.views.decorators.csrf import csrf_exempt
 class FormulaAsync(View):
     serializer_class = FormulaSerializer
 
-    async def transpile(self, formula_raw):
+    async def transpile(self, formula_postfix):
         try:
             async with aiohttp.ClientSession() as session:
                 transpiler_url = os.getenv("TRANSPILER_LAMBDA_URL")
-                response = await session.get(f"{transpiler_url}?formula_raw={formula_raw}")
+                response = await session.get(f"{transpiler_url}?formula_postfix={formula_postfix}")
                 result = await response.text()
                 result = json.loads(result)
                 return result
@@ -29,7 +29,8 @@ class FormulaAsync(View):
     
     async def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
-        result = await self.transpile(data.get("formula_raw"))
+        formula_postfix = data.get("formula_postfix")
+        result = await self.transpile(formula_postfix)
         if not result:
             return Response(
                 {
@@ -40,13 +41,13 @@ class FormulaAsync(View):
             )
 
         formula_json = result.get("formula_json") or {}
-        formula_raw = result.get("formula_raw") or ""
         formula_result = result.get("formula_result") or ""
         
         transpiled = {
             "name": data.get("name"),
             "is_conclusion": data.get("is_conclusion"), 
             "formula_json": formula_json,
+            "formula_postfix": formula_postfix,
             "formula_result": formula_result,
             "workspace_id": data.get("workspace_id")
         }
