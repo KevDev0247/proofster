@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from api.models import Formula
 from api.serializers import FormulaSerializer
+from api.enums import Stage
 from django.views.generic import View
 from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
@@ -49,6 +50,7 @@ class FormulaAsync(View):
             "formula_json": formula_json,
             "formula_postfix": formula_postfix,
             "formula_result": formula_result,
+            "stage": Stage.ORIGINAL.value,
             "workspace_id": data.get("workspace_id")
         }
         serializer = self.serializer_class(data=transpiled)

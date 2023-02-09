@@ -16,6 +16,7 @@ class Formula(models.Model):
     formula_json = models.JSONField()
     formula_postfix = models.CharField(max_length=255)
     formula_result = models.CharField(max_length=255)
+    stage = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
