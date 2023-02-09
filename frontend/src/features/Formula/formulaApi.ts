@@ -32,7 +32,7 @@ export const updateFormula = createAsyncThunk(
   "formula/update",
   async (formula: IFormula) => {
     try {
-      const response = await FORMULA_API.put(`formula/${formula.formula_id}`, formula);
+      const response = await FORMULA_API.patch(`detail/${formula.id}`, formula);
       return response.data
     } catch (error) {
       console.log(error)
@@ -44,7 +44,7 @@ export const deleteFormula = createAsyncThunk(
   "formula/delete",
   async (formulaId: number) => {
     try {
-      const response = await FORMULA_API.delete(`formulas/${formulaId}`);
+      const response = await FORMULA_API.delete(`detail/${formulaId}`);
       return response.data;
     } catch (error) {
       console.log(error);

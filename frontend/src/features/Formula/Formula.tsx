@@ -16,7 +16,10 @@ export default function Formula() {
   }, [dispatch]);
 
   const formulaList = useSelector(
-    (state: RootState) => state.formula.list.values
+    (state: RootState) => {
+      console.log(state.formula.list.values)
+      return state.formula.list.values
+    }
   );
   const isLoadingTable = useSelector(
     (state: RootState) => state.formula.list.isLoading
@@ -29,7 +32,7 @@ export default function Formula() {
   );
 
   const [formula, setFormula] = useState<IFormula>({
-    formula_id: 0,
+    id: 0,
     name: "",
     formula_raw: "",
     formula_result: "",
@@ -49,7 +52,7 @@ export default function Formula() {
   const selectFormula = (d: IFormula) => {
     setShowValidation(false);
     setFormula({
-      formula_id: d.formula_id,
+      id: d.id,
       name: d.name,
       formula_raw: d.formula_raw,
       formula_result: d.formula_result,
@@ -80,7 +83,7 @@ export default function Formula() {
     }
 
     const action = 
-      formula.formula_id === 0 
+      formula.id === 0 
         ? createFormula(formula) 
         : updateFormula(formula)
       
@@ -98,7 +101,7 @@ export default function Formula() {
 
   const resetForm = () => {
     setFormula({
-      formula_id: 0,
+      id: 0,
       name: "",
       formula_raw: "",
       formula_result: "",
@@ -162,7 +165,7 @@ export default function Formula() {
                 disabled={isSaving || isDeleting}
               />
               &nbsp;
-              {formula.formula_id !== 0 && (
+              {formula.id !== 0 && (
                 <Button 
                   title="Cancel"
                   onClick={resetForm}
@@ -202,7 +205,7 @@ export default function Formula() {
                               type="is-danger"
                               title="Delete"
                               loading={isDeleting}
-                              onClick={() => removeFormula(d.formula_id)}
+                              onClick={() => removeFormula(d.id)}
                               disabled={isSaving || isDeleting}
                             />
                           </td>

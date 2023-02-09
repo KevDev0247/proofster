@@ -70,6 +70,7 @@ class FormulaAsync(View):
             )
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class Formulas(generics.GenericAPIView):
     serializer_class = FormulaSerializer
 
@@ -85,6 +86,7 @@ class Formulas(generics.GenericAPIView):
         })
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class FormulaDetail(generics.GenericAPIView):
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
