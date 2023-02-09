@@ -40,6 +40,7 @@ class FormulaAsync(View):
             )
 
         formula_json = result.get("formula_json") or {}
+        formula_raw = result.get("formula_raw") or ""
         formula_result = result.get("formula_result") or ""
         
         transpiled = {
