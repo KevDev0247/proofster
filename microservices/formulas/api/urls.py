@@ -1,8 +1,9 @@
 from django.urls import path
-from api.views import Formulas, FormulaAsync, FormulaDetail
+from api.views import FormulaSync, FormulaAsync
 
 urlpatterns = [
-    path('', FormulaAsync.as_view()),
-    path('<str:workspace_id>', Formulas.as_view()),
-    path('detail/<str:pk>', FormulaDetail.as_view())
+    path('create/', FormulaAsync.as_view(), name='post'),
+    path('update/<str:pk>', FormulaAsync.as_view(), name='patch'),
+    path('get/workspace/<str:workspace_id>', FormulaSync.as_view(), name='get'),
+    path('delete/<str:pk>', FormulaSync.as_view(), name='delete')
 ]

@@ -9,12 +9,12 @@ class Formula(models.Model):
         editable=False
     )
     name = models.CharField(
-        max_length=255, 
+        max_length=255,
         unique=True
     )
     is_conclusion = models.BooleanField(default=False)
-    formula_json = models.JSONField()
     formula_postfix = models.CharField(max_length=255)
+    formula_json = models.JSONField()
     formula_result = models.CharField(max_length=255)
     stage = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
