@@ -6,6 +6,8 @@ from models.Function import Function
 from models.Unary import Unary
 from models.Variable import Variable
 
+DEBUG = False
+
 
 class Normalizer:
     def __init__(self, arg: List[Formula]):
@@ -230,14 +232,16 @@ class Normalizer:
         return formula
 
     def normalize_to_prenex(self):
-        print("Sub step 1. removing arrows")
+        if DEBUG:
+            print("Sub step 1. removing arrows")
         for f, formula in enumerate(self._arg):
             self._arg[f] = self.remove_arrows(formula)
+        if DEBUG:
+            self.print_argument()
+            print("")
 
-        self.print_argument()
-        print("")
-
-        print("Sub step 2. moving negation inward")
+        if DEBUG:
+            print("Sub step 2. moving negation inward")
         for f, formula in enumerate(self._arg):
             formula_type = formula.get_formula_type()
             var_count = formula.get_var_count()
@@ -251,31 +255,34 @@ class Normalizer:
             if formula_type == Type.BINARY:
                 self._arg[f] = self.move_negation_inward(formula, False)
                 self._arg[f].set_var_count(var_count)
+        if DEBUG:
+            self.print_argument()
+            print("")
 
-        self.print_argument()
-        print("")
-
-        print("Sub step 3. standardize variables")
+        if DEBUG:
+            print("Sub step 3. standardize variables")
         for f, formula in enumerate(self._arg):
             var_count = formula.get_var_count()
 
             for var in var_count:
                 self._subscript = 0
                 self._arg[f] = self.standardize_variables(formula, var)
+        if DEBUG:
+            self.print_argument()
+            print("")
 
-        self.print_argument()
-        print("")
-
-        print("Sub step 4. moving all quantifiers to front")
+        if DEBUG:
+            print("Sub step 4. moving all quantifiers to front")
         for f, formula in enumerate(self._arg):
             self._arg[f].set_quant_list(
                 self.move_quantifiers_to_front(formula, [])
             )
+        if DEBUG:
+            self.print_argument()
+            print("")
 
-        self.print_argument()
-        print("")
-
-        print("Sub step 5. skolemize the formula")
+        if DEBUG:
+            print("Sub step 5. skolemize the formula")
         for f, formula in enumerate(self._arg):
             drop_list = []
 
@@ -297,6 +304,6 @@ class Normalizer:
             # skolemize each variable in the formula
             for to_drop in drop_list:
                 self._arg[f] = self.skolemize(formula, to_drop)
-
-        self.print_argument()
-        print("")
+        if DEBUG:
+            self.print_argument()
+            print("")
