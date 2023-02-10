@@ -148,7 +148,7 @@ export default function Formula() {
                   <Input 
                     type="text"
                     title="Formula"
-                    name="formula_raw"
+                    name="formula_postfix"
                     placeholder="Enter formula in reverse polish form"
                     value={formula.formula_postfix}
                     inputChange={handleInputChange}
