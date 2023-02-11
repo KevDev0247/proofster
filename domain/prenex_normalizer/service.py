@@ -11,7 +11,7 @@ def normalize_and_save(argument: List[Formula]) -> List[str]:
     arg = normalizer.get_arg()
 
     if DEBUG:
-        print("Sub step 1. Negating conclusion")
+        print("Sub step 1. negating conclusion")
     normalizer.negate_conclusion()
     if DEBUG:
         normalizer.print_argument()
@@ -45,7 +45,7 @@ def normalize_and_save(argument: List[Formula]) -> List[str]:
         print("")
 
     if DEBUG:
-        print("Sub step 4. standardize variables")
+        print("Sub step 4. standardizing variables")
     for f, formula in enumerate(arg):
         var_count = formula.get_var_count()
 
@@ -67,7 +67,7 @@ def normalize_and_save(argument: List[Formula]) -> List[str]:
         print("")
 
     if DEBUG:
-        print("Sub step 6. skolemize the formula")
+        print("Sub step 6. skolemizing formulas")
     for f, formula in enumerate(arg):
         drop_list = []
 
