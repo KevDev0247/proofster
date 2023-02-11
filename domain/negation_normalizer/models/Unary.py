@@ -40,9 +40,9 @@ class Unary(Formula):
         if self._negation:
             result += "¬"
         if self._quantifier == Quantifier.EXISTENTIAL:
-            result += "∃"
+            result += "∃" + self._quant_var
         if self._quantifier == Quantifier.UNIVERSAL:
-            result += "∀"
+            result += "∀" + self._quant_var
         result += self._inside.to_string()
         return result
 
