@@ -6,16 +6,17 @@ from models.Formula import Formula
 DEBUG = False
 
 
-def normalize_and_save(argument: List[Formula]) -> List[str]:
+def normalize(argument: List[Formula], is_proof: bool) -> List[str]:
     normalizer = Normalizer(argument)
     arg = normalizer.get_arg()
 
-    if DEBUG:
-        print("Sub step 1. negating conclusion")
-    normalizer.negate_conclusion()
-    if DEBUG:
-        normalizer.print_argument()
-        print("")
+    if is_proof:
+        if DEBUG:
+            print("Sub step 1. negating conclusion")
+        normalizer.negate_conclusion()
+        if DEBUG:
+            normalizer.print_argument()
+            print("")
 
     if DEBUG:
         print("Sub step 2. removing arrows")

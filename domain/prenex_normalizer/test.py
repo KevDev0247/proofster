@@ -1,7 +1,7 @@
 import unittest
 from factory import create_formula_from_json
 from test_input import premise_input, conclusion_input
-from service import normalize_and_save
+from service import normalize
 
 
 class Test(unittest.TestCase):
@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
         premise = create_formula_from_json(premise_input)
         conclusion = create_formula_from_json(conclusion_input)
 
-        normalized_argument = normalize_and_save([premise, conclusion])
+        normalized_argument = normalize([premise, conclusion], is_proof=True)
         conclusion_actual = normalized_argument[1]
         premise_actual = normalized_argument[0]
         conclusion_expected = "F(u)"
