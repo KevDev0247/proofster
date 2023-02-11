@@ -233,7 +233,14 @@ class Normalizer:
 
     def normalize_to_prenex(self):
         if DEBUG:
-            print("Sub step 1. removing arrows")
+            print("Sub step 1. Negating conclusion")
+        self.negate_conclusion()
+        if DEBUG:
+            self.print_argument()
+            print("")
+
+        if DEBUG:
+            print("Sub step 2. removing arrows")
         for f, formula in enumerate(self._arg):
             self._arg[f] = self.remove_arrows(formula)
         if DEBUG:
@@ -241,7 +248,7 @@ class Normalizer:
             print("")
 
         if DEBUG:
-            print("Sub step 2. moving negation inward")
+            print("Sub step 3. moving negation inward")
         for f, formula in enumerate(self._arg):
             formula_type = formula.get_formula_type()
             var_count = formula.get_var_count()
@@ -260,7 +267,7 @@ class Normalizer:
             print("")
 
         if DEBUG:
-            print("Sub step 3. standardize variables")
+            print("Sub step 4. standardize variables")
         for f, formula in enumerate(self._arg):
             var_count = formula.get_var_count()
 
@@ -272,7 +279,7 @@ class Normalizer:
             print("")
 
         if DEBUG:
-            print("Sub step 4. moving all quantifiers to front")
+            print("Sub step 5. moving all quantifiers to front")
         for f, formula in enumerate(self._arg):
             self._arg[f].set_quant_list(
                 self.move_quantifiers_to_front(formula, [])
@@ -282,7 +289,7 @@ class Normalizer:
             print("")
 
         if DEBUG:
-            print("Sub step 5. skolemize the formula")
+            print("Sub step 6. skolemize the formula")
         for f, formula in enumerate(self._arg):
             drop_list = []
 
