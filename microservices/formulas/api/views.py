@@ -28,10 +28,13 @@ class FormulaAsync(View):
         try:
             async with aiohttp.ClientSession() as session:
                 transpiler_url = os.getenv("TRANSPILER_LAMBDA_URL")
-                response = await session.get(f"{transpiler_url}?formula_postfix={formula_postfix}")
+                response = await session.post(
+                    transpiler_url, json={
+                        "formula_postfix": formula_postfix
+                    }
+                )
                 result = await response.text()
-                result = json.loads(result)
-                return result
+                return json.loads(result)
         except Exception as e:
             return None
     

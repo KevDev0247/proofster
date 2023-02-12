@@ -7,11 +7,11 @@ from models.Function import Function
 from models.Unary import Unary
 from models.Variable import Variable
 
-def transpile(formula_input: List[str]) -> Formula:
+def transpile(tokens: List[str]) -> Formula:
     formula_holder = []
     var_count = {}
 
-    for t, token in enumerate(formula_input):
+    for t, token in enumerate(tokens):
         if token == "->":
             right = formula_holder.pop()
             left = formula_holder.pop()
@@ -41,8 +41,8 @@ def transpile(formula_input: List[str]) -> Formula:
                 Binary(left, right, Connective.OR)
             )
         if token == "FORM":
-            func_name = formula_input[t + 1]
-            var_name = formula_input[t + 2]
+            func_name = tokens[t + 1]
+            var_name = tokens[t + 2]
 
             if var_name not in var_count:
                 var_count[var_name] = 1
@@ -60,7 +60,7 @@ def transpile(formula_input: List[str]) -> Formula:
             )
         if token == "FORALL":
             inside = formula_holder.pop()
-            var_name = formula_input[t + 1]
+            var_name = tokens[t + 1]
 
             if var_name not in var_count:
                 var_count[var_name] = 1
@@ -70,7 +70,7 @@ def transpile(formula_input: List[str]) -> Formula:
             )
         if token == "EXIST":
             inside = formula_holder.pop()
-            var_name = formula_input[t + 1]
+            var_name = tokens[t + 1]
 
             if var_name not in var_count:
                 var_count[var_name] = 1
@@ -86,9 +86,11 @@ def transpile(formula_input: List[str]) -> Formula:
     return formula
 
 def lambda_handler(event, context):
-    formula_postfix = event.get("queryStringParameters", {}).get("formula_postfix").replace('"', '')
-    formula_input = formula_postfix.split()
-    formula = transpile(formula_input)
+    body = json.loads(event['body'])
+    formula_postfix = body.get("formula_postfix")
+    tokens = formula_postfix.split()
+    
+    formula = transpile(tokens)
     body = {
         'formula_json': formula.to_json(),
         'formula_result': formula.to_string()
