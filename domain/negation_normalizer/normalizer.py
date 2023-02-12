@@ -2,9 +2,7 @@ from typing import List
 from models.Binary import Binary
 from models.Enums import Connective, Quantifier, Type
 from models.Formula import Formula
-from models.Function import Function
 from models.Unary import Unary
-from models.Variable import Variable
 
 
 class Normalizer:
@@ -41,6 +39,12 @@ class Normalizer:
                     formula_string += "∀" + var
             formula_string += formula.to_string()
             result.append(formula_string)
+        return result
+
+    def to_json(self) -> List[dict]:
+        result = []
+        for formula in self._arg:
+            result.append(formula.to_json())
         return result
 
     def print_argument(self):

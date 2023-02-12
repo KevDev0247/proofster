@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
         premise = create_formula_from_json(premise_input)
         conclusion = create_formula_from_json(conclusion_input)
 
-        normalized_argument = normalize([premise, conclusion], is_proof=True)
+        normalized_argument = normalize([premise, conclusion], is_proof=True).to_string()
         conclusion_actual = normalized_argument[1]
         premise_actual = normalized_argument[0]
         conclusion_expected = "∃xF(x)"
