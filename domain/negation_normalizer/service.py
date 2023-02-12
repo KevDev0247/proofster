@@ -49,12 +49,13 @@ def normalize(argument: List[Formula], is_proof: bool) -> Normalizer:
     return normalizer
 
 def lambda_handler(event, context):
-    argument_json = event.get("queryStringParameters", {}).get("argument_json")
-    is_proof = event.get("queryStringParameters", {}).get("is_proof")
+    body = json.loads(event['body'])
+    argument_json = body.get("argument_json")
+    is_proof = body.get("is_proof")
 
     argument = []
     for formula_json in argument_json:
-        formula = create_formula_from_json(json.load(formula_json))
+        formula = create_formula_from_json(formula_json)
         argument.append(formula)
     
     normalizer = normalize(argument, is_proof)
