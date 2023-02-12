@@ -4,7 +4,6 @@ from .Enums import Connective, Type
 from .Formula import Formula
 
 class Binary(Formula):
-
     def __init__(
             self,
             left: Formula,

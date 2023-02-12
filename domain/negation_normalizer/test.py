@@ -10,7 +10,7 @@ class Test(unittest.TestCase):
         expected = "∀x∃y((F(y) ∧ G(y)) ∨ ¬(F(x) ⇒ G(x)))"
         self.assertEqual(actual, expected)
 
-    def test_prenex_normalizer_service(self):
+    def test_negation_normalizer_service(self):
         premise = create_formula_from_json(premise_input)
         conclusion = create_formula_from_json(conclusion_input)
 
