@@ -73,7 +73,6 @@ def lambda_handler(event, context):
         argument.append(formula)
     
     normalizer = normalize(argument)
-    print(normalizer.to_string())
     body = {
         'argument_json': normalizer.to_json(),
         'argument_string': normalizer.to_string()
