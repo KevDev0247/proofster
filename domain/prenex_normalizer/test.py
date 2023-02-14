@@ -1,7 +1,8 @@
+import json
 import unittest
 from factory import create_formula_from_json
-from test_input import premise_input
-from service import normalize
+from test_input import premise_input, event_input
+from service import normalize, lambda_handler
 
 
 class Test(unittest.TestCase):
@@ -18,3 +19,11 @@ class Test(unittest.TestCase):
         premise_expected = "∀x1((F(f(x1)) ∧ G(f(x1))) ∨ (F(x1) ∧ ¬G(x1)))"
 
         self.assertEqual(premise_actual, premise_expected)
+
+    def test_lambda_handler(self):
+        response = lambda_handler(event_input, None)
+        premise_actual_str = json.loads(response['body'])['argument_string'][0]
+        print(premise_actual_str)
+        premise_expected_str = "∀x1((F(f(x1)) ∧ G(f(x1))) ∨ (F(x1) ∧ ¬G(x1)))"
+
+        self.assertEqual(premise_actual_str, premise_expected_str)

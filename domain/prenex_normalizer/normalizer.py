@@ -30,14 +30,20 @@ class Normalizer:
             formula_string = ""
             quant_list = formula.get_quant_list()
             for quant, var in quant_list:
-                if quant == Quantifier.EXISTENTIAL:
+                if Quantifier(quant) == Quantifier.EXISTENTIAL:
                     formula_string += "∃" + var
-                if quant == Quantifier.UNIVERSAL:
+                if Quantifier(quant) == Quantifier.UNIVERSAL:
                     formula_string += "∀" + var
             formula_string += formula.to_string()
             result.append(formula_string)
         return result
 
+    def to_json(self) -> List[dict]:
+        result = []
+        for formula in self._arg:
+            result.append(formula.to_json())
+        return result
+        
     def print_argument(self):
         formulas_strings = self.to_string()
         for formula_string in formulas_strings:
@@ -90,7 +96,7 @@ class Normalizer:
         elif formula_type == Type.UNARY:
             if formula.get_quantifier() != Quantifier.NONE:
                 quant_list.append(
-                    (formula.get_quantifier(), formula.get_quant_var())
+                    (formula.get_quantifier().value, formula.get_quant_var())
                 )
                 formula.set_quantifier(Quantifier.NONE)
             quant_list = self.move_quantifiers_to_front(

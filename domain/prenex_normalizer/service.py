@@ -42,13 +42,13 @@ def normalize(argument: List[Formula]) -> Normalizer:
         # dropping the existentials in the quantifier list
         quant_list = formula.get_quant_list()
         for q, quant_holder in enumerate(quant_list.copy()):
-            quantifier = quant_holder[0]
+            quant = quant_holder[0]
             quant_var = quant_holder[1]
             if len(quant_list) > 1:
                 prev_var = quant_list[q - 1][1]
             else:
                 prev_var = ""
-            if (quantifier == Quantifier.EXISTENTIAL
+            if (Quantifier(quant) == Quantifier.EXISTENTIAL
                     and quant_var not in quant_list):
                 drop_list.append((quant_var, prev_var))
                 quant_list.pop(q)
@@ -62,3 +62,24 @@ def normalize(argument: List[Formula]) -> Normalizer:
         print("")
     
     return normalizer
+
+def lambda_handler(event, context):
+    body = json.loads(event['body'])
+    argument_json = body.get("argument_json")
+
+    argument = []
+    for formula_json in argument_json:
+        formula = create_formula_from_json(formula_json)
+        argument.append(formula)
+    
+    normalizer = normalize(argument)
+    print(normalizer.to_string())
+    body = {
+        'argument_json': normalizer.to_json(),
+        'argument_string': normalizer.to_string()
+    }
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps(body)
+    }
