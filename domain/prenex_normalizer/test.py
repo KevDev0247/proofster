@@ -23,7 +23,6 @@ class Test(unittest.TestCase):
     def test_lambda_handler(self):
         response = lambda_handler(event_input, None)
         premise_actual_str = json.loads(response['body'])['argument_string'][0]
-        print(premise_actual_str)
         premise_expected_str = "∀x1((F(f(x1)) ∧ G(f(x1))) ∨ (F(x1) ∧ ¬G(x1)))"
 
         self.assertEqual(premise_actual_str, premise_expected_str)
