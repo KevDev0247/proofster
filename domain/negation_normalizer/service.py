@@ -24,6 +24,8 @@ def normalize(argument: List[Formula], is_proof: bool) -> Normalizer:
         print("Sub step 2. removing arrows")
     for f, formula in enumerate(arg):
         arg[f] = normalizer.remove_arrows(formula)
+    removed_arrow_json = normalizer.to_json()
+    removed_arrow_string = normalizer.to_string()
     if DEBUG:
         normalizer.print_argument()
         print("")
@@ -42,6 +44,8 @@ def normalize(argument: List[Formula], is_proof: bool) -> Normalizer:
         if formula_type == Type.BINARY:
             arg[f] = normalizer.move_negation_inward(formula, False)
             arg[f].set_var_count(var_count)
+    nnf_json = normalizer.to_json()
+    nnf_string = normalizer.to_string()
     if DEBUG:
         normalizer.print_argument()
         print("")
