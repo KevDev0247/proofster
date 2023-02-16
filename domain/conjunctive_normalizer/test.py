@@ -15,8 +15,8 @@ class Test(unittest.TestCase):
     def test_conjunctive_normalizer_service(self):
         premise = create_formula_from_json(premise_input)
 
-        normalized_argument = normalize([premise]).to_string()
-        premise_actual = normalized_argument[0]
+        normalizer, response = normalize([premise])
+        premise_actual = response['cnf_string'][0]
         premise_expected = "(((F(f(x1)) ∨ F(x1)) ∧ (F(f(x1)) ∨ ¬G(x1))) ∧ ((G(f(x1)) ∨ F(x1)) ∧ (G(f(x1)) ∨ ¬G(x1))))"
 
         self.assertEqual(premise_actual, premise_expected)
@@ -24,8 +24,8 @@ class Test(unittest.TestCase):
     def test_clause_generation(self):
         premise = create_formula_from_json(premise_input)
 
-        normalized_argument = normalize([premise])
-        clauses = generate_clauses(normalized_argument)
+        normalizer, response = normalize([premise])
+        clauses = generate_clauses(normalizer)
         clauses_actual_str = clause_to_string(clauses[0])
         clauses_expected_str = "F(f(x1)) ∨ F(x1), F(f(x1)) ∨ ¬G(x1), G(f(x1)) ∨ F(x1), G(f(x1)) ∨ ¬G(x1)"
 
@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
 
     def test_lambda_handler(self):
         response = lambda_handler(event_input, None)
-        premise_actual_str = json.loads(response['body'])['argument_string'][0]
+        premise_actual_str = json.loads(response['body'])['cnf_string'][0]
         premise_expected_str = "(((F(f(x1)) ∨ F(x1)) ∧ (F(f(x1)) ∨ ¬G(x1))) ∧ ((G(f(x1)) ∨ F(x1)) ∧ (G(f(x1)) ∨ ¬G(x1))))"
 
         self.assertEqual(premise_actual_str, premise_expected_str)

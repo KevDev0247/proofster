@@ -68,12 +68,12 @@ def normalize(argument: List[Formula]) -> Normalizer:
         print("")
     
     return {
-        "standardized_string": standardized_string,
-        "pre_quantifier_string": pre_quantifier_string,
-        "pnf_string": skolemized_string,
-        "standardized_json": standardized_json,
-        "pre_quantifier_json": pre_quantifier_json,
-        "pnf_json": skolemized_json
+        'standardized_string': standardized_string,
+        'pre_quantifier_string': pre_quantifier_string,
+        'pnf_string': skolemized_string,
+        'standardized_json': standardized_json,
+        'pre_quantifier_json': pre_quantifier_json,
+        'pnf_json': skolemized_json
     }
 
 def lambda_handler(event, context):

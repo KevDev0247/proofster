@@ -15,7 +15,8 @@ def normalize(argument: List[Formula]) -> Normalizer:
         print("Sub step 1. dropping all quantifiers")
     for f, formula in enumerate(arg):
         arg[f].set_quant_list([])
-
+    dropped_quantifiers_json = normalizer.to_json()
+    dropped_quantifiers_string = normalizer.to_string()
     if DEBUG:
         normalizer.print_argument()
         print("")
@@ -24,12 +25,20 @@ def normalize(argument: List[Formula]) -> Normalizer:
         print("Sub step 2. converting to Conjunctive Normal Form")
     for f, formula in enumerate(arg):
         arg[f] = normalizer.convert_to_cnf(formula)
-
+    cnf_json = normalizer.to_json()
+    cnf_string = normalizer.to_string()
     if DEBUG:
         normalizer.print_argument()
         print("")
 
-    return normalizer
+    return normalizer, {
+        'dropped_quantifiers_string': dropped_quantifiers_string,
+        'cnf_string': cnf_string,
+        'clauses_string': None,
+        'dropped_quantifiers_json': dropped_quantifiers_json,
+        'cnf_json': cnf_json,
+        'clauses_json': None
+    }
 
 def generate_clauses(normalizer: Normalizer):
     arg = normalizer.get_arg()
@@ -56,22 +65,18 @@ def lambda_handler(event, context):
         formula = create_formula_from_json(formula_json)
         argument.append(formula)
     
-    normalizer = normalize(argument)
+    normalizer, response = normalize(argument)
 
     clauses = generate_clauses(normalizer)
     clauses_json, clauses_string = [], []
     for clause in clauses:
         clauses_json.append(clause_to_json(clause))
         clauses_string.append(clause_to_string(clause))
-
-    body = {
-        'argument_json': normalizer.to_json(),
-        'argument_string': normalizer.to_string(),
-        'clauses_json': clauses_json,
-        'clauses_string': clauses_string
-    }
+    
+    response['clauses_string'] = clauses_string
+    response['clauses_json'] = clauses_json
 
     return {
         'statusCode': 200,
-        'body': json.dumps(body)
+        'body': json.dumps(response)
     }

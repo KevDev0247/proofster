@@ -54,12 +54,12 @@ def normalize(argument: List[Formula], is_proof: bool) -> Normalizer:
         print("")
     
     return {
-        "negated_conclusion_json": negated_conclusion_json,
-        "negated_conclusion_string": negated_conclusion_string,
-        "removed_arrow_json": removed_arrow_json,
-        "removed_arrow_string": removed_arrow_string,
-        "nnf_json": nnf_json,
-        "nnf_string": nnf_string
+        'negated_conclusion_string': negated_conclusion_string,
+        'removed_arrow_string': removed_arrow_string,
+        'nnf_string': nnf_string,
+        'negated_conclusion_json': negated_conclusion_json,
+        'removed_arrow_json': removed_arrow_json,
+        'nnf_json': nnf_json
     }
 
 def lambda_handler(event, context):
