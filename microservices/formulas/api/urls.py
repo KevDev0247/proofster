@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views import FormulaSync, FormulaAsync
+from api.views.crud import FormulaSync, FormulaAsync
 
 urlpatterns = [
     path('create/', FormulaAsync.as_view(), name='post'),

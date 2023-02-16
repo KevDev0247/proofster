@@ -5,13 +5,13 @@ import aiohttp
 from datetime import datetime
 from django.http import JsonResponse
 from rest_framework import status
-from api.models import Formula
-from api.serializers import FormulaSerializer
-from api.enums import Stage
 from django.views.generic import View
 from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from ..models import Formula
+from ..serializers import FormulaSerializer
+from ..enums import Stage
 
 def get_formula(pk):
     try:
