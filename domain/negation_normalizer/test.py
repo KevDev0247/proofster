@@ -15,9 +15,9 @@ class Test(unittest.TestCase):
         premise = create_formula_from_json(premise_input)
         conclusion = create_formula_from_json(conclusion_input)
 
-        normalized_argument = normalize([premise, conclusion], is_proof=True).to_string()
-        conclusion_actual = normalized_argument[1]
-        premise_actual = normalized_argument[0]
+        response = normalize([premise, conclusion], is_proof=True)
+        conclusion_actual = response['nnf_string'][1]
+        premise_actual = response['nnf_string'][0]
         conclusion_expected = "∃xF(x)"
         premise_expected = "∀x∃y((F(y) ∧ G(y)) ∨ (F(x) ∧ ¬G(x)))"
 
@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
 
     def test_lambda_handler(self):
         response = lambda_handler(event_input, None)
-        premise_actual_str = json.loads(response['body'])['argument_string'][0]
+        premise_actual_str = json.loads(response['body'])['nnf_string'][0]
         premise_expected_str = "∀x∃y((F(y) ∧ G(y)) ∨ (F(x) ∧ ¬G(x)))"
 
         self.assertEqual(premise_actual_str, premise_expected_str)

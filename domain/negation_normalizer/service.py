@@ -12,10 +12,13 @@ def normalize(argument: List[Formula], is_proof: bool) -> Normalizer:
     normalizer = Normalizer(argument)
     arg = normalizer.get_arg()
 
+    negated_conclusion_json, negated_conclusion_string = None, None
     if is_proof:
         if DEBUG:
             print("Sub step 1. negating conclusion")
         normalizer.negate_conclusion()
+        negated_conclusion_json = normalizer.to_json()
+        negated_conclusion_string = normalizer.to_string()
         if DEBUG:
             normalizer.print_argument()
             print("")
@@ -50,7 +53,14 @@ def normalize(argument: List[Formula], is_proof: bool) -> Normalizer:
         normalizer.print_argument()
         print("")
     
-    return normalizer
+    return {
+        "negated_conclusion_json": negated_conclusion_json,
+        "negated_conclusion_string": negated_conclusion_string,
+        "removed_arrow_json": removed_arrow_json,
+        "removed_arrow_string": removed_arrow_string,
+        "nnf_json": nnf_json,
+        "nnf_string": nnf_string
+    }
 
 def lambda_handler(event, context):
     body = json.loads(event['body'])
@@ -62,13 +72,9 @@ def lambda_handler(event, context):
         formula = create_formula_from_json(formula_json)
         argument.append(formula)
     
-    normalizer = normalize(argument, is_proof)
-    body = {
-        'argument_json': normalizer.to_json(),
-        'argument_string': normalizer.to_string()
-    }
+    response = normalize(argument, is_proof)
 
     return {
         'statusCode': 200,
-        'body': json.dumps(body)
+        'body': json.dumps(response)
     }
