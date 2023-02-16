@@ -21,7 +21,7 @@ def get_formula(pk):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class FormulaAsync(View):
+class FormulaCrudAsync(View):
     serializer_class = FormulaSerializer
 
     async def transpile(self, formula_postfix):
@@ -116,7 +116,7 @@ class FormulaAsync(View):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class FormulaSync(View):
+class FormulaCrudSync(View):
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
 
