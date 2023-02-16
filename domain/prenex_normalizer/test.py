@@ -14,15 +14,15 @@ class Test(unittest.TestCase):
     def test_prenex_normalizer_service(self):
         premise = create_formula_from_json(premise_input)
 
-        normalized_argument = normalize([premise]).to_string()
-        premise_actual = normalized_argument[0]
+        response = normalize([premise])
+        premise_actual = response['pnf_string'][0]
         premise_expected = "∀x1((F(f(x1)) ∧ G(f(x1))) ∨ (F(x1) ∧ ¬G(x1)))"
 
         self.assertEqual(premise_actual, premise_expected)
 
     def test_lambda_handler(self):
         response = lambda_handler(event_input, None)
-        premise_actual_str = json.loads(response['body'])['argument_string'][0]
+        premise_actual_str = json.loads(response['body'])['pnf_string'][0]
         premise_expected_str = "∀x1((F(f(x1)) ∧ G(f(x1))) ∨ (F(x1) ∧ ¬G(x1)))"
 
         self.assertEqual(premise_actual_str, premise_expected_str)

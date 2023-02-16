@@ -20,6 +20,8 @@ def normalize(argument: List[Formula]) -> Normalizer:
         for var in var_count:
             normalizer.set_subscript(0)
             arg[f] = normalizer.standardize_variables(formula, var)
+    standardized_json = normalizer.to_json()
+    standardized_string = normalizer.to_string()
     if DEBUG:
         normalizer.print_argument()
         print("")
@@ -30,6 +32,8 @@ def normalize(argument: List[Formula]) -> Normalizer:
         arg[f].set_quant_list(
             normalizer.move_quantifiers_to_front(formula, [])
         )
+    pre_quantifier_json = normalizer.to_json()
+    pre_quantifier_string = normalizer.to_string()
     if DEBUG:
         normalizer.print_argument()
         print("")
@@ -57,11 +61,20 @@ def normalize(argument: List[Formula]) -> Normalizer:
         # skolemize each variable in the formula
         for to_drop in drop_list:
             arg[f] = normalizer.skolemize(formula, to_drop)
+    skolemized_json = normalizer.to_json()
+    skolemized_string = normalizer.to_string()
     if DEBUG:
         normalizer.print_argument()
         print("")
     
-    return normalizer
+    return {
+        "standardized_string": standardized_string,
+        "pre_quantifier_string": pre_quantifier_string,
+        "pnf_string": skolemized_string,
+        "standardized_json": standardized_json,
+        "pre_quantifier_json": pre_quantifier_json,
+        "pnf_json": skolemized_json
+    }
 
 def lambda_handler(event, context):
     body = json.loads(event['body'])
@@ -72,13 +85,9 @@ def lambda_handler(event, context):
         formula = create_formula_from_json(formula_json)
         argument.append(formula)
     
-    normalizer = normalize(argument)
-    body = {
-        'argument_json': normalizer.to_json(),
-        'argument_string': normalizer.to_string()
-    }
+    response = normalize(argument)
 
     return {
         'statusCode': 200,
-        'body': json.dumps(body)
+        'body': json.dumps(response)
     }
