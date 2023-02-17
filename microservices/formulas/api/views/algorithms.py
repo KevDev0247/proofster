@@ -13,6 +13,7 @@ from ..models import Formula
 from ..serializers import FormulaSerializer
 from ..enums import Stage
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaAlgorithmsAsync(View):
     serializer_class = FormulaSerializer
@@ -60,6 +61,15 @@ class FormulaAlgorithmsAsync(View):
                 "status": status.HTTP_400_BAD_REQUEST
             })
 
+        standardized_json = result.get("standardized_json") or {}
+        standardized_string = result.get("standardized_string") or ""
+
+        pre_quantifier_json = result.get("pre_quantifier_json") or {}
+        pre_quantifier_string = result.get("pre_quantifier_string") or ""
+
+        pnf_json = result.get("pnf_json") or {}
+        pnf_string = result.get("pnf_string") or ""
+
     async def generate_cnf(self, request):
         result = await self.handle_domain_request(
             'CONJUNCTIVE_NORMALIZER_LAMBDA_URL', 
@@ -70,3 +80,12 @@ class FormulaAlgorithmsAsync(View):
                 "message": "Error Occurred during Conjunctive Normalization procedure",
                 "status": status.HTTP_400_BAD_REQUEST
             })
+
+        dropped_quantifiers_json = result.get("dropped_quantifiers_json") or {}
+        dropped_quantifiers_string = result.get("dropped_quantifiers_string") or ""
+
+        cnf_json = result.get("cnf_json") or {}
+        cnf_string = result.get("cnf_string") or ""
+
+        clauses_json = result.get("clauses_json") or {}
+        clauses_string = result.get("clauses_string") or ""
