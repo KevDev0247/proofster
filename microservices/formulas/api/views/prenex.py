@@ -16,6 +16,18 @@ from ..enums import Stage
 class PrenexNormalizer(View):
 
     async def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        stage = data.get('stage')
+        workspace_id = data.get('workspace_id')
+
+        formulas = await get_formula_by_stage(stage-1, workspace_id)
+        if not formulas:
+            return JsonResponse({
+                'message': "Error getting formulas",
+                'status': status.HTTP_500_INTERNAL_SERVER_ERROR
+            })
+        names = [formula.name for formula in formulas]
+        
         result = await execute_algorithm(
             'CONJUNCTIVE_NORMALIZER_LAMBDA_URL', 
             json.loads(request.body.decode('utf-8'))
