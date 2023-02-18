@@ -124,7 +124,7 @@ class FormulaCrudSync(View):
         formulas = Formula.objects.all()
 
         if workspace_id:
-            formulas = formulas.filter(workspace_id=workspace_id)
+            formulas = formulas.filter(workspace_id=workspace_id, stage=0)
         serializer = self.serializer_class(formulas, many=True)
         return JsonResponse({
             'formulas': serializer.data,
