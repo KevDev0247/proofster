@@ -27,10 +27,10 @@ class FormulaCrudAsync(View):
     async def transpile(self, formula_postfix):
         try:
             async with aiohttp.ClientSession() as session:
-                transpiler_url = os.getenv("TRANSPILER_LAMBDA_URL")
+                transpiler_url = os.getenv('TRANSPILER_LAMBDA_URL')
                 response = await session.post(
                     transpiler_url, json={
-                        "formula_postfix": formula_postfix
+                        'formula_postfix': formula_postfix
                     }
                 )
                 result = await response.text()
@@ -40,25 +40,25 @@ class FormulaCrudAsync(View):
     
     async def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
-        formula_postfix = data.get("formula_postfix")
+        formula_postfix = data.get('formula_postfix')
         result = await self.transpile(formula_postfix)
         if not result:
             return JsonResponse({
-                "message": "Error Occurred during formula transpilation",
-                "status": status.HTTP_400_BAD_REQUEST
+                'message': "Error Occurred during formula transpilation",
+                'status': status.HTTP_400_BAD_REQUEST
             })
 
-        formula_json = result.get("formula_json") or {}
-        formula_result = result.get("formula_result") or ""
+        formula_json = result.get('formula_json') or {}
+        formula_result = result.get('formula_result') or ""
         
         transpiled = {
-            "name": data.get("name"),
-            "is_conclusion": data.get("is_conclusion"),
-            "formula_postfix": formula_postfix,
-            "formula_json": formula_json,
-            "formula_result": formula_result,
-            "stage": Stage.ORIGINAL.value,
-            "workspace_id": data.get("workspace_id")
+            'name': data.get('name'),
+            'is_conclusion': data.get('is_conclusion'),
+            'formula_postfix': formula_postfix,
+            'formula_json': formula_json,
+            'formula_result': formula_result,
+            'stage': Stage.ORIGINAL.value,
+            'workspace_id': data.get('workspace_id')
         }
         serializer = self.serializer_class(data=transpiled)
         
@@ -66,13 +66,13 @@ class FormulaCrudAsync(View):
             await sync_to_async(serializer.save)()
 
             return JsonResponse({
-                "formula": serializer.data,
-                "status": status.HTTP_200_OK
+                'formula': serializer.data,
+                'status': status.HTTP_200_OK
             })
         else:
             return JsonResponse({
-                "message": serializer.errors,
-                "status": status.HTTP_400_BAD_REQUEST
+                'message': serializer.errors,
+                'status': status.HTTP_400_BAD_REQUEST
             })
 
     async def patch(self, request, pk):
@@ -82,8 +82,8 @@ class FormulaCrudAsync(View):
         formula = await sync_to_async(get_formula)(pk)
         if formula == None:
             return JsonResponse({
-                "message": f"Formula with Id: {pk} not found",
-                "status": status.HTTP_400_BAD_REQUEST
+                'message': f"Formula with Id: {pk} not found",
+                'status': status.HTTP_400_BAD_REQUEST
             })
 
         updated_formula_postfix = data.get("formula_postfix")
@@ -91,27 +91,27 @@ class FormulaCrudAsync(View):
             result = await self.transpile(updated_formula_postfix)
             if not result:
                 return JsonResponse({
-                    "message": "Error Occurred during formula transpilation",
-                    "status": status.HTTP_400_BAD_REQUEST
+                    'message': "Error Occurred during formula transpilation",
+                    'status': status.HTTP_400_BAD_REQUEST
                 })
-            data["formula_json"] = result.get("formula_json") or {}
-            data["formula_result"] = result.get("formula_result") or ""
+            data['formula_json'] = result.get('formula_json') or {}
+            data['formula_result'] = result.get('formula_result') or ""
             
         serializer = self.serializer_class(
             formula, data=data, partial=True)
 
         if await sync_to_async(serializer.is_valid)():
-            serializer.validated_data["updated_at"] = datetime.now()
+            serializer.validated_data['updated_at'] = datetime.now()
             await sync_to_async(serializer.save)()
             
             return JsonResponse({
-                "formula": serializer.data,
-                "status": status.HTTP_200_OK
+                'formula': serializer.data,
+                'status': status.HTTP_200_OK
             })
         else:
             return JsonResponse({
-                "message": serializer.errors,
-                "status": status.HTTP_400_BAD_REQUEST
+                'message': serializer.errors,
+                'status': status.HTTP_400_BAD_REQUEST
             })
 
 
@@ -127,19 +127,19 @@ class FormulaCrudSync(View):
             formulas = formulas.filter(workspace_id=workspace_id)
         serializer = self.serializer_class(formulas, many=True)
         return JsonResponse({
-            "formulas": serializer.data,
-            "status": status.HTTP_200_OK
+            'formulas': serializer.data,
+            'status': status.HTTP_200_OK
         })
 
     def delete(self, request, pk):
         formula = get_formula(pk)
         if formula == None:
             return JsonResponse({
-                "message": f"Formula with Id: {pk} not found",
-                "status": status.HTTP_400_BAD_REQUEST
+                'message': f"Formula with Id: {pk} not found",
+                'status': status.HTTP_400_BAD_REQUEST
             })
 
         formula.delete()
         return JsonResponse({
-            "status": status.HTTP_200_OK
+            'status': status.HTTP_200_OK
         })

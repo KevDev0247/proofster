@@ -30,13 +30,13 @@ class NormalizationView(View):
 
         algorithm_url_key = create_normalizer_url_key(stage_enum)
 
-        step_one_json_key = create_step_one_key(stage_enum, "json")
-        step_two_json_key = create_step_two_key(stage_enum, "json")
-        step_three_json_key = create_step_three_key(stage_enum, "json")
+        step_one_json_key = create_step_one_key(stage_enum, 'json')
+        step_two_json_key = create_step_two_key(stage_enum, 'json')
+        step_three_json_key = create_step_three_key(stage_enum, 'json')
 
-        step_one_string_key = create_step_one_key(stage_enum, "string")
-        step_two_string_key = create_step_two_key(stage_enum, "string")
-        step_three_string_key = create_step_three_key(stage_enum, "string")
+        step_one_string_key = create_step_one_key(stage_enum, 'string')
+        step_two_string_key = create_step_two_key(stage_enum, 'string')
+        step_three_string_key = create_step_three_key(stage_enum, 'string')
 
         formulas = await get_formula_by_stage(stage, workspace_id)
         if not formulas:
@@ -85,15 +85,15 @@ class NormalizationView(View):
 
         if step_one_saved and step_two_saved and step_three_saved:
             return JsonResponse({
-                "results": {
+                'results': {
                     step_one_string_key: step_one_string,
                     step_two_string_key: step_two_string,
                     step_three_string_key: step_three_string
                 },
-                "status": status.HTTP_200_OK
+                'status': status.HTTP_200_OK
             })
         else:
             return JsonResponse({
-                "message": "Failed to save sub steps",
-                "status": status.HTTP_500_INTERNAL_SERVER_ERROR
+                'message': "Failed to save sub steps",
+                'status': status.HTTP_500_INTERNAL_SERVER_ERROR
             })

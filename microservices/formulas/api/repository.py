@@ -40,7 +40,7 @@ def create_bulk_formula(data, stage, workspace_id):
         to_save.append({
             'name': name,
             'is_conclusion': f == len(formulas) - 1,
-            "formula_postfix": None,
+            'formula_postfix': None,
             'formula_json': f_json,
             'formula_result': f_string,
             'stage': stage,

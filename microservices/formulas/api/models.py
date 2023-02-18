@@ -20,7 +20,7 @@ class Formula(models.Model):
     workspace_id = models.UUIDField(default=uuid.uuid4)
 
     class Meta:
-        db_table = "formulas"
+        db_table = 'formulas'
         ordering = ['-created_at']
 
         def __str__(self) -> str:
