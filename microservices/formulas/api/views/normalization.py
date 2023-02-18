@@ -5,13 +5,22 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from ..repository import create_bulk_formula, get_formula_by_stage, execute_algorithm
 from ..enums import Stage
-from ..factory import create_normalizer_url_key, create_step_one_key, create_step_two_key, create_step_three_key
+from ..repository import (
+    create_bulk_formula, 
+    get_formula_by_stage, 
+    execute_algorithm
+)
+from ..factory import (
+    create_normalizer_url_key, 
+    create_step_one_key, 
+    create_step_two_key, 
+    create_step_three_key
+)
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class NegationNormalizer(View):
+class NormalizationView(View):
 
     async def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
