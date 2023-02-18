@@ -8,7 +8,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from ..repository import create_bulk_formula, get_formula_by_stage, execute_algorithm
-from ..models import Formula
 from ..enums import Stage
 
 
@@ -32,7 +31,7 @@ class NegationNormalizer(View):
             'NEGATION_NORMALIZER_LAMBDA_URL', 
             {
                 'is_proof': data.get('is_proof'),
-                'argument_json': formulas.values_list('formula_json', flat=True)
+                'argument_json': [formula.formula_json for formula in formulas]
             }
         )
         if not result:
@@ -41,29 +40,29 @@ class NegationNormalizer(View):
                 'status': status.HTTP_500_INTERNAL_SERVER_ERROR
             })
 
-        negated_conclusion_json = result.get('negated_conclusion_json') or {}, 
+        negated_conclusion_json = result.get('negated_conclusion_json') or []
         negated_conclusion_string = result.get('negated_conclusion_string') or ""
         negated_conclusion_created = await create_bulk_formula({
-            names, 
-            negated_conclusion_json, 
-            negated_conclusion_string
-        }, Stage.NEGATED_CONCLUSION, workspace_id)
+            'names': names, 
+            'jsons': negated_conclusion_json, 
+            'strings': negated_conclusion_string
+        }, Stage.NEGATED_CONCLUSION.value, workspace_id)
 
-        removed_arrow_json = result.get('removed_arrow_json') or {}
+        removed_arrow_json = result.get('removed_arrow_json') or []
         removed_arrow_string = result.get('removed_arrow_string') or ""
         removed_arrow_created = await create_bulk_formula({
-            names, 
-            removed_arrow_json, 
-            removed_arrow_string
-        }, Stage.REMOVED_ARROW, workspace_id)
+            'names': names, 
+            'jsons': removed_arrow_json, 
+            'strings': removed_arrow_string
+        }, Stage.REMOVED_ARROW.value, workspace_id)
         
-        nnf_json = result.get('nnf_json') or {}
+        nnf_json = result.get('nnf_json') or []
         nnf_string = result.get('nnf_string') or ""
         nnf_created = await create_bulk_formula({
-            names, 
-            nnf_json, 
-            nnf_string
-        }, Stage.NNF, workspace_id)
+            'names': names, 
+            'jsons': nnf_json, 
+            'strings': nnf_string
+        }, Stage.NNF.value, workspace_id)
 
         if negated_conclusion_created and removed_arrow_created and nnf_created:
             return JsonResponse({

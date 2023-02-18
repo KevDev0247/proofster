@@ -8,14 +8,11 @@ class Formula(models.Model):
         default=uuid.uuid4, 
         editable=False
     )
-    name = models.CharField(
-        max_length=255,
-        unique=True
-    )
+    name = models.CharField(max_length=255)
     is_conclusion = models.BooleanField(default=False)
-    formula_postfix = models.CharField(max_length=255)
+    formula_postfix = models.TextField(null=True)
     formula_json = models.JSONField()
-    formula_result = models.CharField(max_length=255)
+    formula_result = models.TextField()
     stage = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

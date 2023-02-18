@@ -12,7 +12,7 @@ async def execute_algorithm(url_key, body):
         async with aiohttp.ClientSession() as session:
             url = os.getenv(url_key)
             response = await session.post(
-                url, json={body}
+                url, json=body
             )
             result = await response.text()
             return json.loads(result)
@@ -32,24 +32,29 @@ def get_formula_by_stage(stage, workspace_id):
         print(f"Error occurred: {e}")
         return None
 
-async def create_bulk_formula(data, stage, workspace_id):
-    formulas = zip(data['names'], data['jsons'], data['strings'])
+@sync_to_async
+def create_bulk_formula(data, stage, workspace_id):
+    formulas = list(zip(data['names'], data['jsons'], data['strings']))
     to_save = []
-    for f, (name, f_string, f_json) in enumerate(formulas):
+    for f, (name, f_json, f_string) in enumerate(formulas):
         to_save.append({
             'name': name,
             'is_conclusion': f == len(formulas) - 1,
+            "formula_postfix": None,
             'formula_json': f_json,
             'formula_result': f_string,
             'stage': stage,
             'workspace_id': workspace_id
         })
-
+    
     serializer = FormulaSerializer(data=to_save, many=True)
-    if await sync_to_async(serializer.is_valid)():
-        results = await sync_to_async(
-            Formula.objects.bulk_create(serializer.data)
-        )
-        return results
+    if serializer.is_valid():
+        try:
+            serializer.save()
+            return serializer.data
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            return None
     else:
+        print(f"Error occurred: {serializer.errors}")
         return None
