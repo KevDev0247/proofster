@@ -26,5 +26,5 @@ class Formula(models.Model):
         db_table = "formulas"
         ordering = ['-created_at']
 
-    def __str__(self) -> str:
-        return self.title
+        def __str__(self) -> str:
+            return self.title
