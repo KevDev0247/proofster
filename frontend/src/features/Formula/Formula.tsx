@@ -4,6 +4,8 @@ import { RootState, useAppDispatch } from '../../store';
 import { createFormula, deleteFormula, getFormulas, updateFormula } from './formulaApi';
 import { IFormula } from '../../models/formula';
 import { toast } from 'react-toastify';
+import Typography from '@material-ui/core/Typography';
+import { Box, Card, CardContent, Grid, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -62,7 +64,7 @@ export default function Formula() {
   };
 
   const removeFormula = (id: number) => {
-    if (id) 
+    if (id)
       dispatch(deleteFormula(id))
         .unwrap()
         .then((response) => {
@@ -82,11 +84,11 @@ export default function Formula() {
       return;
     }
 
-    const action = 
-      formula.id === 0 
-        ? createFormula(formula) 
+    const action =
+      formula.id === 0
+        ? createFormula(formula)
         : updateFormula(formula)
-      
+
     dispatch(action)
       .unwrap()
       .then((response) => {
@@ -114,110 +116,136 @@ export default function Formula() {
   return (
     <>
       <div className="form-container">
-        <h1 className="title">
-          Arguments Panel &nbsp;
-          <span className="tag is-dark">{formulaList?.length}</span>
-        </h1>
-        <div className="card">
-          <div className="card-content">
-            <div className="content">
-              <div className="columns">
-                <div className="column is-4">
-                  <Checkbox
-                    title="Conclusion"
-                    name="is_conclusion"
-                    value={formula.is_conclusion}
-                    inputChange={handleInputChange}
-                  />
-                </div>
-              </div>
-              <div className="columns">
-                <div className="column is-4">
-                  <Input
-                    type="text"
-                    title="Name"
-                    name="name"
-                    placeholder="Enter name here"
-                    value={formula.name}
-                    inputChange={handleInputChange}
-                    showValidation={showValidation}
-                    isRequired={true}
-                  />
-                </div>
-                <div className="column is-4">
-                  <Input 
-                    type="text"
-                    title="Formula"
-                    name="formula_postfix"
-                    placeholder="Enter formula in reverse polish form"
-                    value={formula.formula_postfix}
-                    inputChange={handleInputChange}
-                    showValidation={showValidation}
-                    isRequired={true}
-                  />
-                </div>
-              </div>
-              <Button 
-                type="is-dark"
-                loading={isSaving}
-                title="Submit"
-                onClick={submit}
-                disabled={isSaving || isDeleting}
-              />
-              &nbsp;
-              {formula.id !== 0 && (
-                <Button 
-                  title="Cancel"
-                  onClick={resetForm}
-                  disabled={isSaving || isDeleting}
-                />
-              )}
-              <hr />
-              {isLoadingTable && (
-                <div className="has-text-centered">Fetching...</div>
-              )}
-              <div className="table-container">
-                <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Type</th>
-                      <th>Formula</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {formulaList?.map((d: IFormula, index: number) => {
-                      return (
-                        <tr key={index}>
-                          <td>{d.name}</td>
-                          <td>{d.is_conclusion ? "Conclusion" : "Premise"}</td>
-                          <td>{d.formula_result}</td>
-                          <td>
-                            <Button
-                              type="is-warning"
-                              title="Edit"
-                              onClick={() => selectFormula(d)}
-                              disabled={isSaving || isDeleting}
-                            />
-                            &nbsp;
-                            <Button
-                              type="is-danger"
-                              title="Delete"
-                              loading={isDeleting}
-                              onClick={() => removeFormula(d.id)}
-                              disabled={isSaving || isDeleting}
-                            />
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={12}>
+            <Typography variant="h5" component="h1" gutterBottom>
+              Argument
+            </Typography>
+            <TableContainer component={Paper}>
+              <Table aria-label="formula table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Type</TableCell>
+                    <TableCell>Formula</TableCell>
+                    <TableCell>Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {formulaList?.map((d: IFormula, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell>{d.name}</TableCell>
+                      <TableCell>{d.is_conclusion ? "Conclusion" : "Premise"}</TableCell>
+                      <TableCell>{d.formula_result}</TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <Grid container spacing={1}>
+                            <Grid item xs={12} md={6}>
+                              <Button
+                                type="outlined"
+                                title="Edit"
+                                color="primary"
+                                onClick={() => selectFormula(d)}
+                                disabled={isSaving || isDeleting}
+                              />                          
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                              <Button
+                                type="contained"
+                                title="Delete"
+                                color="secondary"
+                                loading={isDeleting}
+                                onClick={() => removeFormula(d.id)}
+                                disabled={isSaving || isDeleting}
+                              />                          
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid item xs={4} sm={4}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5" component="h1" gutterBottom>
+                  Input
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={12}>
+                    <Checkbox
+                      title="Conclusion"
+                      name="is_conclusion"
+                      value={formula.is_conclusion}
+                      inputChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                    <Input
+                      type="text"
+                      title="Name"
+                      name="name"
+                      placeholder="Enter name here"
+                      value={formula.name}
+                      inputChange={handleInputChange}
+                      showValidation={showValidation}
+                      isRequired={true}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                    <Input
+                      type="text"
+                      title="Formula"
+                      name="formula_postfix"
+                      placeholder="Enter formula"
+                      value={formula.formula_postfix}
+                      inputChange={handleInputChange}
+                      showValidation={showValidation}
+                      isRequired={true}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <Button
+                      type="contained"
+                      loading={isSaving}
+                      title="Submit"
+                      color="primary"
+                      onClick={submit}
+                      disabled={isSaving || isDeleting}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} container justifyContent="flex-end">
+                    &nbsp;
+                    {formula.id !== 0 && (
+                      <Button
+                        type="outlined"
+                        title="Cancel"
+                        color="primary"
+                        onClick={resetForm}
+                        disabled={isSaving || isDeleting}
+                      />
+                    )}
+                    {isLoadingTable && (
+                      <div className="has-text-centered">Fetching...</div>
+                    )}
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={8} md={8}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5" component="h1" gutterBottom>
+                  Control Panel
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </div>
     </>
   )

@@ -1,29 +1,33 @@
+import { Button, CircularProgress, useTheme } from '@material-ui/core';
+
 type Props = {
   loading?: boolean;
-  type?: string;
+  type?: "contained" | "outlined" | "text";
+  color?: "primary" | "secondary" | "error";
   title: string;
-  onClick: React.SyntheticEvent | any;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
 };
 
-function Button ({
+function ProofsterButton({
   loading,
-  type,
+  type = "contained",
+  color = "primary",
   title,
   onClick,
   disabled,
 }: Props) {
   return (
-    <button
-      className={
-        loading ? "button is-small is-loading " : "button is-small " + type
-      }
+    <Button
+      variant={type}
+      color={color}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
+      startIcon={loading && <CircularProgress size={20} />}
     >
       {title}
-    </button>
+    </Button>
   );
-};
+}
 
-export default Button;
+export default ProofsterButton;

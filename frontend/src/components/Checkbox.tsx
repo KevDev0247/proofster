@@ -1,3 +1,6 @@
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+
 type Props = {
   title: string;
   name: string;
@@ -5,28 +8,25 @@ type Props = {
   inputChange: void | any;
 };
 
-function Checkbox({
+function ProofsterCheckbox({
   title,
   name,
   value,
   inputChange,
 }: Props) {
   return (
-    <>
-      <div className="control">
-        <label className="checkbox">
-          <input 
-            type="checkbox" 
-            name={name}
-            onChange={inputChange}
-            checked={value}
-          />
-          &nbsp;&nbsp;
-          <span style={{ fontWeight: "bold", fontSize: "16px" }}>{title}</span>
-        </label>
-      </div>
-    </>
+    <FormControlLabel
+      control={
+        <Checkbox
+          checked={value}
+          name={name}
+          color="primary"
+          onChange={inputChange}
+        />
+      }
+      label={title}
+    />
   );
 }
 
-export default Checkbox;
+export default ProofsterCheckbox;

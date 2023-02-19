@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import 'bulma/css/bulma.min.css';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,7 +15,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>
 );
