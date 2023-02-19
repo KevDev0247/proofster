@@ -5,10 +5,12 @@ import { createFormula, deleteFormula, getFormulas, updateFormula } from './form
 import { IFormula } from '../../models/formula';
 import { toast } from 'react-toastify';
 import Typography from '@material-ui/core/Typography';
-import { Box, Card, CardContent, Grid, Paper, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
+import { Box, Card, CardContent, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function Formula() {
   const dispatch = useAppDispatch();
@@ -140,24 +142,36 @@ export default function Formula() {
                       <TableCell>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Grid container spacing={1}>
-                            <Grid item xs={12} md={6}>
-                              <Button
+                            <Grid item xs={12} md={4}>
+                              {/* <Button
                                 type="outlined"
                                 title="Edit"
                                 color="primary"
                                 onClick={() => selectFormula(d)}
                                 disabled={isSaving || isDeleting}
-                              />                          
+                              /> */}
+                              <IconButton
+                                color="primary"
+                                onClick={() => selectFormula(d)}
+                                disabled={isSaving || isDeleting}>
+                                <Edit />
+                              </IconButton>                   
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                              <Button
+                            <Grid item xs={12} md={4}>
+                              {/* <Button
                                 type="contained"
                                 title="Delete"
                                 color="secondary"
                                 loading={isDeleting}
                                 onClick={() => removeFormula(d.id)}
                                 disabled={isSaving || isDeleting}
-                              />                          
+                              /> */}
+                              <IconButton
+                                color="secondary"
+                                onClick={() => removeFormula(d.id)}
+                                disabled={isSaving || isDeleting}>
+                                <DeleteIcon />
+                              </IconButton>                       
                             </Grid>
                           </Grid>
                         </Box>
@@ -221,9 +235,9 @@ export default function Formula() {
                     &nbsp;
                     {formula.id !== 0 && (
                       <Button
-                        type="outlined"
+                        type="contained"
                         title="Cancel"
-                        color="primary"
+                        color="secondary"
                         onClick={resetForm}
                         disabled={isSaving || isDeleting}
                       />
