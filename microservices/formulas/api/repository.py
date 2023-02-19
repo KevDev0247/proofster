@@ -2,6 +2,7 @@ import json
 import os
 import uuid
 import aiohttp
+from datetime import datetime
 from typing import Dict, List
 from asgiref.sync import sync_to_async
 
@@ -62,91 +63,31 @@ def save_bulk_formula(
     ))
     normalized = list(zip(names, jsons, strings, ids))
 
-    to_create, to_update, to_delete = [], [], []
-    if len(normalized) >= len(existing):
-        to_update_partial = normalized.copy()
-        existing_ids = [curr.formula_id for curr in existing]
-        
-        to_drop = []
-        for (name, f_json, f_string, f_id) in normalized:
-            if f_id not in existing_ids:
-                to_create.append({
-                    'name': name,
-                    'is_conclusion': f_id == conclusion_id,
-                    'formula_postfix': None,
-                    'formula_json': f_json,
-                    'formula_result': f_string,
-                    'stage': stage,
-                    'workspace_id': workspace_id,
-                    'formula_id': f_id
-                })
-                to_drop.append((name, f_json, f_string, f_id))
+    for formula in existing:
+        formula.delete()
 
-        to_update_partial = list(filter(
-            lambda x: x not in to_drop,
-            to_update_partial
-        ))
-        joined = list(zip(to_update_partial, existing))
-        for ((name, f_json, f_string, f_id), curr) in joined:
-            curr.name = name
-            curr.formula_json = f_json
-            curr.formula_result = f_string
-            to_update.append(curr)      
-    else:
-        to_delete = existing.copy()
-        normalized_ids = ids
+    to_create = []
+    for (name, f_json, f_string, f_id) in normalized:
+        to_create.append({
+            'name': name,
+            'is_conclusion': f_id == conclusion_id,
+            'formula_postfix': None,
+            'formula_json': f_json,
+            'formula_result': f_string,
+            'stage': stage,
+            'workspace_id': workspace_id,
+            'formula_id': f_id
+        })
 
-        to_drop, to_update_full = [], []
-        for curr in existing:
-            if curr.formula_id in normalized_ids:
-                to_update_full.append(curr)
-                to_drop.append(curr)
-            
-        print("to drop ", to_delete)
-        to_delete = list(filter(
-            lambda x: x not in to_drop,
-            to_delete
-        ))
-        print("to delete ", to_delete)
-        joined = list(zip(normalized, to_update_full))
-        for ((name, f_json, f_string, f_id), curr) in joined:
-            curr.name = name
-            curr.formula_json = f_json
-            curr.formula_result = f_string
-            to_update.append(curr)
-
-    created = False
+    saved = False
     create_serializer = FormulaSerializer(data=to_create, many=True)
     if create_serializer.is_valid():
         try:
             create_serializer.save()
-            created = True
+            saved = True
         except Exception as e:
             print(f"Error occurred: {e}")
     else:
         print(f"Error occurred: {create_serializer.errors}")
-    print("created")
 
-    print(to_update)
-    updated = False
-    serialized = [
-        FormulaSerializer(formula).data 
-        for formula in to_update
-    ]
-    update_serializer = FormulaSerializer(data=serialized, many=True)
-    if update_serializer.is_valid():
-        print("valid")
-        try:
-            update_serializer.save()
-            updated = True
-        except Exception as e:
-            print(f"Error occurred: {e}")
-    else:
-        print(f"Error occurred: {update_serializer.errors}")
-    print("updated")
-
-    for formula in to_delete:
-        formula.delete()
-    print("deleted")
-
-    return created and updated
+    return saved
