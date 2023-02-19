@@ -9,7 +9,7 @@ declare module '@material-ui/core/styles/createPalette' {
   }
 }
 
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       main: '#2E2E2E',

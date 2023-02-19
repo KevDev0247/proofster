@@ -5,12 +5,11 @@ import { createFormula, deleteFormula, getFormulas, updateFormula } from './form
 import { IFormula } from '../../models/formula';
 import { toast } from 'react-toastify';
 import Typography from '@material-ui/core/Typography';
-import { Edit } from '@material-ui/icons';
-import { Box, Card, CardContent, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Edit, Delete } from '@material-ui/icons';
+import { Box, Card, CardContent, FormControl, FormControlLabel, CircularProgress, Grid, IconButton, Paper, Radio, RadioGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function Formula() {
   const dispatch = useAppDispatch();
@@ -20,10 +19,7 @@ export default function Formula() {
   }, [dispatch]);
 
   const formulaList = useSelector(
-    (state: RootState) => {
-      console.log(state.formula.list.values)
-      return state.formula.list.values
-    }
+    (state: RootState) => state.formula.list.values
   );
   const isLoadingTable = useSelector(
     (state: RootState) => state.formula.list.isLoading
@@ -119,26 +115,53 @@ export default function Formula() {
     <>
       <div className="form-container">
         <Grid container spacing={4}>
+          {isLoadingTable && (
+            <Grid container justifyContent="center" alignItems="center" spacing={2}>
+              <Grid item>
+                <CircularProgress color="primary" />
+              </Grid>
+              <Grid item>
+                <Typography variant="h6">Fetching...</Typography>
+              </Grid>
+            </Grid>
+          )}
           <Grid item xs={12} md={12}>
-            <Typography variant="h5" component="h1" gutterBottom>
-              Argument
-            </Typography>
             <TableContainer component={Paper}>
               <Table aria-label="formula table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Formula</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell>
+                      <Typography variant="body2" gutterBottom>Name</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" gutterBottom>Type</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" gutterBottom>Formula</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" gutterBottom>Actions</Typography>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {formulaList?.map((d: IFormula, index: number) => (
                     <TableRow key={index}>
-                      <TableCell>{d.name}</TableCell>
-                      <TableCell>{d.is_conclusion ? "Conclusion" : "Premise"}</TableCell>
-                      <TableCell>{d.formula_result}</TableCell>
+                      <TableCell>
+                        <Typography variant="body1" gutterBottom>
+                          {d.name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body1" gutterBottom>
+                          {d.is_conclusion ? "Conclusion" : "Premise"}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body1" gutterBottom>
+                          {d.formula_result}
+                        </Typography>
+                      </TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Grid container spacing={1}>
@@ -170,7 +193,7 @@ export default function Formula() {
                                 color="secondary"
                                 onClick={() => removeFormula(d.id)}
                                 disabled={isSaving || isDeleting}>
-                                <DeleteIcon />
+                                <Delete />
                               </IconButton>                       
                             </Grid>
                           </Grid>
@@ -182,7 +205,7 @@ export default function Formula() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid item xs={4} sm={4}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="h1" gutterBottom>
@@ -221,7 +244,7 @@ export default function Formula() {
                       isRequired={true}
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={6} md={6}>
                     <Button
                       type="contained"
                       loading={isSaving}
@@ -231,26 +254,23 @@ export default function Formula() {
                       disabled={isSaving || isDeleting}
                     />
                   </Grid>
-                  <Grid item xs={12} md={6} container justifyContent="flex-end">
+                  <Grid item xs={6} md={6} container justifyContent="flex-end">
                     &nbsp;
                     {formula.id !== 0 && (
                       <Button
-                        type="contained"
+                        type="outlined"
                         title="Cancel"
-                        color="secondary"
+                        color="primary"
                         onClick={resetForm}
                         disabled={isSaving || isDeleting}
                       />
-                    )}
-                    {isLoadingTable && (
-                      <div className="has-text-centered">Fetching...</div>
                     )}
                   </Grid>
                 </Grid>
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={8} md={8}>
+          <Grid item xs={12} md={8}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="h1" gutterBottom>

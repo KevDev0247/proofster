@@ -1,17 +1,18 @@
 import './App.css';
 import Formula from './features/Formula/Formula';
+import { AppBar, Toolbar, Typography, Container } from '@material-ui/core';
 
 function App() {
   return (
     <>
-      <nav className="navbar is-dark">
-        <div className="navbar-brand">
-          <a className="navbar-item" href="#">Toolbar</a>
-        </div>
-      </nav>
-      <div className="container is-max-desktop">
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          <Typography variant="h6">Proofster</Typography>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="md">
         <Formula />
-      </div>
+      </Container>
     </>
   );
 }
