@@ -77,8 +77,7 @@ class FormulaCrudAsync(View):
 
     async def patch(self, request, pk):
         data = json.loads(request.body.decode('utf-8'))
-
-        # print(Formula.objects.filter(pk=uuid.UUID(pk)).exists())
+        
         formula = await sync_to_async(get_formula)(pk)
         if formula == None:
             return JsonResponse({
@@ -115,6 +114,7 @@ class FormulaCrudAsync(View):
             })
 
 
+# need to delete all other formulas with the same name
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaCrudSync(View):
     queryset = Formula.objects.all()

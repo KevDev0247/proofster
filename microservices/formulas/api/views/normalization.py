@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from ..enums import Stage
 from ..repository import (
-    create_bulk_formula, 
+    save_bulk_formula, 
     get_formula_by_stage, 
     execute_algorithm
 )
@@ -45,6 +45,12 @@ class NormalizationView(View):
                 'status': status.HTTP_500_INTERNAL_SERVER_ERROR
             })
         names = [formula.name for formula in formulas]
+        ids = [formula.formula_id for formula in formulas]
+        conclusion_ids = [
+            formula.id 
+            for formula in formulas 
+            if formula.is_conclusion
+        ]
 
         result = await execute_algorithm(
             url_key = algorithm_url_key, 
@@ -61,25 +67,28 @@ class NormalizationView(View):
 
         step_one_json = result.get(step_one_json_key) or []
         step_one_string = result.get(step_one_string_key) or ''
-        step_one_saved = await create_bulk_formula({
-            'names': names, 
-            'jsons': step_one_json, 
+        step_one_saved = await save_bulk_formula({
+            'names': names,
+            'ids': ids,
+            'jsons': step_one_json,
             'strings': step_one_string
         }, stage + 1, workspace_id)
 
         step_two_json = result.get(step_two_json_key) or []
         step_two_string = result.get(step_two_string_key) or ''
-        step_two_saved = await create_bulk_formula({
-            'names': names, 
-            'jsons': step_two_json, 
+        step_two_saved = await save_bulk_formula({
+            'names': names,
+            'ids': ids,
+            'jsons': step_two_json,
             'strings': step_two_string
         }, stage + 2, workspace_id)
 
         step_three_json = result.get(step_three_json_key) or []
         step_three_string = result.get(step_three_string_key) or ''
-        step_three_saved = await create_bulk_formula({
-            'names': names, 
-            'jsons': step_three_json, 
+        step_three_saved = await save_bulk_formula({
+            'names': names,
+            'ids': ids,
+            'jsons': step_three_json,
             'strings': step_three_string
         }, stage + 3, workspace_id)
 
@@ -94,6 +103,6 @@ class NormalizationView(View):
             })
         else:
             return JsonResponse({
-                'message': "Failed to save sub steps",
+                'message': "Error saving sub steps",
                 'status': status.HTTP_500_INTERNAL_SERVER_ERROR
             })

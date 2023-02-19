@@ -18,6 +18,7 @@ class Formula(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     workspace_id = models.UUIDField(default=uuid.uuid4)
+    formula_id = models.UUIDField(default=uuid.uuid4)
 
     class Meta:
         db_table = 'formulas'
