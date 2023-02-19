@@ -2,13 +2,17 @@ import json
 import os
 import uuid
 import aiohttp
+from typing import Dict, List
 from asgiref.sync import sync_to_async
 
 from .models import Formula
 from .serializers import FormulaSerializer
 
 
-async def execute_algorithm(url_key, body):
+async def execute_algorithm(
+    url_key: str, 
+    body: Dict[str, any]
+) -> Dict[str, any]:
     try:
         async with aiohttp.ClientSession() as session:
             url = os.getenv(url_key)
@@ -21,14 +25,17 @@ async def execute_algorithm(url_key, body):
         print(f"Error occurred: {e}")
         return None
 
-def get_formula(pk):
+def get_formula(pk) -> Formula:
     try:
         return Formula.objects.get(pk=uuid.UUID(pk))
     except:
         return None
 
 @sync_to_async
-def get_formula_by_stage(stage, workspace_id):
+def get_formula_by_stage(
+    stage: int, 
+    workspace_id: int
+) -> List[Formula]:
     try:
         formulas = list(Formula.objects.filter(
             stage=stage,
@@ -40,19 +47,20 @@ def get_formula_by_stage(stage, workspace_id):
         return None
 
 @sync_to_async
-def save_bulk_formula(data, stage, workspace_id):
+def save_bulk_formula(
+    stage: int, 
+    workspace_id: str,
+    conclusion_id: str,
+    names: List[str],
+    ids: List[str],
+    jsons: List[Dict[str, any]],
+    strings: List[str]
+) -> bool:
     existing = list(Formula.objects.filter(
         stage=stage,
         workspace_id=workspace_id
     ))
-    normalized = list(zip(
-        data['names'], data['jsons'], data['strings'], data['ids']
-    ))
-    conclusion_ids = [
-        formula.id 
-        for formula in existing 
-        if formula.is_conclusion
-    ]
+    normalized = list(zip(names, jsons, strings, ids))
 
     to_create, to_update, to_delete = [], [], []
     if len(normalized) >= len(existing):
@@ -64,7 +72,7 @@ def save_bulk_formula(data, stage, workspace_id):
             if f_id not in existing_ids:
                 to_create.append({
                     'name': name,
-                    'is_conclusion': f_id in conclusion_ids,
+                    'is_conclusion': f_id == conclusion_id,
                     'formula_postfix': None,
                     'formula_json': f_json,
                     'formula_result': f_string,
@@ -86,7 +94,7 @@ def save_bulk_formula(data, stage, workspace_id):
             to_update.append(curr)      
     else:
         to_delete = existing.copy()
-        normalized_ids = data['ids']
+        normalized_ids = ids
 
         to_drop = []
         for curr in existing:

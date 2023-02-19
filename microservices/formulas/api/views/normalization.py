@@ -46,17 +46,20 @@ class NormalizationView(View):
             })
         names = [formula.name for formula in formulas]
         ids = [formula.formula_id for formula in formulas]
-        conclusion_ids = [
-            formula.id 
-            for formula in formulas 
-            if formula.is_conclusion
-        ]
+        
+        premises, conclusion = [], []
+        for formula in formulas:
+            if formula.is_conclusion:
+                conclusion.append(formula)
+            else:
+                premises.append(formula)
+        argument = premises + conclusion
 
         result = await execute_algorithm(
-            url_key = algorithm_url_key, 
+            url_key = algorithm_url_key,
             body = {
                 'is_proof': data.get('is_proof'),
-                'argument_json': [formula.formula_json for formula in formulas]
+                'argument_json': [formula.formula_json for formula in argument]
             }
         )
         if not result:
@@ -67,30 +70,37 @@ class NormalizationView(View):
 
         step_one_json = result.get(step_one_json_key) or []
         step_one_string = result.get(step_one_string_key) or ''
-        step_one_saved = await save_bulk_formula({
-            'names': names,
-            'ids': ids,
-            'jsons': step_one_json,
-            'strings': step_one_string
-        }, stage + 1, workspace_id)
-
+        step_one_saved = await save_bulk_formula(
+            stage + 1,
+            workspace_id,
+            conclusion[0].formula_id,
+            names,
+            ids,
+            step_one_json,
+            step_one_string
+        )
         step_two_json = result.get(step_two_json_key) or []
         step_two_string = result.get(step_two_string_key) or ''
-        step_two_saved = await save_bulk_formula({
-            'names': names,
-            'ids': ids,
-            'jsons': step_two_json,
-            'strings': step_two_string
-        }, stage + 2, workspace_id)
-
+        step_two_saved = await save_bulk_formula(
+            stage + 2,
+            workspace_id,
+            conclusion[0].formula_id,
+            names,
+            ids,
+            step_two_json,
+            step_two_string
+        )
         step_three_json = result.get(step_three_json_key) or []
         step_three_string = result.get(step_three_string_key) or ''
-        step_three_saved = await save_bulk_formula({
-            'names': names,
-            'ids': ids,
-            'jsons': step_three_json,
-            'strings': step_three_string
-        }, stage + 3, workspace_id)
+        step_three_saved = await save_bulk_formula(
+            stage + 3,
+            workspace_id,
+            conclusion[0].formula_id,
+            names,
+            ids,
+            step_three_json,
+            step_three_string
+        )
 
         if step_one_saved and step_two_saved and step_three_saved:
             return JsonResponse({
