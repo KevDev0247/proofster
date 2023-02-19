@@ -96,19 +96,24 @@ def save_bulk_formula(
         to_delete = existing.copy()
         normalized_ids = ids
 
-        to_drop = []
+        to_drop, to_update_full = [], []
         for curr in existing:
             if curr.formula_id in normalized_ids:
-                curr.name = name
-                curr.formula_json = f_json
-                curr.formula_result = f_string
-                to_update.append(curr)
-            to_drop.append(curr)
+                to_update_full.append(curr)
+                to_drop.append(curr)
             
+        print("to drop ", to_delete)
         to_delete = list(filter(
             lambda x: x not in to_drop,
             to_delete
         ))
+        print("to delete ", to_delete)
+        joined = list(zip(normalized, to_update_full))
+        for ((name, f_json, f_string, f_id), curr) in joined:
+            curr.name = name
+            curr.formula_json = f_json
+            curr.formula_result = f_string
+            to_update.append(curr)
 
     created = False
     create_serializer = FormulaSerializer(data=to_create, many=True)
@@ -120,10 +125,17 @@ def save_bulk_formula(
             print(f"Error occurred: {e}")
     else:
         print(f"Error occurred: {create_serializer.errors}")
+    print("created")
 
+    print(to_update)
     updated = False
-    update_serializer = FormulaSerializer(data=to_update, many=True)
+    serialized = [
+        FormulaSerializer(formula).data 
+        for formula in to_update
+    ]
+    update_serializer = FormulaSerializer(data=serialized, many=True)
     if update_serializer.is_valid():
+        print("valid")
         try:
             update_serializer.save()
             updated = True
@@ -131,8 +143,10 @@ def save_bulk_formula(
             print(f"Error occurred: {e}")
     else:
         print(f"Error occurred: {update_serializer.errors}")
+    print("updated")
 
     for formula in to_delete:
         formula.delete()
+    print("deleted")
 
     return created and updated
