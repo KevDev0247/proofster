@@ -32,7 +32,6 @@ def get_formula(pk) -> Formula:
     except:
         return None
 
-@sync_to_async
 def get_formula_by_stage(
     stage: int, 
     workspace_id: int

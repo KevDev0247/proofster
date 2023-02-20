@@ -4,6 +4,7 @@ from rest_framework import status
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from asgiref.sync import sync_to_async
 
 from ..enums import Stage
 from ..repository import (
@@ -20,7 +21,7 @@ from ..factory import (
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class NormalizationView(View):
+class NormalizationAsync(View):
 
     async def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
@@ -38,7 +39,7 @@ class NormalizationView(View):
         step_two_string_key = create_step_two_key(stage_enum, 'string')
         step_three_string_key = create_step_three_key(stage_enum, 'string')
 
-        formulas = await get_formula_by_stage(stage, workspace_id)
+        formulas = await sync_to_async(get_formula_by_stage)(stage, workspace_id)
         if not formulas:
             return JsonResponse({
                 'message': "Error getting formulas",

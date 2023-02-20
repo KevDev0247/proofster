@@ -9,6 +9,8 @@ from django.views.generic import View
 from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+
+from ..repository import get_formula_by_stage
 from ..models import Formula
 from ..serializers import FormulaSerializer
 from ..enums import Stage
@@ -114,17 +116,16 @@ class FormulaCrudAsync(View):
             })
 
 
-# need to delete all other formulas with the same name
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaCrudSync(View):
     queryset = Formula.objects.all()
     serializer_class = FormulaSerializer
 
-    def get(self, request, workspace_id):
-        formulas = Formula.objects.all()
+    def get(self, request):
+        workspace_id = request.GET.get('workspace_id')
+        stage = request.GET.get('stage')
 
-        if workspace_id:
-            formulas = formulas.filter(workspace_id=workspace_id, stage=0)
+        formulas = get_formula_by_stage(stage, workspace_id)
         serializer = self.serializer_class(formulas, many=True)
         return JsonResponse({
             'formulas': serializer.data,

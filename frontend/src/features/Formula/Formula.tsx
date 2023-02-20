@@ -6,7 +6,7 @@ import { IFormula } from '../../models/formula';
 import { toast } from 'react-toastify';
 import Typography from '@material-ui/core/Typography';
 import { Edit, Delete } from '@material-ui/icons';
-import { Box, Card, CardContent, FormControl, FormControlLabel, CircularProgress, Grid, IconButton, Paper, Radio, RadioGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Box, Card, CardContent, CircularProgress, Grid, IconButton, Paper, Radio, RadioGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -15,7 +15,10 @@ export default function Formula() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getFormulas());
+    dispatch(getFormulas({ 
+      workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956', 
+      stage: 0 
+    }));
   }, [dispatch]);
 
   const formulaList = useSelector(
@@ -67,7 +70,10 @@ export default function Formula() {
         .unwrap()
         .then((response) => {
           toast.success(response);
-          dispatch(getFormulas());
+          dispatch(getFormulas({ 
+            workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956', 
+            stage: 0 
+          }));
         })
         .catch((error) => {
           toast.error(error);
@@ -92,7 +98,10 @@ export default function Formula() {
       .then((response) => {
         toast.success(response);
         resetForm();
-        dispatch(getFormulas());
+        dispatch(getFormulas({ 
+          workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956', 
+          stage: 0 
+        }));
       })
       .catch((error) => {
         toast.error(error);
@@ -175,7 +184,7 @@ export default function Formula() {
                             </Grid>
                             <Grid item xs={12} md={4}>
                               <IconButton
-                                color="secondary"
+                                color="primary"
                                 onClick={() => removeFormula(d.id)}
                                 disabled={isSaving || isDeleting}>
                                 <Delete />

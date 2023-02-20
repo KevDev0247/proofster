@@ -1,0 +1,14 @@
+import { Card, CardContent, Typography } from '@material-ui/core'
+import React from 'react'
+
+export default function Normalizer() {
+  return (
+    <Card>
+      <CardContent>
+        <Typography variant="h5" component="h1" gutterBottom>
+          Control Panel
+        </Typography>
+      </CardContent>
+    </Card>
+  )
+}

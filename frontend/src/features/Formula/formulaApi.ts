@@ -2,11 +2,16 @@ import { FORMULA_API } from "../../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IFormula } from "../../models/formula";
 
+interface IGetFormulasParams {
+  workspaceId: string;
+  stage: number;
+}
+
 export const getFormulas = createAsyncThunk(
   "formulas/get", 
-  async () => {
+  async (params: IGetFormulasParams) => {
     try {
-      const response = await FORMULA_API.get("get/workspace/216da6d9-aead-4970-9465-69bfb55d4956")
+      const response = await FORMULA_API.get(`get/?workspace_id=${params.workspaceId}&stage=${params.stage}`)
       return response.data.formulas
     } catch (error) {
       console.log(error);
