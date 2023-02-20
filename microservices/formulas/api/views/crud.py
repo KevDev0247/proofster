@@ -10,16 +10,10 @@ from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from ..repository import get_formula_by_stage
+from ..repository import get_formula_by_stage, get_formula
 from ..models import Formula
 from ..serializers import FormulaSerializer
 from ..enums import Stage
-
-def get_formula(pk):
-    try:
-        return Formula.objects.get(pk=uuid.UUID(pk))
-    except:
-        return None
 
 
 @method_decorator(csrf_exempt, name='dispatch')

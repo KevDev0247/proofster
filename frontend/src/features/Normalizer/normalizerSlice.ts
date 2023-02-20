@@ -1,6 +1,6 @@
  /* eslint-disable */
 import { createSlice } from "@reduxjs/toolkit";
-import { normalize } from "./normalizerApi";
+import { getResults, normalize } from "./normalizerApi";
 
 export const normalizerSlice = createSlice({
   name: "normalizer",
@@ -17,15 +17,15 @@ export const normalizerSlice = createSlice({
       droppedQuantifiers: [],
       cnf: [],
       clauses: [],
-      stage: 0
-    }
+    },
+    stage: 0
   },
   reducers: {
     next: (state) => {
-      state.normalize.stage += 1
+      state.stage += 1
     },
     reset: (state) => {
-      state.normalize.stage = 0
+      state.stage = 0
     }
   },
   extraReducers: {
@@ -39,6 +39,19 @@ export const normalizerSlice = createSlice({
       state.normalize.isLoading = false
     },
     [normalize.rejected.type]: (state, action) => {
+      state.normalize.status = "failed",
+      state.normalize.isLoading = false
+    },
+    [getResults.pending.type]: (state, action) => {
+      state.normalize.status = "pending",
+      state.normalize.isLoading = true
+    },
+    [getResults.fulfilled.type]: (state, action) => {
+      state.normalize.status = "success",
+      state.normalize.isLoading = false
+      
+    },
+    [getResults.rejected.type]: (state, action) => {
       state.normalize.status = "failed",
       state.normalize.isLoading = false
     },
