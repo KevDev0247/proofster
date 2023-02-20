@@ -1,7 +1,11 @@
  /* eslint-disable */
 import { createSlice } from "@reduxjs/toolkit";
-import { getFormulas, createFormula, deleteFormula } from "./formulaApi";
-import { updateFormula } from './formulaApi';
+import { 
+  getFormulas, 
+  createFormula,
+  updateFormula,
+  deleteFormula 
+} from "./formulaApi";
 
 export const formulaSlice = createSlice({
   name: "formula",

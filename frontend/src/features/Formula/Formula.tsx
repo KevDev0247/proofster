@@ -166,13 +166,6 @@ export default function Formula() {
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Grid container spacing={1}>
                             <Grid item xs={12} md={4}>
-                              {/* <Button
-                                type="outlined"
-                                title="Edit"
-                                color="primary"
-                                onClick={() => selectFormula(d)}
-                                disabled={isSaving || isDeleting}
-                              /> */}
                               <IconButton
                                 color="primary"
                                 onClick={() => selectFormula(d)}
@@ -181,14 +174,6 @@ export default function Formula() {
                               </IconButton>                   
                             </Grid>
                             <Grid item xs={12} md={4}>
-                              {/* <Button
-                                type="contained"
-                                title="Delete"
-                                color="secondary"
-                                loading={isDeleting}
-                                onClick={() => removeFormula(d.id)}
-                                disabled={isSaving || isDeleting}
-                              /> */}
                               <IconButton
                                 color="secondary"
                                 onClick={() => removeFormula(d.id)}
@@ -205,7 +190,7 @@ export default function Formula() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={12}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="h1" gutterBottom>
@@ -270,7 +255,7 @@ export default function Formula() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={12}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="h1" gutterBottom>

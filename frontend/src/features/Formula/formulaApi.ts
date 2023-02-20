@@ -1,7 +1,6 @@
 import { FORMULA_API } from "../../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IFormula } from "../../models/formula";
-import AxiosError from "../../errors";
 
 export const getFormulas = createAsyncThunk(
   "formulas/get", 
@@ -10,7 +9,6 @@ export const getFormulas = createAsyncThunk(
       const response = await FORMULA_API.get("get/workspace/216da6d9-aead-4970-9465-69bfb55d4956")
       return response.data.formulas
     } catch (error) {
-      console.log((error as AxiosError).config.url);
       console.log(error);
     }
   }
