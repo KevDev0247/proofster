@@ -1,6 +1,7 @@
  /* eslint-disable */
 import { createSlice } from "@reduxjs/toolkit";
 import { getResults, normalize } from "./normalizerApi";
+import { IFormula } from './../../models/formula';
 
 export const normalizerSlice = createSlice({
   name: "normalizer",
@@ -8,24 +9,26 @@ export const normalizerSlice = createSlice({
     normalize: {
       isLoading: false,
       status: "",
-      negatedConclusion: [],
-      removedArrow: [],
-      nnf: [],
-      standardized: [],
-      preQuantifier: [],
-      pnf: [],
-      droppedQuantifiers: [],
-      cnf: [],
-      clauses: [],
+      stages: [
+        { name: "Negated Conclusion", formulas: [] as IFormula[] },
+        { name: "Removed Arrow", formulas: [] as IFormula[] },
+        { name: "NNF", formulas: [] as IFormula[] },
+        { name: "Standardized", formulas: [] as IFormula[] },
+        { name: "Pre-Quantifier", formulas: [] as IFormula[] },
+        { name: "PNF", formulas: [] as IFormula[] },
+        { name: "Dropped Quantifiers", formulas: [] as IFormula[] },
+        { name: "CNF", formulas: [] as IFormula[] },
+        { name: "Clauses", formulas: [] as IFormula[] }
+      ]
     },
-    stage: 0
+    currentStage: 0
   },
   reducers: {
     next: (state) => {
-      state.stage += 1
+      state.currentStage += 1
     },
     reset: (state) => {
-      state.stage = 0
+      state.currentStage = 0
     }
   },
   extraReducers: {
@@ -34,7 +37,7 @@ export const normalizerSlice = createSlice({
       state.normalize.status = "pending",
       state.normalize.isLoading = true
     },
-    [normalize.fulfilled.type]: (state, { payload }) => {
+    [normalize.fulfilled.type]: (state, action) => {
       state.normalize.status = "success",
       state.normalize.isLoading = false
     },
@@ -50,6 +53,11 @@ export const normalizerSlice = createSlice({
       state.normalize.status = "success",
       state.normalize.isLoading = false
       
+      const formulas = action.payload
+      formulas.forEach((formula: IFormula) => {
+        const index = formula.stage;
+        state.normalize.stages[index].formulas.push(formula);
+      });
     },
     [getResults.rejected.type]: (state, action) => {
       state.normalize.status = "failed",

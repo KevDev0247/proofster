@@ -5,4 +5,5 @@ export interface IFormula {
 	formula_result: string;
 	is_conclusion: boolean;
 	workspace_id: string;
+	stage: number;
 }
