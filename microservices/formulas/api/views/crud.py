@@ -91,8 +91,11 @@ class FormulaCrudAsync(View):
             data['formula_json'] = result.get('formula_json') or {}
             data['formula_result'] = result.get('formula_result') or ""
             
-        serializer = FormulaSerializer(data=data, partial=True)
-
+        serializer = FormulaSerializer(
+            instance=formula, 
+            data=data, 
+            partial=True
+        )
         if await sync_to_async(serializer.is_valid)():
             serializer.validated_data['updated_at'] = datetime.now()
             await sync_to_async(serializer.save)()

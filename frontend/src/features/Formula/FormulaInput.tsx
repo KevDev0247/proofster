@@ -1,9 +1,10 @@
-import React, { useEffect, useState }  from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { IFormula } from '../../models/formula';
-import { createFormula, deleteFormula, getFormulas, updateFormula } from './formulaApi';
+import { createFormula, getFormulas, updateFormula } from './formulaApi';
+import { setShowValidation, setSelected } from './formulaSlice';
 import { RootState, useAppDispatch } from '../../store';
 import { toast } from 'react-toastify';
+import { IFormula } from '../../models/formula';
 import Typography from '@material-ui/core/Typography';
 import {
   Card, 
@@ -23,17 +24,17 @@ export default function FormulaInput() {
   const isDeleting = useSelector(
     (state: RootState) => state.formula.save.isDeleting
   );
+  const showValidation = useSelector(
+    (state: RootState) => state.formula.save.showValidation
+  );
+  const selected = useSelector(
+    (state: RootState) => state.formula.save.selected
+  );
+  const [formula, setFormula] = useState<IFormula>(selected);
 
-  const [formula, setFormula] = useState<IFormula>({
-    id: 0,
-    name: "",
-    formula_postfix: "",
-    formula_result: "",
-    is_conclusion: false,
-    workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
-    stage: 0
-  });
-  const [showValidation, setShowValidation] = useState<boolean>(false);
+  useEffect(() => {
+    setFormula(selected);
+  }, [selected]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
@@ -41,22 +42,6 @@ export default function FormulaInput() {
       ...prevState,
       [name]: name === "is_conclusion" ? checked : value,
     }));
-  };
-
-  const removeFormula = (id: number) => {
-    if (id)
-      dispatch(deleteFormula(id))
-        .unwrap()
-        .then((response) => {
-          toast.success(response);
-          dispatch(getFormulas({ 
-            workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956', 
-            stage: 0 
-          }));
-        })
-        .catch((error) => {
-          toast.error(error);
-        });
   };
 
   const submit = (e: React.SyntheticEvent) => {
@@ -68,7 +53,7 @@ export default function FormulaInput() {
     }
 
     const action =
-      formula.id === 0
+      selected.id === 0
         ? createFormula(formula)
         : updateFormula(formula)
 
@@ -88,7 +73,7 @@ export default function FormulaInput() {
   };
 
   const resetForm = () => {
-    setFormula({
+    dispatch(setSelected({
       id: 0,
       name: "",
       formula_postfix: "",
@@ -96,8 +81,8 @@ export default function FormulaInput() {
       is_conclusion: false,
       workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
       stage: 0
-    });
-    setShowValidation(false);
+    }));
+    dispatch(setShowValidation(false));
   };
 
   return (
@@ -105,7 +90,7 @@ export default function FormulaInput() {
       <Card>
         <CardContent>
           <Typography variant="h5" component="h1" gutterBottom>
-            Input
+            Argument Editor
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>

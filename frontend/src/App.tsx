@@ -1,5 +1,5 @@
 import './App.css';
-import Formula from './features/Formula/Formula';
+import ControlPanel from './components/ControlPanel';
 import { AppBar, Toolbar, Typography, Container, Grid } from '@material-ui/core';
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
         </Grid>
         <Grid item xs={12} md={12}>
           <Container maxWidth="md">
-            <Formula />
+            <ControlPanel />
           </Container>        
         </Grid>
       </Grid>
