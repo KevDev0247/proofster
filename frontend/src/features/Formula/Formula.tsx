@@ -125,159 +125,157 @@ export default function Formula() {
 
   return (
     <>
-      <div className="form-container">
-        <Grid container spacing={4}>
-          {isLoadingTable && (
-            <Grid container justifyContent="center" alignItems="center" spacing={2}>
-              <Grid item>
-                <CircularProgress color="primary" />
-              </Grid>
-              <Grid item>
-                <Typography variant="h6">Fetching...</Typography>
-              </Grid>
-            </Grid>
-          )}
-          <Grid item xs={12} md={12}>
-            <TableContainer component={Paper}>
-              <Table aria-label="formula table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      <Typography variant="body2" gutterBottom>Name</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" gutterBottom>Type</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" gutterBottom>Formula</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" gutterBottom>Actions</Typography>
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {formulaList?.map((d: IFormula, index: number) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <Typography variant="body1" gutterBottom>
-                          {d.name}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body1" gutterBottom>
-                          {d.is_conclusion ? "Conclusion" : "Premise"}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body1" gutterBottom>
-                          {d.formula_result}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <Grid container spacing={1}>
-                            <Grid item xs={12} md={4}>
-                              <IconButton
-                                color="primary"
-                                onClick={() => selectFormula(d)}
-                                disabled={isSaving || isDeleting}>
-                                <Edit />
-                              </IconButton>                   
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                              <IconButton
-                                color="primary"
-                                onClick={() => removeFormula(d.id)}
-                                disabled={isSaving || isDeleting}>
-                                <Delete />
-                              </IconButton>                       
-                            </Grid>
-                          </Grid>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" component="h1" gutterBottom>
-                  Input
-                </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} md={12}>
-                    <Checkbox
-                      title="Conclusion"
-                      name="is_conclusion"
-                      value={formula.is_conclusion}
-                      inputChange={handleInputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={12}>
-                    <Input
-                      type="text"
-                      title="Name"
-                      name="name"
-                      placeholder="Enter name here"
-                      value={formula.name}
-                      inputChange={handleInputChange}
-                      showValidation={showValidation}
-                      isRequired={true}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={12}>
-                    <Input
-                      type="text"
-                      title="Formula"
-                      name="formula_postfix"
-                      placeholder="Enter formula"
-                      value={formula.formula_postfix}
-                      inputChange={handleInputChange}
-                      showValidation={showValidation}
-                      isRequired={true}
-                    />
-                  </Grid>
-                  <Grid item xs={6} md={6}>
+      <Grid container spacing={4}>
+      <Grid item xs={12} md={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5" component="h1" gutterBottom>
+                Input
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={12}>
+                  <Checkbox
+                    title="Conclusion"
+                    name="is_conclusion"
+                    value={formula.is_conclusion}
+                    inputChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <Input
+                    type="text"
+                    title="Name"
+                    name="name"
+                    placeholder="Enter name here"
+                    value={formula.name}
+                    inputChange={handleInputChange}
+                    showValidation={showValidation}
+                    isRequired={true}
+                  />
+                </Grid>
+                <Grid item xs={12} md={12}>
+                  <Input
+                    type="text"
+                    title="Formula"
+                    name="formula_postfix"
+                    placeholder="Enter formula"
+                    value={formula.formula_postfix}
+                    inputChange={handleInputChange}
+                    showValidation={showValidation}
+                    isRequired={true}
+                  />
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <Button
+                    type="contained"
+                    loading={isSaving}
+                    title="Submit"
+                    color="primary"
+                    onClick={submit}
+                    disabled={isSaving || isDeleting}
+                  />
+                </Grid>
+                <Grid item xs={6} md={6} container justifyContent="flex-end">
+                  &nbsp;
+                  {formula.id !== 0 && (
                     <Button
-                      type="contained"
-                      loading={isSaving}
-                      title="Submit"
+                      type="outlined"
+                      title="Cancel"
                       color="primary"
-                      onClick={submit}
+                      onClick={resetForm}
                       disabled={isSaving || isDeleting}
                     />
-                  </Grid>
-                  <Grid item xs={6} md={6} container justifyContent="flex-end">
-                    &nbsp;
-                    {formula.id !== 0 && (
-                      <Button
-                        type="outlined"
-                        title="Cancel"
-                        color="primary"
-                        onClick={resetForm}
-                        disabled={isSaving || isDeleting}
-                      />
-                    )}
-                  </Grid>
+                  )}
                 </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" component="h1" gutterBottom>
-                  Control Panel
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
         </Grid>
-      </div>
+        {isLoadingTable && (
+          <Grid container justifyContent="center" alignItems="center" spacing={2}>
+            <Grid item>
+              <CircularProgress color="primary" />
+            </Grid>
+            <Grid item>
+              <Typography variant="h6">Fetching...</Typography>
+            </Grid>
+          </Grid>
+        )}
+        <Grid item xs={12} md={12}>
+          <TableContainer component={Paper}>
+            <Table aria-label="formula table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Typography variant="body2" gutterBottom>Name</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" gutterBottom>Type</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" gutterBottom>Formula</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" gutterBottom>Actions</Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {formulaList?.map((d: IFormula, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Typography variant="body1" gutterBottom>
+                        {d.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body1" gutterBottom>
+                        {d.is_conclusion ? "Conclusion" : "Premise"}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body1" gutterBottom>
+                        {d.formula_result}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Grid container spacing={1}>
+                          <Grid item xs={12} md={4}>
+                            <IconButton
+                              color="primary"
+                              onClick={() => selectFormula(d)}
+                              disabled={isSaving || isDeleting}>
+                              <Edit />
+                            </IconButton>                   
+                          </Grid>
+                          <Grid item xs={12} md={4}>
+                            <IconButton
+                              color="primary"
+                              onClick={() => removeFormula(d.id)}
+                              disabled={isSaving || isDeleting}>
+                              <Delete />
+                            </IconButton>                       
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h5" component="h1" gutterBottom>
+                Normalizer
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>      
     </>
   )
 }

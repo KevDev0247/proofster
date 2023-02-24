@@ -9,7 +9,7 @@ export default function Normalizer() {
     <Card>
       <CardContent>
         <Typography variant="h5" component="h1" gutterBottom>
-          Control Panel
+          Normalizer
         </Typography>
       </CardContent>
     </Card>
