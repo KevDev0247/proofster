@@ -15,7 +15,7 @@ import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-export default function FormulaInput() {
+export default function FormulaEditor() {
   const dispatch = useAppDispatch();
 
   const isSaving = useSelector(
@@ -118,7 +118,7 @@ export default function FormulaInput() {
                 type="text"
                 title="Formula"
                 name="formula_postfix"
-                placeholder="Enter formula"
+                placeholder="Enter formula here"
                 value={formula.formula_postfix}
                 inputChange={handleInputChange}
                 showValidation={showValidation}

@@ -4,7 +4,8 @@ import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from './formulaApi';
 import { RootState, useAppDispatch } from '../../store';
 import { setShowValidation, setSelected } from './formulaSlice';
-import { Edit, Delete } from '@material-ui/icons';
+import Edit from '@material-ui/icons/Edit';
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { toast } from 'react-toastify';
 import Typography from '@material-ui/core/Typography';
 import { 
@@ -86,43 +87,28 @@ export default function FormulaTable() {
           </Grid>
         </Grid>
       )}
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table aria-label="formula table">
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="body2" gutterBottom>Name</Typography>
+                <Typography variant="body1" gutterBottom></Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2" gutterBottom>Type</Typography>
+                <Typography variant="body1" gutterBottom><strong>Name</strong></Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2" gutterBottom>Formula</Typography>
+                <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2" gutterBottom>Actions</Typography>
+                <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {formulaList?.map((d: IFormula, index: number) => (
               <TableRow key={index}>
-                <TableCell>
-                  <Typography variant="body1" gutterBottom>
-                    {d.name}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body1" gutterBottom>
-                    {d.is_conclusion ? "Conclusion" : "Premise"}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body1" gutterBottom>
-                    {d.formula_result}
-                  </Typography>
-                </TableCell>
-                <TableCell>
+                <TableCell size='small'>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Grid container spacing={1}>
                       <Grid item xs={12} md={4}>
@@ -138,11 +124,26 @@ export default function FormulaTable() {
                           color="primary"
                           onClick={() => removeFormula(d.id)}
                           disabled={isSaving || isDeleting}>
-                          <Delete />
+                          <DeleteOutlinedIcon />
                         </IconButton>
                       </Grid>
                     </Grid>
                   </Box>
+                </TableCell>
+                <TableCell size='small'>
+                  <Typography variant="body1" gutterBottom>
+                    {d.name}
+                  </Typography>
+                </TableCell>
+                <TableCell size='small'>
+                  <Typography variant="body1" gutterBottom>
+                    {d.is_conclusion ? "Conclusion" : "Premise"}
+                  </Typography>
+                </TableCell>
+                <TableCell size='small'>
+                  <Typography variant="body1" gutterBottom>
+                    {d.formula_result}
+                  </Typography>
                 </TableCell>
               </TableRow>
             ))}
