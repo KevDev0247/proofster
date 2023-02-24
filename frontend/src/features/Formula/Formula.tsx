@@ -6,7 +6,21 @@ import { IFormula } from '../../models/formula';
 import { toast } from 'react-toastify';
 import Typography from '@material-ui/core/Typography';
 import { Edit, Delete } from '@material-ui/icons';
-import { Box, Card, CardContent, CircularProgress, Grid, IconButton, Paper, Radio, RadioGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { 
+  Box, 
+  Card, 
+  CardContent, 
+  CircularProgress, 
+  Grid, 
+  IconButton, 
+  Paper, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow 
+} from '@material-ui/core';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -126,7 +140,7 @@ export default function Formula() {
   return (
     <>
       <Grid container spacing={4}>
-      <Grid item xs={12} md={12}>
+        <Grid item xs={12} md={12}>
           <Card>
             <CardContent>
               <Typography variant="h5" component="h1" gutterBottom>
@@ -191,17 +205,17 @@ export default function Formula() {
             </CardContent>
           </Card>
         </Grid>
-        {isLoadingTable && (
-          <Grid container justifyContent="center" alignItems="center" spacing={2}>
-            <Grid item>
-              <CircularProgress color="primary" />
-            </Grid>
-            <Grid item>
-              <Typography variant="h6">Fetching...</Typography>
-            </Grid>
-          </Grid>
-        )}
         <Grid item xs={12} md={12}>
+          {isLoadingTable && (
+            <Grid container justifyContent="center" alignItems="center" spacing={2}>
+              <Grid item>
+                <CircularProgress color="primary" />
+              </Grid>
+              <Grid item>
+                <Typography variant="h6">Fetching...</Typography>
+              </Grid>
+            </Grid>
+          )}          
           <TableContainer component={Paper}>
             <Table aria-label="formula table">
               <TableHead>
