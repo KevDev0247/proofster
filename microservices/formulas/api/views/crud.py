@@ -18,7 +18,6 @@ from ..enums import Stage
 
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaCrudAsync(View):
-    serializer_class = FormulaSerializer
 
     async def transpile(self, formula_postfix):
         try:
@@ -56,7 +55,7 @@ class FormulaCrudAsync(View):
             'stage': Stage.ORIGINAL.value,
             'workspace_id': data.get('workspace_id')
         }
-        serializer = self.serializer_class(data=transpiled)
+        serializer = FormulaSerializer(data=transpiled)
         
         if await sync_to_async(serializer.is_valid)():
             await sync_to_async(serializer.save)()
@@ -92,8 +91,7 @@ class FormulaCrudAsync(View):
             data['formula_json'] = result.get('formula_json') or {}
             data['formula_result'] = result.get('formula_result') or ""
             
-        serializer = self.serializer_class(
-            formula, data=data, partial=True)
+        serializer = FormulaSerializer(data=data, partial=True)
 
         if await sync_to_async(serializer.is_valid)():
             serializer.validated_data['updated_at'] = datetime.now()
@@ -112,15 +110,17 @@ class FormulaCrudAsync(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaCrudSync(View):
-    queryset = Formula.objects.all()
-    serializer_class = FormulaSerializer
 
     def get(self, request):
         workspace_id = request.GET.get('workspace_id')
         stage = request.GET.get('stage')
 
         formulas = get_formula_by_stage(stage, workspace_id)
-        serializer = self.serializer_class(formulas, many=True)
+        serializer = FormulaSerializer(
+            formulas,
+            context={'exclude_formula_json': True},
+            many=True
+        )
         return JsonResponse({
             'formulas': serializer.data,
             'status': status.HTTP_200_OK
