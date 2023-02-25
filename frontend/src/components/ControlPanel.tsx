@@ -1,18 +1,28 @@
-import React from 'react'
-import { Grid, Card, Box, CardContent, Typography } from '@material-ui/core';
+import React, { useState } from 'react'
+import { Grid, Card, Box, CardContent, Typography, Select } from '@material-ui/core';
 import FormulaTable from './../features/Formula/FormulaTable';
 import FormulaEditor from './../features/Formula/FormulaEditor';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 import Button from './Button';
 
-export default function ControlPanel() {
-  const [age, setAge] = React.useState('');
+interface Option {
+  label: string;
+  value: string;
+}
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+export default function ControlPanel() {
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const options: Option[] = [
+    { label: 'Normalize to Negation Normal Form', value: 'nnf' },
+    { label: 'Normalize to Prenex Normal Form', value: 'pnf' },
+    { label: 'Normalize to Conjunctive Normal Form', value: 'cnf' },
+  ];
+
+  const handleOptionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSelectedOption(event.target.value as string);
   };
 
   return (
@@ -34,18 +44,19 @@ export default function ControlPanel() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Algorithm</InputLabel>
+                  <FormControl fullWidth variant="outlined">
+                    <InputLabel htmlFor="demo-simple-select">Algorithm</InputLabel>
                     <Select
-                      labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={age}
+                      value={selectedOption}
+                      onChange={handleOptionChange}
                       label="Algorithm"
-                      onChange={handleChange}
                     >
-                      <MenuItem value={10}>Normalize to Negation Normal Form</MenuItem>
-                      <MenuItem value={20}>Normalize to Prenex Normal Form</MenuItem>
-                      <MenuItem value={30}>Normalize to Conjunctive Normal Form</MenuItem>
+                      {options.map(({ label, value }) => (
+                        <MenuItem key={value} value={value}>
+                          {label}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Box>

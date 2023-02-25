@@ -5,12 +5,8 @@ import { setShowValidation, setSelected } from './formulaSlice';
 import { RootState, useAppDispatch } from '../../store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
+import { Card, CardContent, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import {
-  Card, 
-  CardContent, 
-  Grid
-} from '@material-ui/core';
 import Checkbox from '../../components/Checkbox';
 import Input from '../../components/Input';
 import Button from '../../components/Button';

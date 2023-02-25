@@ -1,26 +1,15 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { IFormula } from '../../models/formula';
-import { deleteFormula, getFormulas } from './formulaApi';
-import { RootState, useAppDispatch } from '../../store';
-import { setShowValidation, setSelected } from './formulaSlice';
 import Edit from '@material-ui/icons/Edit';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { toast } from 'react-toastify';
 import Typography from '@material-ui/core/Typography';
-import { 
-  Box,
-  CircularProgress, 
-  Grid, 
-  IconButton, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow 
-} from '@material-ui/core';
+import{ Box, CircularProgress, Grid, IconButton } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { IFormula } from '../../models/formula';
+import { deleteFormula, getFormulas } from './formulaApi';
+import { RootState, useAppDispatch } from '../../store';
+import { setShowValidation, setSelected } from './formulaSlice';
 
 
 export default function FormulaTable() {
