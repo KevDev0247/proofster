@@ -5,6 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { Button, CircularProgress } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { cnfSubtitle, pnfSubtitle } from '../../strings';
+import { nnfSubtitle } from './../../strings';
 
 interface Option {
   label: string;
@@ -46,7 +48,7 @@ export default function Normalizer() {
       </Grid>
       <Grid item xs={12} md={6} container justifyContent="flex-end">
         <Typography variant="caption" component="h1" gutterBottom>
-          In Boolean logic, a formula is in conjunctive normal form (CNF) if it is a conjunction of one or more clauses, where a clause is a disjunction of literals; otherwise put, it is a product of sums or an AND of ORs.
+          {cnfSubtitle}
         </Typography>
       </Grid>
       <Grid item xs={12} md={6}>

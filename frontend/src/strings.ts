@@ -1,0 +1,3 @@
+export const nnfSubtitle = 'A formula is in negation normal form (NNF) if the negation operator (¬) is only applied to variables and the only other allowed Boolean operators are conjunction (∧) and disjunction (∨).'
+export const pnfSubtitle = 'A formula is in prenex normal form (PNF) if it is written as a string of quantifiers and bound variables, called the prefix, followed by a quantifier-free part, called the matrix.'
+export const cnfSubtitle = 'A formula is in conjunctive normal form (CNF) if it is a conjunction of one or more clauses, where a clause is a disjunction of literals; otherwise put, it is a product of sums or an AND of ORs.';
