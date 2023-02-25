@@ -1,8 +1,20 @@
+import React from 'react'
 import { Grid, Card, Box, CardContent, Typography } from '@material-ui/core';
 import FormulaTable from './../features/Formula/FormulaTable';
 import FormulaEditor from './../features/Formula/FormulaEditor';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Button from './Button';
 
 export default function ControlPanel() {
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value as string);
+  };
+
   return (
     <Grid container spacing={4}>
       <Grid item xs={12} md={12}>
@@ -16,10 +28,53 @@ export default function ControlPanel() {
                 <Typography variant="h5" component="h1" gutterBottom>
                   Control Panel
                 </Typography>
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <FormulaTable />      
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Algorithm</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={age}
+                      label="Algorithm"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Normalize to Negation Normal Form</MenuItem>
+                      <MenuItem value={20}>Normalize to Prenex Normal Form</MenuItem>
+                      <MenuItem value={30}>Normalize to Conjunctive Normal Form</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Grid> 
+              <Grid item xs={12} md={6} container justifyContent="flex-end">
+                <Typography variant="caption" component="h1" gutterBottom>
+                In Boolean logic, a formula is in conjunctive normal form (CNF) if it is a conjunction of one or more clauses, where a clause is a disjunction of literals; otherwise put, it is a product of sums or an AND of ORs.
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Button
+                  type="contained"
+                  loading={false}
+                  title="Execute"
+                  color="primary"
+                  onClick={() => {}}
+                  disabled={false}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} container justifyContent="flex-end">
+                <Button
+                  type="outlined"
+                  loading={false}
+                  title="Reset"
+                  color="primary"
+                  onClick={() => {}}
+                  disabled={false}
+                />
               </Grid>              
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <FormulaTable />      
             </Grid>
           </CardContent>
         </Card>
