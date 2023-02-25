@@ -1,6 +1,7 @@
 import './App.css';
 import ControlPanel from './components/ControlPanel';
 import { AppBar, Toolbar, Typography, Container, Grid } from '@mui/material';
+import WorkBench from './components/WorkBench';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         </Grid>
         <Grid item xs={12} md={12}>
           <Container maxWidth="md">
-            <ControlPanel />
+            <WorkBench />
           </Container>        
         </Grid>
       </Grid>

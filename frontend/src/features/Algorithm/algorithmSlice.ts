@@ -1,7 +1,7 @@
  /* eslint-disable */
 import { createSlice } from "@reduxjs/toolkit";
-import { getResults, normalize } from "./normalizerApi";
-import { IFormula } from './../../models/formula';
+import { getResults, normalize } from "./algorithmApi";
+import { IFormula } from '../../models/formula';
 
 export const normalizerSlice = createSlice({
   name: "normalizer",
