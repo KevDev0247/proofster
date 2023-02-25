@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import formulaSlice from './features/Formula/formulaSlice';
-import normalizerSlice from "./features/Algorithm/algorithmSlice";
+import algorithmSlice from "./features/Algorithm/algorithmSlice";
 
 export const store = configureStore({
     reducer: {
         formula: formulaSlice,
-        normalizer: normalizerSlice
+        algorithm: algorithmSlice
     }
 });
 

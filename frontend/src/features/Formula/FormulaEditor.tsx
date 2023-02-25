@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { createFormula, getFormulas, updateFormula } from './formulaApi';
-import { setShowValidation, setSelected } from './formulaSlice';
-import { RootState, useAppDispatch } from '../../store';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { AppDispatch, RootState, useAppDispatch } from '../../store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
 import { Box, Card, CardContent, Grid } from '@mui/material';
@@ -11,9 +10,11 @@ import { Button, CircularProgress } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
+import { createFormula, getFormulas, updateFormula } from './formulaApi';
+import { setShowValidation, setSelected } from './formulaSlice';
 
 export default function FormulaEditor() {
-  const dispatch = useAppDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
 
   const isSaving = useSelector(
     (state: RootState) => state.formula.save.isSaving
@@ -35,7 +36,7 @@ export default function FormulaEditor() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
-    setFormula((prevState) => ({
+    setFormula((prevState: IFormula) => ({
       ...prevState,
       [name]: name === "is_conclusion" ? checked : value,
     }));
@@ -56,16 +57,16 @@ export default function FormulaEditor() {
 
     dispatch(action)
       .unwrap()
-      .then((response) => {
-        toast.success(response);
+      .then((response: PayloadAction<string>) => {
+        toast.success(response.payload);
         resetForm();
         dispatch(getFormulas({
           workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
           stage: 0
         }));
       })
-      .catch((error) => {
-        toast.error(error);
+      .catch((error: PayloadAction<string>) => {
+        toast.error(error.payload);
       });
   };
 

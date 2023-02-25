@@ -3,12 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getResults, normalize } from "./algorithmApi";
 import { IFormula } from '../../models/formula';
 
-export const normalizerSlice = createSlice({
+export const algorithmSlice = createSlice({
   name: "normalizer",
   initialState: {
     normalize: {
       isLoading: false,
       status: "",
+      currentStage: 0,
       stages: [
         { name: "Negated Conclusion", formulas: [] as IFormula[] },
         { name: "Removed Arrow", formulas: [] as IFormula[] },
@@ -21,14 +22,16 @@ export const normalizerSlice = createSlice({
         { name: "Clauses", formulas: [] as IFormula[] }
       ]
     },
-    currentStage: 0
   },
   reducers: {
-    next: (state) => {
-      state.currentStage += 1
+    nextStage: (state) => {
+      state.normalize.currentStage += 1;
     },
-    reset: (state) => {
-      state.currentStage = 0
+    resetStage: (state) => {
+      state.normalize.currentStage = 0;
+      state.normalize.stages.forEach((stage) => {
+        stage.formulas = [];
+      });
     }
   },
   extraReducers: {
@@ -66,4 +69,6 @@ export const normalizerSlice = createSlice({
   },
 });
 
-export default normalizerSlice.reducer;
+export const { nextStage, resetStage } = algorithmSlice.actions;
+
+export default algorithmSlice.reducer;

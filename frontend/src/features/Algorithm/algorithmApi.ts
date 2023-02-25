@@ -2,7 +2,7 @@ import { FORMULA_API, NORMALIZER_API } from "../../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IGetFormulasParams } from "../../models/requests";
 
-interface INormalizer {
+interface INormalizeRequest {
   stage: number;
   workspace_id: string;
   is_proof: boolean;
@@ -10,9 +10,9 @@ interface INormalizer {
 
 export const normalize = createAsyncThunk(
   "normalizer/nnf",
-  async (normalizer: INormalizer) => {
+  async (request: INormalizeRequest) => {
     try {
-      const response = await NORMALIZER_API.post("", normalizer);
+      const response = await NORMALIZER_API.post("", request);
       return response.data.results;
     } catch (error) {
       console.log(error);
