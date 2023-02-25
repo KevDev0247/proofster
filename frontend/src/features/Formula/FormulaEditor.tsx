@@ -5,12 +5,12 @@ import { setShowValidation, setSelected } from './formulaSlice';
 import { RootState, useAppDispatch } from '../../store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
-import { Card, CardContent, Grid } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import { Button, CircularProgress } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
+import { Box, Card, CardContent, Grid } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import { Button, CircularProgress } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
 
 export default function FormulaEditor() {
   const dispatch = useAppDispatch();
@@ -59,9 +59,9 @@ export default function FormulaEditor() {
       .then((response) => {
         toast.success(response);
         resetForm();
-        dispatch(getFormulas({ 
-          workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956', 
-          stage: 0 
+        dispatch(getFormulas({
+          workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
+          stage: 0
         }));
       })
       .catch((error) => {
@@ -84,7 +84,9 @@ export default function FormulaEditor() {
 
   return (
     <>
-      <Card>
+      <Card
+        sx={{ boxShadow: 3 }}
+      >
         <CardContent>
           <Typography variant="h5" component="h1" gutterBottom>
             Argument Editor

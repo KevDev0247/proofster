@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux';
 import Edit from '@material-ui/icons/Edit';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { toast } from 'react-toastify';
-import Typography from '@material-ui/core/Typography';
-import{ Box, CircularProgress, Grid, IconButton } from '@material-ui/core';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import Typography from '@mui/material/Typography';
+import{ Box, CircularProgress, Grid, IconButton } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from './formulaApi';
 import { RootState, useAppDispatch } from '../../store';
@@ -80,16 +80,16 @@ export default function FormulaTable() {
         <Table aria-label="formula table">
           <TableHead>
             <TableRow>
-              <TableCell>
+              <TableCell size='small'>
                 <Typography variant="body1" gutterBottom></Typography>
               </TableCell>
-              <TableCell>
+              <TableCell size='small'>
                 <Typography variant="body1" gutterBottom><strong>Name</strong></Typography>
               </TableCell>
-              <TableCell>
+              <TableCell size='small'>
                 <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
               </TableCell>
-              <TableCell>
+              <TableCell size='small'>
                 <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
               </TableCell>
             </TableRow>

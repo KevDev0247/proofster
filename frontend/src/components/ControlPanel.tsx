@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Grid, Card, Box, CardContent, Typography, Select } from '@material-ui/core';
+import { Grid, Card, Box, CardContent, Typography } from '@mui/material';
 import FormulaTable from './../features/Formula/FormulaTable';
 import FormulaEditor from './../features/Formula/FormulaEditor';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import { Button, CircularProgress } from '@material-ui/core';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import { Button, CircularProgress } from '@mui/material';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 interface Option {
   label: string;
@@ -21,17 +22,19 @@ export default function ControlPanel() {
     { label: 'Normalize to Conjunctive Normal Form', value: 'cnf' },
   ];
 
-  const handleOptionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleOptionChange = (event: SelectChangeEvent) => {
     setSelectedOption(event.target.value as string);
   };
 
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={3}>
       <Grid item xs={12} md={12}>
         <FormulaEditor />
       </Grid>
       <Grid item xs={12} md={12}>
-        <Card>
+        <Card
+          sx={{ boxShadow: 3 }}
+        >
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} md={12}>
@@ -40,14 +43,15 @@ export default function ControlPanel() {
                 </Typography>
               </Grid>
               <Grid item xs={12} md={12}>
-                <FormulaTable />      
+                <FormulaTable />
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box sx={{ minWidth: 120 }}>
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel htmlFor="demo-simple-select">Algorithm</InputLabel>
+                  <FormControl fullWidth>
+                    <InputLabel id="algorithm-select">Algorithm</InputLabel>
                     <Select
-                      id="demo-simple-select"
+                      labelId="algorithm-select"
+                      id="algorithm-select"
                       value={selectedOption}
                       onChange={handleOptionChange}
                       label="Algorithm"
@@ -60,17 +64,17 @@ export default function ControlPanel() {
                     </Select>
                   </FormControl>
                 </Box>
-              </Grid> 
+              </Grid>
               <Grid item xs={12} md={6} container justifyContent="flex-end">
                 <Typography variant="caption" component="h1" gutterBottom>
-                In Boolean logic, a formula is in conjunctive normal form (CNF) if it is a conjunction of one or more clauses, where a clause is a disjunction of literals; otherwise put, it is a product of sums or an AND of ORs.
+                  In Boolean logic, a formula is in conjunctive normal form (CNF) if it is a conjunction of one or more clauses, where a clause is a disjunction of literals; otherwise put, it is a product of sums or an AND of ORs.
                 </Typography>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => {}}
+                  onClick={() => { }}
                   disabled={false}
                   startIcon={false && <CircularProgress size={20} />}
                 >
@@ -81,13 +85,13 @@ export default function ControlPanel() {
                 <Button
                   variant="outlined"
                   color="primary"
-                  onClick={() => {}}
+                  onClick={() => { }}
                   disabled={false}
                   startIcon={false && <CircularProgress size={20} />}
                 >
                   Reset
                 </Button>
-              </Grid>              
+              </Grid>
             </Grid>
           </CardContent>
         </Card>

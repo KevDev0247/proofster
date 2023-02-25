@@ -1,11 +1,11 @@
 import './App.css';
 import ControlPanel from './components/ControlPanel';
-import { AppBar, Toolbar, Typography, Container, Grid } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Container, Grid } from '@mui/material';
 
 function App() {
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <AppBar position="static" color="primary">
             <Toolbar>
