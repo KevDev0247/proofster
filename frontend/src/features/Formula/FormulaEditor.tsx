@@ -7,9 +7,10 @@ import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
 import { Card, CardContent, Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Checkbox from '../../components/Checkbox';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
+import { Button, CircularProgress } from '@material-ui/core';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@material-ui/core/TextField';
 
 export default function FormulaEditor() {
   const dispatch = useAppDispatch();
@@ -90,57 +91,70 @@ export default function FormulaEditor() {
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
-              <Checkbox
-                title="Conclusion"
-                name="is_conclusion"
-                value={formula.is_conclusion}
-                inputChange={handleInputChange}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formula.is_conclusion}
+                    name="is_conclusion"
+                    color="primary"
+                    onChange={handleInputChange}
+                  />
+                }
+                label="Conclusion"
               />
             </Grid>
             <Grid item xs={12} md={12}>
-              <Input
-                type="text"
-                title="Name"
+              <TextField
+                id="name"
                 name="name"
-                placeholder="Enter name here"
+                label="Name"
+                variant="outlined"
+                type="text"
                 value={formula.name}
-                inputChange={handleInputChange}
-                showValidation={showValidation}
-                isRequired={true}
+                onChange={handleInputChange}
+                placeholder="Enter name here"
+                fullWidth
+                error={showValidation}
+                helperText={showValidation && 'Name is required'}
               />
             </Grid>
             <Grid item xs={12} md={12}>
-              <Input
-                type="text"
-                title="Formula"
+              <TextField
+                id="formula_postfix"
                 name="formula_postfix"
-                placeholder="Enter formula here"
+                label="Formula"
+                variant="outlined"
+                type="text"
                 value={formula.formula_postfix}
-                inputChange={handleInputChange}
-                showValidation={showValidation}
-                isRequired={true}
+                onChange={handleInputChange}
+                placeholder="Enter formula here"
+                fullWidth
+                error={showValidation}
+                helperText={showValidation && 'Formula is required'}
               />
             </Grid>
             <Grid item xs={6} md={6}>
               <Button
-                type="contained"
-                loading={isSaving}
-                title="Submit"
+                variant="contained"
                 color="primary"
                 onClick={submit}
                 disabled={isSaving || isDeleting}
-              />
+                startIcon={isSaving && <CircularProgress size={20} />}
+              >
+                Submit
+              </Button>
             </Grid>
             <Grid item xs={6} md={6} container justifyContent="flex-end">
               &nbsp;
               {formula.id !== 0 && (
                 <Button
-                  type="outlined"
-                  title="Cancel"
+                  variant="outlined"
                   color="primary"
                   onClick={resetForm}
                   disabled={isSaving || isDeleting}
-                />
+                >
+                  Cancel
+                </Button>
               )}
             </Grid>
           </Grid>

@@ -5,7 +5,7 @@ import FormulaEditor from './../features/Formula/FormulaEditor';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Button from './Button';
+import { Button, CircularProgress } from '@material-ui/core';
 
 interface Option {
   label: string;
@@ -68,23 +68,25 @@ export default function ControlPanel() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Button
-                  type="contained"
-                  loading={false}
-                  title="Execute"
+                  variant="contained"
                   color="primary"
                   onClick={() => {}}
                   disabled={false}
-                />
+                  startIcon={false && <CircularProgress size={20} />}
+                >
+                  Execute
+                </Button>
               </Grid>
               <Grid item xs={12} md={6} container justifyContent="flex-end">
                 <Button
-                  type="outlined"
-                  loading={false}
-                  title="Reset"
+                  variant="outlined"
                   color="primary"
                   onClick={() => {}}
                   disabled={false}
-                />
+                  startIcon={false && <CircularProgress size={20} />}
+                >
+                  Reset
+                </Button>
               </Grid>              
             </Grid>
           </CardContent>
