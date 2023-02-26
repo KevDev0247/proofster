@@ -14,7 +14,7 @@ import {
   cnfSubtitle, preprocessSubtitle 
 } from '../../strings';
 import { getResults, normalize } from './algorithmApi';
-import { nextStage, resetStage } from './algorithmSlice'
+import { nextStage, resetStage, setStopStage } from './algorithmSlice'
 
 interface Option {
   label: string;
@@ -37,19 +37,16 @@ export default function Normalizer() {
 
   const [targetStage, setTargetStage] = useState('');
 
-  useEffect(() => {
-    dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956'))
-  }, [dispatch]);
-
   const handleOptionChange = (event: SelectChangeEvent) => {
-    setTargetStage(event.target.value as string);
+    setTargetStage(event.target.value);
+    dispatch(setStopStage(parseInt(event.target.value)));
   };
 
   const execute = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     const action = normalize({
-      stage: parseInt(targetStage),
+      stage: currentStage,
       workspace_id: '216da6d9-aead-4970-9465-69bfb55d4956',
       is_proof: parseInt(targetStage) == 9,
     });
@@ -58,7 +55,9 @@ export default function Normalizer() {
       .unwrap()
       .then((response: PayloadAction<string>) => {
         toast.success(response.payload);
-        dispatch(nextStage());
+        dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956')).then(() => {
+          dispatch(nextStage());
+        })
       })
       .catch((error: PayloadAction<string>) => {
         toast.error(error.payload);
@@ -132,3 +131,4 @@ export default function Normalizer() {
     </>
   )
 }
+

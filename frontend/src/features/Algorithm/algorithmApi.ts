@@ -23,8 +23,8 @@ export const getResults = createAsyncThunk(
   "normalizer/fetch",
   async (workspaceId: string) => {
     try {
-      const response = await FORMULA_API.get(`get/?workspace_id=${workspaceId}`);
-      return response.data.formulas;
+      const response = await FORMULA_API.get(`domain/results?workspace_id=${workspaceId}`);
+      return response.data.results;
     } catch (error) {
       console.log(error);
     }
