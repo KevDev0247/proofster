@@ -25,50 +25,52 @@ export default function AlgorithmResult() {
       {renderResults
         .filter((result: INormalized) => result.formulas.length > 0)
         .map((result: INormalized, resultIndex: number) => (
-          <Card key={resultIndex} sx={{ boxShadow: 3 }}>
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={12}>
-                  <Typography variant="h5" component="h1" gutterBottom>
-                    Algorithm Output
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={12}>
-                  <TableContainer>
-                    <Table aria-label="formula table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell size='small'>
-                            <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
-                          </TableCell>
-                          <TableCell size='small'>
-                            <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {result.formulas?.map((d: IFormulaResult, index: number) => (
-                          <TableRow key={index}>
+          <Grid item xs={12} md={12}>
+            <Card key={resultIndex} sx={{ boxShadow: 3 }}>
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={12}>
+                    <Typography variant="h5" component="h1" gutterBottom>
+                      Step 1
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                    <TableContainer>
+                      <Table aria-label="formula table">
+                        <TableHead>
+                          <TableRow>
                             <TableCell size='small'>
-                              <Typography variant="body1" gutterBottom>
-                                {d.is_conclusion ? "Conclusion" : "Premise"}
-                              </Typography>
+                              <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
                             </TableCell>
                             <TableCell size='small'>
-                              <Typography variant="body1" gutterBottom>
-                                {d.formula_result}
-                              </Typography>
+                              <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
                             </TableCell>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                          {result.formulas?.map((d: IFormulaResult, index: number) => (
+                            <TableRow key={index}>
+                              <TableCell size='small'>
+                                <Typography variant="body1" gutterBottom>
+                                  {d.is_conclusion ? "Conclusion" : "Premise"}
+                                </Typography>
+                              </TableCell>
+                              <TableCell size='small'>
+                                <Typography variant="body1" gutterBottom>
+                                  {d.formula_result}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
-      ))}
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
     </>
   )
 }

@@ -16,9 +16,7 @@ export default function WorkBench() {
       <Grid item xs={12} md={12}>
         <ControlPanel />
       </Grid>
-      <Grid item xs={12} md={12}>
-        <AlgorithmResult />
-      </Grid>
+      <AlgorithmResult />
     </Grid>
   )
 }
