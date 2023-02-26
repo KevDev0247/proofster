@@ -5,3 +5,4 @@ export const cnfSubtitle = "A formula is in conjunctive normal form (CNF) if it 
 export const preprocessSubtitle = "Resolution Preprocessing converts inputted formulas from raw form into conjunctive normal form (CNF). Lastly it generates a set of clauses for each formula in CNF which is then used for resolution.";
 
 export const formulaUpdatedWarning = "Argument has been edited, please clear cache and press execute to run algorithms for the updated results!";
+export const errorAddOn = ", please clear cache and press EXECUTE to rerun algorithm";

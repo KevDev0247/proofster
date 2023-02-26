@@ -1,5 +1,6 @@
 import { FORMULA_API, NORMALIZER_API } from "../../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { errorAddOn } from "../../constants";
 
 interface INormalizeRequest {
   stage: number;
@@ -9,12 +10,14 @@ interface INormalizeRequest {
 
 export const normalize = createAsyncThunk(
   "normalizer/nnf",
-  async (request: INormalizeRequest) => {
+  async (request: INormalizeRequest, { rejectWithValue }) => {
     try {
       const response = await NORMALIZER_API.post("", request);
-      return response.data.results;
-    } catch (error) {
-      console.log(error);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response.data.message + errorAddOn
+      );
     }
   }
 );

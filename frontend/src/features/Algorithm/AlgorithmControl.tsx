@@ -3,17 +3,14 @@ import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
-import { Grid, Typography } from '@mui/material';
+import { Alert, Grid, Typography } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { Button, CircularProgress } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import {
-  prompt, nnfSubtitle, pnfSubtitle,
-  cnfSubtitle, preprocessSubtitle
-} from '../../constants';
 import { getResults, normalize } from './algorithmApi';
+import { setShowCacheWarning } from '../../store/globalSlice';
 import {
   nextStage,
   resetStage,
@@ -21,7 +18,10 @@ import {
   setStopStage,
   setCompletedStage
 } from './algorithmSlice';
-import { setShowCacheWarning } from '../../store/globalSlice';
+import {
+  prompt, nnfSubtitle, pnfSubtitle,
+  cnfSubtitle, preprocessSubtitle
+} from '../../constants';
 
 interface Option {
   label: string;
@@ -52,16 +52,32 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const stopStage = useSelector(
     (state: RootState) => state.algorithm.normalize.stopStage
   );
+  const error = useSelector(
+    (state: RootState) => state.algorithm.normalize.error
+  );  
   const disableButton = useSelector(
     (state: RootState) => state.global.disableButton
   );
 
   const [targetStage, setTargetStage] = useState('');
 
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    if (error.length != 0)
+      setShowError(true);
+    else
+      setShowError(false);
+  }, [error]);
+
   const handleOptionChange = (event: SelectChangeEvent) => {
-    setTargetStage(event.target.value);
     dispatch(clearCache());
+    setTargetStage(event.target.value);
     dispatch(setStopStage(parseInt(event.target.value)));
+  };
+
+  const handleCloseWarning = () => {
+    setShowError(false);
   };
 
   const execute = (e: React.SyntheticEvent) => {
@@ -81,7 +97,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           dispatch(setCompletedStage())
           dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956')).then(() => {
             dispatch(nextStage());
-          })
+          });
         })
         .catch((error: PayloadAction<string>) => {
           toast.error(error.payload);
@@ -93,6 +109,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const clear = () => {
     dispatch(clearCache());
     dispatch(setShowCacheWarning(false));
+    setShowError(false);
   }
 
   const reset = () => {
@@ -101,6 +118,16 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
 
   return (
     <>
+      {showError && (
+        <Grid item container xs={12} md={12} justifyContent="center">
+          <Alert
+            onClose={handleCloseWarning}
+            severity="error"
+          >
+            {error}
+          </Alert>
+        </Grid>        
+      )}
       {showFullControl ? (
         <>
           <Grid item xs={12} md={6}>
@@ -168,7 +195,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           </Grid>
         </>
       }
-       <Grid item xs={5.5} md={4.5} container justifyContent="flex-end">
+      <Grid item xs={5.5} md={4.5} container justifyContent="flex-end">
         <Button
           variant="outlined"
           color="primary"
@@ -177,7 +204,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
         >
           Clear Cache
         </Button>
-      </Grid>     
+      </Grid>
       <Grid item xs={5.5} md={1.5} container justifyContent="flex-end">
         <Button
           variant="outlined"

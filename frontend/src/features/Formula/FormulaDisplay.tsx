@@ -13,8 +13,8 @@ import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from './formulaApi';
 import { RootState, useAppDispatch } from '../../store/store';
 import { setShowValidation, setSelected } from './formulaSlice';
-import { formulaUpdatedWarning } from '../../constants';
 import { setShowCacheWarning } from '../../store/globalSlice';
+import { formulaUpdatedWarning } from '../../constants';
 
 
 export default function FormulaDisplay() {
