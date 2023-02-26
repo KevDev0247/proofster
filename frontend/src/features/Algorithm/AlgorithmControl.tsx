@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
-import { Alert, Grid, Typography } from '@mui/material';
+import { Alert, AlertTitle, Grid, Typography } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -130,7 +130,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       )}
       {showFullControl ? (
         <>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={5}>
             <FormControl fullWidth>
               <InputLabel id="algorithm-select">Algorithm</InputLabel>
               <Select
@@ -148,8 +148,24 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={6} container alignItems="center">
-            <Typography variant="caption" component="h1" gutterBottom>
+          <Grid item xs={12} md={7} container alignItems="center">
+            <Alert severity="info">
+            {(() => {
+                switch (targetStage) {
+                  case '3':
+                    return nnfSubtitle
+                  case '6':
+                    return pnfSubtitle
+                  case '8':
+                    return cnfSubtitle
+                  case '9':
+                    return preprocessSubtitle
+                  default:
+                    return prompt
+                }
+              })()}
+            </Alert>
+            {/* <Typography variant="caption" component="h1" gutterBottom>
               {(() => {
                 switch (targetStage) {
                   case '3':
@@ -164,7 +180,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
                     return prompt
                 }
               })()}
-            </Typography>
+            </Typography> */}
           </Grid>
         </>
       ) : null}
@@ -187,11 +203,11 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
         </>
       ) :
         <>
-          <Grid item xs={0.2} md={0.2} container></Grid>
+          <Grid item xs={0.2} md={0.2} container></Grid>    
           <Grid item xs={6} md={5.5} container>
-            <Typography variant="h6" component="h1" gutterBottom>
+            <Alert severity="success">
               Algorithm Completed!
-            </Typography>
+            </Alert>
           </Grid>
         </>
       }

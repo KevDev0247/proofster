@@ -23,6 +23,9 @@ export const theme = createTheme({
     warning: {
       main: '#ff9800',
     },
+    info: {
+      main: '#2E2E2E'
+    },
     myCustomColor: {
       main: '#abcdef',
     },

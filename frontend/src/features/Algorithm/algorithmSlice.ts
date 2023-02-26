@@ -19,14 +19,16 @@ export const algorithmSlice = createSlice({
   },
   reducers: {
     nextStage: (state) => {
-      state.normalize.currentStage += 1;
-      var currStage = state.normalize.currentStage;
-      var cachedResults = [...current(state.normalize.cachedResults)]
-      
-      state.normalize.renderResults = [
-        ...state.normalize.renderResults,
-        cachedResults[currStage - 1]
-      ]
+      if (state.normalize.currentStage < 9) {
+        state.normalize.currentStage += 1;
+        var currStage = state.normalize.currentStage;
+        var cachedResults = [...current(state.normalize.cachedResults)]
+        
+        state.normalize.renderResults = [
+          ...state.normalize.renderResults,
+          cachedResults[currStage - 1]
+        ]        
+      }
     },
     resetStage: (state) => {
       state.normalize.currentStage = 0;
