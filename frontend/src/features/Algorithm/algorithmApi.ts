@@ -1,6 +1,5 @@
 import { FORMULA_API, NORMALIZER_API } from "../../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IGetFormulasParams } from "../../models/requests";
 
 interface INormalizeRequest {
   stage: number;
@@ -22,11 +21,9 @@ export const normalize = createAsyncThunk(
 
 export const getResults = createAsyncThunk(
   "normalizer/fetch",
-  async (params: IGetFormulasParams) => {
+  async (workspaceId: string) => {
     try {
-      const response = await FORMULA_API.get(
-        `get/?workspace_id=${params.workspaceId}&stage=${params.stage}`
-      );
+      const response = await FORMULA_API.get(`get/?workspace_id=${workspaceId}`);
       return response.data.formulas;
     } catch (error) {
       console.log(error);

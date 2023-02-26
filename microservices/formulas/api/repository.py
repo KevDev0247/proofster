@@ -31,6 +31,18 @@ def get_formula(pk) -> Formula:
         return Formula.objects.get(pk=uuid.UUID(pk))
     except:
         return None
+    
+def get_formula_by_workspace(
+    workspace_id: int
+) -> List[Formula]:
+    try:
+        formulas = list(Formula.objects.filter(
+            workspace_id=workspace_id
+        ))
+        return formulas
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
 
 def get_formula_by_stage(
     stage: int, 

@@ -10,8 +10,7 @@ from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from ..repository import get_formula_by_stage, get_formula
-from ..models import Formula
+from ..repository import get_formula_by_stage, get_formula, get_formula_by_workspace
 from ..serializers import FormulaSerializer
 from ..enums import Stage
 
@@ -118,7 +117,11 @@ class FormulaCrudSync(View):
         workspace_id = request.GET.get('workspace_id')
         stage = request.GET.get('stage')
 
-        formulas = get_formula_by_stage(stage, workspace_id)
+        formulas = []
+        if stage is None:
+            formulas = get_formula_by_workspace(workspace_id)
+        else:
+            formulas = get_formula_by_stage(stage, workspace_id)
         serializer = FormulaSerializer(
             formulas,
             context={'exclude_formula_json': True},

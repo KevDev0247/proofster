@@ -5,7 +5,10 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { toast } from 'react-toastify';
 import Typography from '@mui/material/Typography';
 import{ Box, CircularProgress, Grid, IconButton } from '@mui/material';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { 
+  Table, TableBody, TableCell, 
+  TableContainer, TableHead, TableRow 
+} from '@mui/material';
 import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from './formulaApi';
 import { RootState, useAppDispatch } from '../../store';
@@ -14,13 +17,6 @@ import { setShowValidation, setSelected } from './formulaSlice';
 
 export default function FormulaTable() {
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getFormulas({ 
-      workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956', 
-      stage: 0 
-    }));
-  }, [dispatch]);
 
   const formulaList = useSelector(
     (state: RootState) => state.formula.list.values
@@ -34,6 +30,13 @@ export default function FormulaTable() {
   const isDeleting = useSelector(
     (state: RootState) => state.formula.save.isDeleting
   );
+
+  useEffect(() => {
+    dispatch(getFormulas({ 
+      workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956', 
+      stage: 0 
+    }));
+  }, [dispatch]);
 
   const selectFormula = (d: IFormula) => {
     dispatch(setShowValidation(false));

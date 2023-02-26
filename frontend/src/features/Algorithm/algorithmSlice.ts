@@ -1,7 +1,12 @@
  /* eslint-disable */
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import { getResults, normalize } from "./algorithmApi";
 import { IFormula } from '../../models/formula';
+
+interface IResult {
+  name: string,
+  formulas: IFormula[]
+}
 
 export const algorithmSlice = createSlice({
   name: "normalizer",
@@ -9,29 +14,25 @@ export const algorithmSlice = createSlice({
     normalize: {
       isLoading: false,
       status: "",
-      currentStage: 0,
-      stages: [
-        { name: "Negated Conclusion", formulas: [] as IFormula[] },
-        { name: "Removed Arrow", formulas: [] as IFormula[] },
-        { name: "NNF", formulas: [] as IFormula[] },
-        { name: "Standardized", formulas: [] as IFormula[] },
-        { name: "Pre-Quantifier", formulas: [] as IFormula[] },
-        { name: "PNF", formulas: [] as IFormula[] },
-        { name: "Dropped Quantifiers", formulas: [] as IFormula[] },
-        { name: "CNF", formulas: [] as IFormula[] },
-        { name: "Clauses", formulas: [] as IFormula[] }
-      ]
+      currentStage: -1,
+      cachedResults: [] as IResult[],
+      renderResults: [] as IResult[]
     },
   },
   reducers: {
     nextStage: (state) => {
       state.normalize.currentStage += 1;
+      var currStage = state.normalize.currentStage;
+      var cachedResults = [...current(state.normalize.cachedResults)]
+      
+      state.normalize.renderResults = [
+        ...state.normalize.renderResults,
+        cachedResults[currStage]
+      ]
     },
     resetStage: (state) => {
       state.normalize.currentStage = 0;
-      state.normalize.stages.forEach((stage) => {
-        stage.formulas = [];
-      });
+      state.normalize.renderResults = [];
     }
   },
   extraReducers: {
@@ -56,11 +57,61 @@ export const algorithmSlice = createSlice({
       state.normalize.status = "success",
       state.normalize.isLoading = false
       
-      const formulas = action.payload
+      var formulas: IFormula[] = action.payload
+      formulas = formulas.filter((formula: IFormula) => formula.stage !== 0);
+      
+      var negatedConclusion = { name: "Negated Conclusion", formulas: [] as IFormula[] };
+      var removedArrow = { name: "Removed Arrow", formulas: [] as IFormula[] };
+      var nnf = { name: "NNF", formulas: [] as IFormula[] };
+      var standardized = { name: "Standardized", formulas: [] as IFormula[] };
+      var preQuantifier = { name: "Pre-Quantifier", formulas: [] as IFormula[] };
+      var pnf = { name: "PNF", formulas: [] as IFormula[] };
+      var droppedQuantifier = { name: "Dropped Quantifiers", formulas: [] as IFormula[] };
+      var cnf = { name: "CNF", formulas: [] as IFormula[] };
+      var clauses = { name: "Clauses", formulas: [] as IFormula[] };
+
       formulas.forEach((formula: IFormula) => {
-        const index = formula.stage;
-        state.normalize.stages[index].formulas.push(formula);
+        switch (formula.stage) {
+          case 1:
+            negatedConclusion.formulas.push(formula);
+            break;
+          case 2:
+            removedArrow.formulas.push(formula);
+            break;
+          case 3:
+            nnf.formulas.push(formula);
+            break;
+          case 4:
+            standardized.formulas.push(formula);
+            break;
+          case 5:
+            preQuantifier.formulas.push(formula);
+            break;
+          case 6:
+            pnf.formulas.push(formula);
+            break;
+          case 7:
+            droppedQuantifier.formulas.push(formula)
+            break;
+          case 8:
+            cnf.formulas.push(formula);
+            break;
+          case 9:
+            clauses.formulas.push(formula);
+            break;
+          default:
+        }
       });
+      console.log([
+        negatedConclusion, removedArrow, nnf,
+        standardized, preQuantifier, pnf,
+        droppedQuantifier, cnf, clauses
+      ])
+      state.normalize.cachedResults = [
+        negatedConclusion, removedArrow, nnf,
+        standardized, preQuantifier, pnf,
+        droppedQuantifier, cnf, clauses
+      ]
     },
     [getResults.rejected.type]: (state, action) => {
       state.normalize.status = "failed",

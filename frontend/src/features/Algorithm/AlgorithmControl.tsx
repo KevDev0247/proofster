@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
@@ -13,7 +13,7 @@ import {
   prompt, nnfSubtitle, pnfSubtitle, 
   cnfSubtitle, preprocessSubtitle 
 } from '../../strings';
-import { normalize } from './algorithmApi';
+import { getResults, normalize } from './algorithmApi';
 import { nextStage, resetStage } from './algorithmSlice'
 
 interface Option {
@@ -36,6 +36,10 @@ export default function Normalizer() {
   );
 
   const [targetStage, setTargetStage] = useState('');
+
+  useEffect(() => {
+    dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956'))
+  }, [dispatch]);
 
   const handleOptionChange = (event: SelectChangeEvent) => {
     setTargetStage(event.target.value as string);
@@ -107,7 +111,7 @@ export default function Normalizer() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => { }}
+          onClick={execute}
           disabled={false}
           startIcon={false && <CircularProgress size={20} />}
         >
@@ -118,7 +122,7 @@ export default function Normalizer() {
         <Button
           variant="outlined"
           color="primary"
-          onClick={() => { }}
+          onClick={reset}
           disabled={false}
           startIcon={false && <CircularProgress size={20} />}
         >
