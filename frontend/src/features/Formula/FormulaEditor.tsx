@@ -41,7 +41,9 @@ export default function FormulaEditor() {
 
   useEffect(() => {
     if (isSaving || isDeleting)
-      setDisableButton(true);
+      dispatch(setDisableButton(true));
+    else
+      dispatch(setDisableButton(false));
   }, [isSaving, isDeleting])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,8 +61,6 @@ export default function FormulaEditor() {
       setShowValidation(true);
       return;
     }
-    
-    console.log(formula)
 
     const action =
       selected.id === 0
