@@ -57,8 +57,8 @@ export default function FormulaEditor() {
   const submit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (formula.name === "") {
-      setShowValidation(true);
+    if (formula.name === "" || formula.formula_postfix == "") {
+      dispatch(setShowValidation(true));
       return;
     }
 
@@ -164,7 +164,7 @@ export default function FormulaEditor() {
             </Grid>
             <Grid item xs={6} md={6} container justifyContent="flex-end">
               &nbsp;
-              {formula.id !== 0 && (
+              {formula.id !== 0 ? (
                 <Button
                   variant="outlined"
                   color="primary"
@@ -173,6 +173,15 @@ export default function FormulaEditor() {
                 >
                   Cancel
                 </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={resetForm}
+                  disabled={disableButton}
+                >
+                  Reset
+                </Button>                
               )}
             </Grid>
           </Grid>
