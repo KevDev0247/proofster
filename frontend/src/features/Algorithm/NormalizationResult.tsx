@@ -38,8 +38,13 @@ export default function NormalizationResult() {
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12}>
                     <Typography variant="h5" component="h1" gutterBottom>
-                      Step 1
+                      Preprocessing Step {resultIndex + 1}
                     </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                    <Typography variant="subtitle2" component="h1" gutterBottom>
+                      {result.description}
+                    </Typography>                    
                   </Grid>
                   <Grid item xs={12} md={12}>
                     <TableContainer>

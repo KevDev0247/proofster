@@ -124,17 +124,27 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           </Grid>
         </>
       ) : null}
-      <Grid item xs={6} md={6}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={execute}
-          disabled={false}
-          startIcon={false && <CircularProgress size={20} />}
-        >
-          {showFullControl? 'Execute' : 'NEXT' }
-        </Button>
-      </Grid>
+      {(currentStage != 9 || showFullControl) ? (
+        <>
+          <Grid item xs={6} md={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={execute}
+              disabled={false}
+              startIcon={false && <CircularProgress size={20} />}
+            >
+              {showFullControl ? 'Execute' : 'NEXT'}
+            </Button>
+          </Grid>
+        </>
+      ) :
+        <Grid item xs={12} md={6} container>
+          <Typography variant="h6" component="h1" gutterBottom>
+            Preprocessing Finished!
+          </Typography>
+        </Grid>
+      }
       <Grid item xs={6} md={6} container justifyContent="flex-end">
         <Button
           variant="outlined"
