@@ -17,7 +17,7 @@ export default function ControlPanel() {
           <Grid item xs={12} md={12}>
             <FormulaTable />
           </Grid>
-          <AlgorithmControl />
+          <AlgorithmControl showFullControl={true} />
         </Grid>
       </CardContent>
     </Card>

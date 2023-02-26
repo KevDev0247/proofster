@@ -2,7 +2,7 @@ import React from 'react'
 import FormulaEditor from './../features/Formula/FormulaEditor';
 import { Grid } from '@mui/material';
 import ControlPanel from './ControlPanel';
-import AlgorithmResult from '../features/Algorithm/NormalizationResult';
+import NormalizationResult from '../features/Algorithm/NormalizationResult';
 
 export default function WorkBench() {
 
@@ -16,7 +16,7 @@ export default function WorkBench() {
       <Grid item xs={12} md={12}>
         <ControlPanel />
       </Grid>
-      <AlgorithmResult />
+      <NormalizationResult />
     </Grid>
   )
 }

@@ -1,16 +1,16 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState, useAppDispatch } from '../../store';
-import { Grid, Card, Box, CardContent, Typography } from '@mui/material';
-import { Button, CircularProgress } from '@mui/material';
+import { Grid, Card, CardContent, Typography } from '@mui/material';
 import {
   Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow
 } from '@mui/material';
 import { IFormulaResult, INormalized } from './../../models/normalized';
 import { getResults } from './algorithmApi';
+import AlgorithmControl from './AlgorithmControl';
 
-export default function AlgorithmResult() {
+export default function NormalizationResult() {
   const dispatch: AppDispatch = useAppDispatch();
 
   const renderResults = useSelector(
@@ -74,30 +74,7 @@ export default function AlgorithmResult() {
                     </TableContainer>
                   </Grid>
                   {resultIndex === renderResults.length - 1 && (
-                    <>
-                      <Grid item xs={6} md={6}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => { }}
-                          disabled={false}
-                          startIcon={false && <CircularProgress size={20} />}
-                        >
-                          NEXT
-                        </Button>
-                      </Grid>
-                      <Grid item xs={6} md={6} container justifyContent="flex-end">
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          onClick={() => { }}
-                          disabled={false}
-                          startIcon={false && <CircularProgress size={20} />}
-                        >
-                          Reset
-                        </Button>
-                      </Grid>
-                    </>
+                    <AlgorithmControl showFullControl={false} />
                   )}
                 </Grid>
               </CardContent>
