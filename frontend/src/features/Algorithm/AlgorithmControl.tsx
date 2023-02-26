@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
-import { Alert, AlertTitle, FormHelperText, Grid, Typography } from '@mui/material';
+import { Alert, FormHelperText, Grid } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -15,12 +15,14 @@ import {
   nextStage,
   resetStage,
   clearCache,
+  setError,
   setStopStage,
   setCompletedStage
 } from './algorithmSlice';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
-  cnfSubtitle, preprocessSubtitle, formulaUpdatedWarning
+  cnfSubtitle, preprocessSubtitle, 
+  formulaUpdatedWarning, argumentEmptyError
 } from '../../constants';
 
 interface Option {
@@ -60,6 +62,9 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   );
   const showCacheWarning = useSelector(
     (state: RootState) => state.global.showCacheWarning
+  );
+  const argumentEmpty = useSelector(
+    (state: RootState) => state.global.argumentEmpty
   );
 
   const [targetStage, setTargetStage] = useState('');
@@ -103,8 +108,13 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       is_proof: parseInt(targetStage) == 9,
     });
 
-    if (targetStage === '') {
+    if (showFullControl && targetStage === '') {
       setShowValidation(true);
+      return;
+    }
+
+    if (argumentEmpty) {
+      dispatch(setError(argumentEmptyError));
       return;
     }
 
@@ -184,28 +194,30 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
             </FormControl>
           </Grid>
           <Grid item xs={12} md={7} container alignItems="center">
-            <Alert severity="info">
-              {(() => {
-                switch (targetStage) {
-                  case '3':
-                    return nnfSubtitle
-                  case '6':
-                    return pnfSubtitle
-                  case '8':
-                    return cnfSubtitle
-                  case '9':
-                    return preprocessSubtitle
-                  default:
-                    return prompt
-                }
-              })()}
-            </Alert>
+            <Grid item xs={12} md={12} alignItems="flex-end">
+              <Alert severity="info">
+                {(() => {
+                  switch (targetStage) {
+                    case '3':
+                      return nnfSubtitle
+                    case '6':
+                      return pnfSubtitle
+                    case '8':
+                      return cnfSubtitle
+                    case '9':
+                      return preprocessSubtitle
+                    default:
+                      return prompt
+                  }
+                })()}
+              </Alert>              
+            </Grid>
           </Grid>
         </>
       ) : null}
       {(currentStage != stopStage || currentStage == 0) ? (
         <>
-          <Grid item xs={6} md={6}>
+          <Grid item xs={4} md={6}>
             <Button
               variant="contained"
               color="primary"
@@ -222,15 +234,14 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
         </>
       ) :
         <>
-          <Grid item xs={0.2} md={0.2} container></Grid>
-          <Grid item xs={6} md={5.5} container>
+          <Grid item xs={4} md={6} container>
             <Alert severity="success">
               Algorithm Completed!
             </Alert>
           </Grid>
         </>
       }
-      <Grid item xs={5.5} md={4.5} container justifyContent="flex-end">
+      <Grid item xs={6} md={4.5} container justifyContent="flex-end">
         <Button
           variant="outlined"
           color="primary"
@@ -240,7 +251,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           Clear Cache
         </Button>
       </Grid>
-      <Grid item xs={5.5} md={1.5} container justifyContent="flex-end">
+      <Grid item xs={2} md={1.5} container justifyContent="flex-end">
         <Button
           variant="outlined"
           color="primary"

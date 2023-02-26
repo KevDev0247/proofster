@@ -44,7 +44,7 @@ export default function FormulaEditor() {
       dispatch(setDisableButton(true));
     else
       dispatch(setDisableButton(false));
-  }, [isSaving, isDeleting])
+  }, [isSaving, isDeleting]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;

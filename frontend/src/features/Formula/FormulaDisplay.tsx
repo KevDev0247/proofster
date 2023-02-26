@@ -13,7 +13,7 @@ import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from './formulaApi';
 import { RootState, useAppDispatch } from '../../store/store';
 import { setShowValidation, setSelected } from './formulaSlice';
-import { setShowCacheWarning } from '../../store/globalSlice';
+import { setShowCacheWarning, setArgumentEmpty } from '../../store/globalSlice';
 
 
 export default function FormulaDisplay() {
@@ -46,6 +46,13 @@ export default function FormulaDisplay() {
     if (isUpdated)
       dispatch(setShowCacheWarning(true));
   }, [isUpdated]);
+
+  useEffect(() => {
+    if (formulaList.length == 0)
+      dispatch(setArgumentEmpty(true));
+    else
+      dispatch(setArgumentEmpty(false));
+  }, [formulaList]);
 
   const selectFormula = (d: IFormula) => {
     dispatch(setShowValidation(false));

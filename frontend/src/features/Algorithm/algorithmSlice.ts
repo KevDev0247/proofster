@@ -1,6 +1,5 @@
  /* eslint-disable */
 import { createSlice, current } from "@reduxjs/toolkit";
-import { errorAddOn } from "../../constants";
 import { getResults, normalize } from "./algorithmApi";
 
 export const algorithmSlice = createSlice({
@@ -40,13 +39,16 @@ export const algorithmSlice = createSlice({
       state.normalize.stopStage = 0;
       state.normalize.completedStage = 0;
       state.normalize.currentStage = 0;
-      state.normalize.status = ""
+      state.normalize.status = "";
+    },
+    setError: (state, action) => {
+      state.normalize.error = action.payload;
     },
     setStopStage: (state, action) => {
-      state.normalize.stopStage = action.payload
+      state.normalize.stopStage = action.payload;
     },
     setCompletedStage: (state) => {
-      state.normalize.completedStage += 3
+      state.normalize.completedStage += 3;
     }
   },
   extraReducers: {
@@ -81,10 +83,11 @@ export const algorithmSlice = createSlice({
   },
 });
 
-export const { 
+export const {
   nextStage, 
   resetStage,
   clearCache,
+  setError,
   setStopStage, 
   setCompletedStage
 } = algorithmSlice.actions;
