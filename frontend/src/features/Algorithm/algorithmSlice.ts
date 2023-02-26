@@ -9,6 +9,7 @@ export const algorithmSlice = createSlice({
       isLoading: false,
       status: "",
       currentStage: 0,
+      completedStage: 0,
       stopStage: 0,
       cachedResults: [],
       renderResults: []
@@ -26,11 +27,14 @@ export const algorithmSlice = createSlice({
       ]
     },
     resetStage: (state) => {
-      state.normalize.currentStage = -1;
+      state.normalize.currentStage = 0;
       state.normalize.renderResults = [];
     },
     setStopStage: (state, action) => {
       state.normalize.stopStage = action.payload
+    },
+    setCompletedStage: (state) => {
+      state.normalize.completedStage += 3
     }
   },
   extraReducers: {
@@ -63,6 +67,11 @@ export const algorithmSlice = createSlice({
   },
 });
 
-export const { nextStage, resetStage, setStopStage } = algorithmSlice.actions;
+export const { 
+  nextStage, 
+  resetStage, 
+  setStopStage, 
+  setCompletedStage 
+} = algorithmSlice.actions;
 
 export default algorithmSlice.reducer;

@@ -14,7 +14,12 @@ import {
   cnfSubtitle, preprocessSubtitle 
 } from '../../strings';
 import { getResults, normalize } from './algorithmApi';
-import { nextStage, resetStage, setStopStage } from './algorithmSlice'
+import { 
+  nextStage, 
+  resetStage, 
+  setStopStage, 
+  setCompletedStage 
+} from './algorithmSlice'
 
 interface Option {
   label: string;
@@ -31,6 +36,9 @@ export default function Normalizer() {
     { label: 'Resolution Proof Preprocessing', value: '9' },
   ];
 
+  const completedStage = useSelector(
+    (state: RootState) => state.algorithm.normalize.completedStage
+  );
   const currentStage = useSelector(
     (state: RootState) => state.algorithm.normalize.currentStage
   );
@@ -45,23 +53,27 @@ export default function Normalizer() {
   const execute = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const action = normalize({
-      stage: currentStage,
+    const normalizeAction = normalize({
+      stage: completedStage,
       workspace_id: '216da6d9-aead-4970-9465-69bfb55d4956',
       is_proof: parseInt(targetStage) == 9,
     });
 
-    dispatch(action)
-      .unwrap()
-      .then((response: PayloadAction<string>) => {
-        toast.success(response.payload);
-        dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956')).then(() => {
-          dispatch(nextStage());
+    if (currentStage === completedStage)
+      dispatch(normalizeAction)
+        .unwrap()
+        .then((response: PayloadAction<string>) => {
+          toast.success(response.payload);
+          dispatch(setCompletedStage())
+          dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956')).then(() => {
+            dispatch(nextStage());
+          })
         })
-      })
-      .catch((error: PayloadAction<string>) => {
-        toast.error(error.payload);
-      });
+        .catch((error: PayloadAction<string>) => {
+          toast.error(error.payload);
+        });      
+    else
+      dispatch(nextStage());
   }
 
   const reset = () => {
