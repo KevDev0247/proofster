@@ -30,6 +30,12 @@ export const algorithmSlice = createSlice({
       state.normalize.currentStage = 0;
       state.normalize.renderResults = [];
     },
+    clearCache: (state) => {
+      state.normalize.cachedResults = [];
+      state.normalize.stopStage = 0;
+      state.normalize.completedStage = 0;
+      state.normalize.currentStage = 0;
+    },
     setStopStage: (state, action) => {
       state.normalize.stopStage = action.payload
     },
@@ -69,9 +75,10 @@ export const algorithmSlice = createSlice({
 
 export const { 
   nextStage, 
-  resetStage, 
+  resetStage,
+  clearCache,
   setStopStage, 
-  setCompletedStage 
+  setCompletedStage
 } = algorithmSlice.actions;
 
 export default algorithmSlice.reducer;

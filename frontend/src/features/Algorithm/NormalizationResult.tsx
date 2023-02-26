@@ -30,7 +30,7 @@ export default function NormalizationResult() {
   return (
     <>
       {renderResults
-        .filter((result: INormalized) => result.formulas.length > 0)
+        // .filter((result: INormalized) => result.formulas.length > 0)
         .map((result: INormalized, resultIndex: number) => (
           <Grid item xs={12} md={12}>
             <Card key={resultIndex} sx={{ boxShadow: 3 }}>
@@ -44,40 +44,49 @@ export default function NormalizationResult() {
                   <Grid item xs={12} md={12}>
                     <Typography variant="subtitle2" component="h1" gutterBottom>
                       {result.description}
-                    </Typography>                    
+                    </Typography>
                   </Grid>
-                  <Grid item xs={12} md={12}>
-                    <TableContainer>
-                      <Table aria-label="formula table">
-                        <TableHead>
-                          <TableRow>
-                            <TableCell size='small'>
-                              <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
-                            </TableCell>
-                            <TableCell size='small'>
-                              <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
-                            </TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {result.formulas?.map((d: IFormulaResult, index: number) => (
-                            <TableRow key={index}>
+
+                  {result.formulas.length > 0 ? (
+                    <Grid item xs={12} md={12}>
+                      <TableContainer>
+                        <Table aria-label="formula table">
+                          <TableHead>
+                            <TableRow>
                               <TableCell size='small'>
-                                <Typography variant="body1" gutterBottom>
-                                  {d.is_conclusion ? "Conclusion" : "Premise"}
-                                </Typography>
+                                <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
                               </TableCell>
                               <TableCell size='small'>
-                                <Typography variant="body1" gutterBottom>
-                                  {d.formula_result}
-                                </Typography>
+                                <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
                               </TableCell>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
+                          </TableHead>
+                          <TableBody>
+                            {result.formulas?.map((d: IFormulaResult, index: number) => (
+                              <TableRow key={index}>
+                                <TableCell size='small'>
+                                  <Typography variant="body1" gutterBottom>
+                                    {d.is_conclusion ? "Conclusion" : "Premise"}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell size='small'>
+                                  <Typography variant="body1" gutterBottom>
+                                    {d.formula_result}
+                                  </Typography>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </Grid>
+                  ) : (
+                    <Grid item xs={12} md={12} container justifyContent="center">
+                      <Typography variant="h4" component="h1" gutterBottom>
+                        Step Not Applicable
+                      </Typography>
+                    </Grid>
+                  )}
                   {resultIndex === renderResults.length - 1 && (
                     <AlgorithmControl showFullControl={false} />
                   )}
@@ -86,7 +95,7 @@ export default function NormalizationResult() {
             </Card>
           </Grid>
         ))}
-        <div ref={bottomRef} />
+      <div ref={bottomRef} />
     </>
   )
 }

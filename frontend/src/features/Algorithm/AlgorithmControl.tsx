@@ -17,6 +17,7 @@ import { getResults, normalize } from './algorithmApi';
 import {
   nextStage,
   resetStage,
+  clearCache,
   setStopStage,
   setCompletedStage
 } from './algorithmSlice'
@@ -44,11 +45,15 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const currentStage = useSelector(
     (state: RootState) => state.algorithm.normalize.currentStage
   );
+  const stopStage = useSelector(
+    (state: RootState) => state.algorithm.normalize.stopStage
+  );
 
   const [targetStage, setTargetStage] = useState('');
 
   const handleOptionChange = (event: SelectChangeEvent) => {
     setTargetStage(event.target.value);
+    dispatch(clearCache());
     dispatch(setStopStage(parseInt(event.target.value)));
   };
 
@@ -124,7 +129,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           </Grid>
         </>
       ) : null}
-      {(currentStage != 9 || showFullControl) ? (
+      {(currentStage != stopStage || showFullControl) ? (
         <>
           <Grid item xs={6} md={6}>
             <Button
@@ -139,13 +144,16 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           </Grid>
         </>
       ) :
-        <Grid item xs={12} md={6} container>
-          <Typography variant="h6" component="h1" gutterBottom>
-            Preprocessing Finished!
-          </Typography>
-        </Grid>
+        <>
+          <Grid item xs={0.2} md={0.2} container></Grid>
+          <Grid item xs={6} md={5.5} container>
+            <Typography variant="h6" component="h1" gutterBottom>
+              Algorithm Completed!
+            </Typography>
+          </Grid>
+        </>
       }
-      <Grid item xs={6} md={6} container justifyContent="flex-end">
+      <Grid item xs={5.5} md={6} container justifyContent="flex-end">
         <Button
           variant="outlined"
           color="primary"
