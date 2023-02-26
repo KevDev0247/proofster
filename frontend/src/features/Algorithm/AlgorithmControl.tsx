@@ -16,12 +16,11 @@ import {
   resetStage,
   clearCache,
   setStopStage,
-  setCompletedStage,
-  setError
+  setCompletedStage
 } from './algorithmSlice';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
-  cnfSubtitle, preprocessSubtitle
+  cnfSubtitle, preprocessSubtitle, formulaUpdatedWarning
 } from '../../constants';
 
 interface Option {
@@ -59,6 +58,9 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const disableButton = useSelector(
     (state: RootState) => state.global.disableButton
   );
+  const showCacheWarning = useSelector(
+    (state: RootState) => state.global.showCacheWarning
+  );
 
   const [targetStage, setTargetStage] = useState('');
 
@@ -73,14 +75,23 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       setShowError(false);
   }, [error]);
 
+  useEffect(() => {
+    if (targetStage != '')
+      setShowValidation(false);
+  }, [targetStage]);
+
   const handleOptionChange = (event: SelectChangeEvent) => {
     dispatch(clearCache());
     setTargetStage(event.target.value);
     dispatch(setStopStage(parseInt(event.target.value)));
   };
 
-  const handleCloseWarning = () => {
+  const handleCloseError = () => {
     setShowError(false);
+  };
+
+  const handleCloseWarning = () => {
+    dispatch(setShowCacheWarning(false));
   };
 
   const execute = (e: React.SyntheticEvent) => {
@@ -130,10 +141,20 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       {showError && (
         <Grid item container xs={12} md={12} justifyContent="center">
           <Alert
-            onClose={handleCloseWarning}
+            onClose={handleCloseError}
             severity="error"
           >
             {error}
+          </Alert>
+        </Grid>
+      )}
+      {showCacheWarning && (
+        <Grid item container xs={12} md={12} justifyContent="center">
+          <Alert 
+            onClose={handleCloseWarning} 
+            severity="warning"
+          >
+            {formulaUpdatedWarning}
           </Alert>
         </Grid>
       )}

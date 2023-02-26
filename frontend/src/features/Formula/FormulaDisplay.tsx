@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import Edit from '@material-ui/icons/Edit';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { toast } from 'react-toastify';
 import Typography from '@mui/material/Typography';
-import { Alert, Box, CircularProgress, Grid, IconButton } from '@mui/material';
+import { Box, CircularProgress, Grid, IconButton } from '@mui/material';
 import {
   Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow
@@ -14,7 +14,6 @@ import { deleteFormula, getFormulas } from './formulaApi';
 import { RootState, useAppDispatch } from '../../store/store';
 import { setShowValidation, setSelected } from './formulaSlice';
 import { setShowCacheWarning } from '../../store/globalSlice';
-import { formulaUpdatedWarning } from '../../constants';
 
 
 export default function FormulaDisplay() {
@@ -35,9 +34,6 @@ export default function FormulaDisplay() {
   const isUpdated = useSelector(
     (state: RootState) => state.formula.save.isUpdated
   );
-  const showCacheWarning = useSelector(
-    (state: RootState) => state.global.showCacheWarning
-  );
 
   useEffect(() => {
     dispatch(getFormulas({
@@ -50,10 +46,6 @@ export default function FormulaDisplay() {
     if (isUpdated)
       dispatch(setShowCacheWarning(true));
   }, [isUpdated]);
-
-  const handleCloseWarning = () => {
-    dispatch(setShowCacheWarning(false));
-  };
 
   const selectFormula = (d: IFormula) => {
     dispatch(setShowValidation(false));
@@ -163,16 +155,6 @@ export default function FormulaDisplay() {
           </Table>
         </TableContainer>
       </Grid>
-      {showCacheWarning && (
-        <Grid item container xs={12} md={12} justifyContent="center">
-          <Alert 
-            onClose={handleCloseWarning} 
-            severity="warning"
-          >
-            {formulaUpdatedWarning}
-          </Alert>
-        </Grid>
-      )}
     </>
   )
 }
