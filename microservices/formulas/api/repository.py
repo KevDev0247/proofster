@@ -79,6 +79,7 @@ def save_bulk_formula(
 
     to_create = []
     for (name, f_json, f_string, f_id) in normalized:
+        print(f_id, conclusion_id)
         to_create.append({
             'name': name,
             'is_conclusion': f_id == conclusion_id,

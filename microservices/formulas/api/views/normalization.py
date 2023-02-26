@@ -66,8 +66,6 @@ class NormalizationAsync(View):
                 'message': "Error getting formulas",
                 'status': status.HTTP_500_INTERNAL_SERVER_ERROR
             })
-        names = [formula.name for formula in formulas]
-        ids = [formula.formula_id for formula in formulas]
         
         premises, conclusion = [], []
         for formula in formulas:
@@ -89,6 +87,9 @@ class NormalizationAsync(View):
                 'message': "Error occurred during Normalization procedures",
                 'status': status.HTTP_500_INTERNAL_SERVER_ERROR
             })
+        
+        names = [formula.name for formula in argument]
+        ids = [formula.formula_id for formula in argument]
 
         step_one_json = result.get(step_one_json_key) or []
         step_one_string = result.get(step_one_string_key) or ''
