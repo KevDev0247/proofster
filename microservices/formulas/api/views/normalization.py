@@ -8,6 +8,7 @@ from asgiref.sync import sync_to_async
 
 from ..enums import Stage
 from ..repository import (
+    get_formula_by_workspace,
     save_bulk_formula, 
     get_formula_by_stage, 
     execute_algorithm
@@ -16,8 +17,28 @@ from ..factory import (
     create_normalizer_url_key, 
     create_step_one_key, 
     create_step_two_key, 
-    create_step_three_key
+    create_step_three_key,
+    create_normalization_results
 )
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class NormalizationSync(View):
+
+    def get(self, request):
+        workspace_id = request.GET.get('workspace_id')
+        stage = request.GET.get('stage')
+
+        formulas = []
+        if stage is None:
+            formulas = get_formula_by_workspace(workspace_id)
+        else:
+            formulas = get_formula_by_stage(stage, workspace_id)
+        
+        return JsonResponse({
+            'results': create_normalization_results(formulas),
+            'status': status.HTTP_200_OK
+        })
 
 
 @method_decorator(csrf_exempt, name='dispatch')
