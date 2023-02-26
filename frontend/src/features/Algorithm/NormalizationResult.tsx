@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState, useAppDispatch } from '../../store';
 import { Grid, Card, Box, CardContent, Typography } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import {
   Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow
@@ -66,6 +67,32 @@ export default function AlgorithmResult() {
                       </Table>
                     </TableContainer>
                   </Grid>
+                  {resultIndex === renderResults.length - 1 && (
+                    <>
+                      <Grid item xs={6} md={6}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => { }}
+                          disabled={false}
+                          startIcon={false && <CircularProgress size={20} />}
+                        >
+                          NEXT
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} md={6} container justifyContent="flex-end">
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => { }}
+                          disabled={false}
+                          startIcon={false && <CircularProgress size={20} />}
+                        >
+                          Reset
+                        </Button>
+                      </Grid>
+                    </>
+                  )}
                 </Grid>
               </CardContent>
             </Card>
