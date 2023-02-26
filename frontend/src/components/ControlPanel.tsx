@@ -1,5 +1,5 @@
 import { Grid, Card, Box, CardContent, Typography } from '@mui/material';
-import FormulaTable from './../features/Formula/FormulaTable';
+import FormulaDisplay from '../features/Formula/FormulaDisplay';
 import AlgorithmControl from '../features/Algorithm/AlgorithmControl';
 
 export default function ControlPanel() {
@@ -14,9 +14,7 @@ export default function ControlPanel() {
               Control Panel
             </Typography>
           </Grid>
-          <Grid item xs={12} md={12}>
-            <FormulaTable />
-          </Grid>
+          <FormulaDisplay />
           <AlgorithmControl showFullControl={true} />
         </Grid>
       </CardContent>

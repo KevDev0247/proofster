@@ -32,6 +32,7 @@ export const algorithmSlice = createSlice({
     },
     clearCache: (state) => {
       state.normalize.cachedResults = [];
+      state.normalize.renderResults = [];
       state.normalize.stopStage = 0;
       state.normalize.completedStage = 0;
       state.normalize.currentStage = 0;

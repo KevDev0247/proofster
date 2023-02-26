@@ -18,6 +18,7 @@ export const formulaSlice = createSlice({
     save: {
       isSaving: false,
       isDeleting: false,
+      isUpdated: false,
       selected: {
         id: 0,
         name: "",
@@ -53,32 +54,41 @@ export const formulaSlice = createSlice({
       state.list.status = "failed",
       state.list.isLoading = false
     },
-    [createFormula.pending.type]: (state, action) => {
-      state.save.isSaving = true;
-    },
     [createFormula.fulfilled.type]: (state, action) => {
       state.save.isSaving = false;
+      state.save.isUpdated = true;
     },
     [createFormula.rejected.type]: (state, action) => {
       state.save.isSaving = false;
+      state.save.isUpdated = false;
+    },
+    [createFormula.pending.type]: (state, action) => {
+      state.save.isSaving = true;
+      state.save.isUpdated = false;
     },
     [updateFormula.fulfilled.type]: (state, action) => {
       state.save.isSaving = false;
+      state.save.isUpdated = true;
     },
     [updateFormula.rejected.type]: (state, action) => {
       state.save.isSaving = false;
+      state.save.isUpdated = false;
     },
     [updateFormula.pending.type]: (state, action) => {
       state.save.isSaving = true;
+      state.save.isUpdated = false;
     },
     [deleteFormula.fulfilled.type]: (state, action) => {
       state.save.isDeleting = false;
+      state.save.isUpdated = true;
     },
     [deleteFormula.rejected.type]: (state, action) => {
       state.save.isDeleting = false;
+      state.save.isUpdated = false;
     },
     [deleteFormula.pending.type]: (state, action) => {
       state.save.isDeleting = true;
+      state.save.isUpdated = false;
     },
   },
 });

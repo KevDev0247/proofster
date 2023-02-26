@@ -12,7 +12,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
   cnfSubtitle, preprocessSubtitle
-} from '../../strings';
+} from '../../constants';
 import { getResults, normalize } from './algorithmApi';
 import {
   nextStage,
@@ -83,6 +83,10 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       dispatch(nextStage());
   }
 
+  const clear = () => {
+    dispatch(clearCache());
+  }
+
   const reset = () => {
     dispatch(resetStage());
   }
@@ -129,7 +133,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           </Grid>
         </>
       ) : null}
-      {(currentStage != stopStage || showFullControl) ? (
+      {(currentStage != stopStage || currentStage == 0) ? (
         <>
           <Grid item xs={6} md={6}>
             <Button
@@ -153,7 +157,18 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           </Grid>
         </>
       }
-      <Grid item xs={5.5} md={6} container justifyContent="flex-end">
+       <Grid item xs={5.5} md={4.5} container justifyContent="flex-end">
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={clear}
+          disabled={false}
+          startIcon={false && <CircularProgress size={20} />}
+        >
+          Clear Cache
+        </Button>
+      </Grid>     
+      <Grid item xs={5.5} md={1.5} container justifyContent="flex-end">
         <Button
           variant="outlined"
           color="primary"
