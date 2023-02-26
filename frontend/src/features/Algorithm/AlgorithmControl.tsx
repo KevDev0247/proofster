@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { AppDispatch, RootState, useAppDispatch } from '../../store';
+import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { Grid, Typography } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,7 +20,8 @@ import {
   clearCache,
   setStopStage,
   setCompletedStage
-} from './algorithmSlice'
+} from './algorithmSlice';
+import { setShowCacheWarning } from '../../store/globalSlice';
 
 interface Option {
   label: string;
@@ -39,6 +40,9 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
     { label: 'Resolution Proof Preprocessing', value: '9' },
   ];
 
+  const isLoading = useSelector(
+    (state: RootState) => state.algorithm.normalize.isLoading
+  );
   const completedStage = useSelector(
     (state: RootState) => state.algorithm.normalize.completedStage
   );
@@ -47,6 +51,9 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   );
   const stopStage = useSelector(
     (state: RootState) => state.algorithm.normalize.stopStage
+  );
+  const disableButton = useSelector(
+    (state: RootState) => state.global.disableButton
   );
 
   const [targetStage, setTargetStage] = useState('');
@@ -85,6 +92,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
 
   const clear = () => {
     dispatch(clearCache());
+    dispatch(setShowCacheWarning(false));
   }
 
   const reset = () => {
@@ -140,8 +148,11 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
               variant="contained"
               color="primary"
               onClick={execute}
-              disabled={false}
-              startIcon={false && <CircularProgress size={20} />}
+              disabled={disableButton}
+              startIcon={
+                isLoading &&
+                <CircularProgress color="secondary" size={20} />
+              }
             >
               {showFullControl ? 'Execute' : 'NEXT'}
             </Button>
@@ -162,8 +173,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           variant="outlined"
           color="primary"
           onClick={clear}
-          disabled={false}
-          startIcon={false && <CircularProgress size={20} />}
+          disabled={disableButton}
         >
           Clear Cache
         </Button>
@@ -173,8 +183,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           variant="outlined"
           color="primary"
           onClick={reset}
-          disabled={false}
-          startIcon={false && <CircularProgress size={20} />}
+          disabled={disableButton}
         >
           Reset
         </Button>

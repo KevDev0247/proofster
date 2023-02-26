@@ -11,9 +11,10 @@ import {
 } from '@mui/material';
 import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from './formulaApi';
-import { RootState, useAppDispatch } from '../../store';
+import { RootState, useAppDispatch } from '../../store/store';
 import { setShowValidation, setSelected } from './formulaSlice';
 import { formulaUpdatedWarning } from '../../constants';
+import { setShowCacheWarning } from '../../store/globalSlice';
 
 
 export default function FormulaDisplay() {
@@ -34,8 +35,9 @@ export default function FormulaDisplay() {
   const isUpdated = useSelector(
     (state: RootState) => state.formula.save.isUpdated
   );
-
-  const [showWarning, setShowWarning] = useState(false);
+  const showCacheWarning = useSelector(
+    (state: RootState) => state.global.showCacheWarning
+  );
 
   useEffect(() => {
     dispatch(getFormulas({
@@ -46,11 +48,11 @@ export default function FormulaDisplay() {
 
   useEffect(() => {
     if (isUpdated)
-      setShowWarning(true);
+      dispatch(setShowCacheWarning(true));
   }, [isUpdated]);
 
   const handleCloseWarning = () => {
-    setShowWarning(false);
+    dispatch(setShowCacheWarning(false));
   };
 
   const selectFormula = (d: IFormula) => {
@@ -161,7 +163,7 @@ export default function FormulaDisplay() {
           </Table>
         </TableContainer>
       </Grid>
-      {showWarning && (
+      {showCacheWarning && (
         <Grid item container xs={12} md={12} justifyContent="center">
           <Alert 
             onClose={handleCloseWarning} 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AppDispatch, RootState, useAppDispatch } from '../../store';
+import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
 import { Box, Card, CardContent, Grid } from '@mui/material';
@@ -12,6 +12,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import { createFormula, getFormulas, updateFormula } from './formulaApi';
 import { setShowValidation, setSelected } from './formulaSlice';
+import { setDisableButton } from '../../store/globalSlice';
 
 export default function FormulaEditor() {
   const dispatch: AppDispatch = useAppDispatch();
@@ -28,11 +29,20 @@ export default function FormulaEditor() {
   const selected = useSelector(
     (state: RootState) => state.formula.save.selected
   );
+  const disableButton = useSelector(
+    (state: RootState) => state.global.disableButton
+  );
+
   const [formula, setFormula] = useState<IFormula>(selected);
 
   useEffect(() => {
     setFormula(selected);
   }, [selected]);
+
+  useEffect(() => {
+    if (isSaving || isDeleting)
+      setDisableButton(true);
+  }, [isSaving, isDeleting])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
@@ -49,6 +59,8 @@ export default function FormulaEditor() {
       setShowValidation(true);
       return;
     }
+    
+    console.log(formula)
 
     const action =
       selected.id === 0
@@ -141,8 +153,11 @@ export default function FormulaEditor() {
                 variant="contained"
                 color="primary"
                 onClick={submit}
-                disabled={isSaving || isDeleting}
-                startIcon={isSaving && <CircularProgress size={20} />}
+                disabled={disableButton}
+                startIcon={
+                  isSaving && 
+                  <CircularProgress color="secondary" size={20} />
+                }
               >
                 Submit
               </Button>
@@ -154,7 +169,7 @@ export default function FormulaEditor() {
                   variant="outlined"
                   color="primary"
                   onClick={resetForm}
-                  disabled={isSaving || isDeleting}
+                  disabled={disableButton}
                 >
                   Cancel
                 </Button>

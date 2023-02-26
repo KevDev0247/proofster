@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
-import { AppDispatch, RootState, useAppDispatch } from '../../store';
+import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { Grid, Card, CardContent, Typography } from '@mui/material';
 import {
   Table, TableBody, TableCell,

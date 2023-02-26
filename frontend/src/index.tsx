@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bulma/css/bulma.min.css';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { store } from './store/store';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 

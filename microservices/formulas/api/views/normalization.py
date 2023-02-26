@@ -90,13 +90,14 @@ class NormalizationAsync(View):
         
         names = [formula.name for formula in argument]
         ids = [formula.formula_id for formula in argument]
+        conclusion_id = "" if len(conclusion) == 0 else conclusion[0].formula_id
 
         step_one_json = result.get(step_one_json_key) or []
         step_one_string = result.get(step_one_string_key) or ''
         step_one_saved = await save_bulk_formula(
             stage + 1,
             workspace_id,
-            conclusion[0].formula_id,
+            conclusion_id,
             names,
             ids,
             step_one_json,
@@ -107,7 +108,7 @@ class NormalizationAsync(View):
         step_two_saved = await save_bulk_formula(
             stage + 2,
             workspace_id,
-            conclusion[0].formula_id,
+            conclusion_id,
             names,
             ids,
             step_two_json,
@@ -118,7 +119,7 @@ class NormalizationAsync(View):
         step_three_saved = await save_bulk_formula(
             stage + 3,
             workspace_id,
-            conclusion[0].formula_id,
+            conclusion_id,
             names,
             ids,
             step_three_json,
