@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState, useAppDispatch } from '../../store';
 import { Grid, Card, Box, CardContent, Typography } from '@mui/material';
@@ -16,6 +16,12 @@ export default function AlgorithmResult() {
   const renderResults = useSelector(
     (state: RootState) => state.algorithm.normalize.renderResults
   );
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [renderResults])
 
   useEffect(() => {
     dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956'))
@@ -98,6 +104,7 @@ export default function AlgorithmResult() {
             </Card>
           </Grid>
         ))}
+        <div ref={bottomRef} />
     </>
   )
 }
