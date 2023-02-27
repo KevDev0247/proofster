@@ -1,13 +1,13 @@
 STAGE_NAMES = [
-    "Negated Conclusion",
-    "Removed Arrow",
-    "NNF",
-    "Standardized",
-    "Pre-Quantifier",
-    "PNF",
-    "Dropped Quantifiers",
-    "CNF",
-    "Clauses"
+    "Negated Argument's Conclusion",
+    "Remove Implication and Biconditonals",
+    "Generate Negation Normal Form",
+    "Standardize Formula Variables",
+    "Move All Quantifiers to Front",
+    "Generate Prenex Normal Form",
+    "Drop All Quantifiers",
+    "Generate Conjunctive Normal Form",
+    "Generate Clauses"
 ]
 
 STAGE_DESCRIPTIONS = [

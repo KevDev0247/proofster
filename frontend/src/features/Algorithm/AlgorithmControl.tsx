@@ -125,6 +125,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           toast.success(response.payload);
           dispatch(setCompletedStage())
           dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956')).then(() => {
+            console.log("hi")
             dispatch(nextStage());
           });
         })

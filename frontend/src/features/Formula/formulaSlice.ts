@@ -45,9 +45,9 @@ export const formulaSlice = createSlice({
       state.list.status = "pending",
       state.list.isLoading = true
     },
-    [getFormulas.fulfilled.type]: (state, { payload }) => {
+    [getFormulas.fulfilled.type]: (state, action) => {
       state.list.status = "success"
-      state.list.values = payload
+      state.list.values = action.payload
       state.list.isLoading = false
     },
     [getFormulas.rejected.type]: (state, action) => {
@@ -93,6 +93,9 @@ export const formulaSlice = createSlice({
   },
 });
 
-export const { setSelected, setShowValidation } = formulaSlice.actions;
+export const { 
+  setSelected, 
+  setShowValidation 
+} = formulaSlice.actions;
 
 export default formulaSlice.reducer;

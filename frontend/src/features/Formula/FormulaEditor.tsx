@@ -5,6 +5,7 @@ import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
 import { Box, Card, CardContent, Grid } from '@mui/material';
+import { useTheme, Theme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Button, CircularProgress } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -15,7 +16,10 @@ import { setShowValidation, setSelected } from './formulaSlice';
 import { setDisableButton } from '../../store/globalSlice';
 
 export default function FormulaEditor() {
+
   const dispatch: AppDispatch = useAppDispatch();
+  
+  const theme: Theme = useTheme();
 
   const isSaving = useSelector(
     (state: RootState) => state.formula.save.isSaving
@@ -100,10 +104,21 @@ export default function FormulaEditor() {
       <Card
         sx={{ boxShadow: 3 }}
       >
+      <Box sx={{ 
+        bgcolor: theme.palette.primary.main, 
+        color: 'white', 
+        py: 2, 
+        pl: 2 
+      }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={12}>
+            <Typography variant="h6" component="h1">
+              Argument Editor
+            </Typography>            
+          </Grid>
+        </Grid>
+      </Box>
         <CardContent>
-          <Typography variant="h5" component="h1" gutterBottom>
-            Argument Editor
-          </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
               <FormControlLabel
@@ -155,7 +170,7 @@ export default function FormulaEditor() {
                 onClick={submit}
                 disabled={disableButton}
                 startIcon={
-                  isSaving && 
+                  isSaving &&
                   <CircularProgress color="secondary" size={20} />
                 }
               >
@@ -181,7 +196,7 @@ export default function FormulaEditor() {
                   disabled={disableButton}
                 >
                   Reset
-                </Button>                
+                </Button>
               )}
             </Grid>
           </Grid>
