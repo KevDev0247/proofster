@@ -1,6 +1,6 @@
 import { FORMULA_API, NORMALIZER_API } from "../../api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { errorAddOn } from "../../constants";
+import { serverErrorAddOn } from "../../constants";
 
 interface INormalizeRequest {
   stage: number;
@@ -16,7 +16,7 @@ export const normalize = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response.data.message + errorAddOn
+        error.response.data.message + serverErrorAddOn
       );
     }
   }

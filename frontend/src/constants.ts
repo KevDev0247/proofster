@@ -11,5 +11,5 @@ export const cnfSubtitle = "A conjunction of clauses (Product of sums or an AND 
 export const preprocessSubtitle = "Generate clauses from inputted formulas for the resolution";
 
 export const formulaUpdatedWarning = "Argument has been edited, please clear cache and press execute to run algorithms for the updated results!";
-export const errorAddOn = ", please clear cache and execute algorithms for new results!";
 export const argumentEmptyError = "Argument is empty, please use the argument editor to add formulas and execute algorithms in the control panel!"
+export const serverErrorAddOn = ", please clear cache and execute algorithms for new results!";
