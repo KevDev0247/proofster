@@ -1,3 +1,9 @@
+export const defaultName = "Default"
+export const nnfName = "Negation Normalization"
+export const pnfName = "Prenex Normalization"
+export const cnfName = "Conjunctive Normalization"
+export const preprocessName = "Resolution Preprocessing"
+
 export const prompt = "A description of the algorithm or its result will be displayed here"
 export const nnfSubtitle = "(¬) is only applied to variables and only (∧) and (∨) are allowed";
 export const pnfSubtitle = "Quantifiers and its variables followed by a quantifier-free part";

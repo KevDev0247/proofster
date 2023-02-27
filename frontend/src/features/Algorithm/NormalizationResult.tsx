@@ -9,12 +9,18 @@ import {
 import { IFormulaResult, INormalized } from './../../models/normalized';
 import { getResults } from './algorithmApi';
 import AlgorithmControl from './AlgorithmControl';
+import { cnfName, nnfName } from '../../constants';
+import { pnfName, preprocessName, defaultName } from './../../constants';
 
 export default function NormalizationResult() {
   const dispatch: AppDispatch = useAppDispatch();
 
   const renderResults = useSelector(
     (state: RootState) => state.algorithm.normalize.renderResults
+  );
+
+  const stopStage = useSelector(
+    (state: RootState) => state.algorithm.normalize.stopStage
   );
 
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -36,14 +42,27 @@ export default function NormalizationResult() {
               <CardContent>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12} container spacing={2}>
-                    <Grid item xs={12} md={3.5}>
+                    <Grid item xs={12} md={6}>
                       <Alert variant="filled" severity="info" icon={false}>
                         <Typography variant="h6" component="h1">
-                          Preprocessing Step {resultIndex + 1}
+                          {(() => {
+                            switch (stopStage) {
+                              case 3:
+                                return `${nnfName} Step ${resultIndex + 1}`
+                              case 6:
+                                return `${pnfName} Step ${resultIndex + 1}`
+                              case 8:
+                                return `${cnfName} Step ${resultIndex + 1}`
+                              case 9:
+                                return `${preprocessName} Step ${resultIndex + 1}`
+                              default:
+                                return defaultName
+                            }
+                          })()}
                         </Typography>
                       </Alert>
                     </Grid>
-                    <Grid item xs={12} md={8.5}>
+                    <Grid item xs={12} md={6}>
                       <Alert variant="outlined" severity="info" icon={false}>
                         <Typography variant="h6" component="h1">
                           {result.stage}
@@ -91,14 +110,13 @@ export default function NormalizationResult() {
                         </Grid>
                       ) : (
                         <Grid item xs={12} md={12} container justifyContent="center">
-                          <Typography variant="h4" component="h1" gutterBottom>
-                            Step Not Applicable
+                          <Typography variant="h5" component="h1" gutterBottom>
+                            Step Not Applicable since argument does not contain a conclusion
                           </Typography>
                         </Grid>
                       )}
                     </Grid>
                   </Grid>
-
 
                   {resultIndex === renderResults.length - 1 && (
                     <AlgorithmControl showFullControl={false} />
