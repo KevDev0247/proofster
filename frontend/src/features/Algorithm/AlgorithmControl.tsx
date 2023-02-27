@@ -188,7 +188,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
               </Select>
               {showValidation && (
                 <FormHelperText>
-                  Please select and algorithm
+                  Please select an algorithm
                 </FormHelperText>
               )}
             </FormControl>

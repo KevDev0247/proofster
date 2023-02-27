@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
-import { Grid, Card, CardContent, Typography } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Alert } from '@mui/material';
 import {
   Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow
@@ -30,7 +30,6 @@ export default function NormalizationResult() {
   return (
     <>
       {renderResults
-        // .filter((result: INormalized) => result.formulas.length > 0)
         .map((result: INormalized, resultIndex: number) => (
           <Grid item xs={12} md={12}>
             <Card key={resultIndex} sx={{ boxShadow: 3 }}>
@@ -42,9 +41,12 @@ export default function NormalizationResult() {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={12}>
-                    <Typography variant="subtitle2" component="h1" gutterBottom>
+                    <Alert severity="info">
                       {result.description}
-                    </Typography>
+                    </Alert>
+                    {/* <Typography variant="subtitle2" component="h1" gutterBottom>
+                      {result.description}
+                    </Typography> */}
                   </Grid>
 
                   {result.formulas.length > 0 ? (
