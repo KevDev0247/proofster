@@ -85,18 +85,6 @@ export default function FormulaDisplay() {
 
   return (
     <>
-      <Grid item xs={12} md={12} container justifyContent="center" alignItems="center" spacing={2}>
-        {isLoadingTable && (
-          <>
-            <Grid item>
-              <CircularProgress color="primary" />
-            </Grid>
-            <Grid item>
-              <Typography variant="h6">Fetching...</Typography>
-            </Grid>
-          </>
-        )}
-      </Grid>
       <Grid item xs={12} md={12}>
         <TableContainer>
           <Table aria-label="formula table">
@@ -162,6 +150,23 @@ export default function FormulaDisplay() {
           </Table>
         </TableContainer>
       </Grid>
+      {formulaList.length === 0 && (
+        <Grid item xs={12} md={12} container justifyContent="center" alignItems="center" spacing={2}>
+          <Grid item>
+            <Typography variant="body1">No formulas in this argument</Typography>
+          </Grid>
+        </Grid>
+      )}
+      {isLoadingTable && (
+        <Grid item xs={12} md={12} container justifyContent="center" alignItems="center" spacing={2}>
+          <Grid item>
+            <CircularProgress color="primary" />
+          </Grid>
+          <Grid item>
+            <Typography variant="h6">Fetching...</Typography>
+          </Grid>
+        </Grid>
+      )}
     </>
   )
 }

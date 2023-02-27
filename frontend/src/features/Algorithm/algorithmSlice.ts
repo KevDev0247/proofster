@@ -11,7 +11,7 @@ export const algorithmSlice = createSlice({
       error: "",
       currentStage: 0,
       completedStage: 0,
-      stopStage: 0,
+      stopStage: 9,
       cachedResults: [],
       renderResults: []
     },
@@ -36,7 +36,7 @@ export const algorithmSlice = createSlice({
     clearCache: (state) => {
       state.normalize.cachedResults = [];
       state.normalize.renderResults = [];
-      state.normalize.stopStage = 0;
+      state.normalize.stopStage = 9;
       state.normalize.completedStage = 0;
       state.normalize.currentStage = 0;
       state.normalize.status = "";
