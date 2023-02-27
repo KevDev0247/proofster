@@ -4,7 +4,7 @@ import Edit from '@material-ui/icons/Edit';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import { toast } from 'react-toastify';
 import Typography from '@mui/material/Typography';
-import { Box, CircularProgress, Grid, IconButton } from '@mui/material';
+import { Box, CircularProgress, Grid, Hidden, IconButton } from '@mui/material';
 import {
   Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow
@@ -93,12 +93,14 @@ export default function FormulaDisplay() {
                 <TableCell size='small'>
                   <Typography variant="body1" gutterBottom></Typography>
                 </TableCell>
-                <TableCell size='small'>
-                  <Typography variant="body1" gutterBottom><strong>Name</strong></Typography>
-                </TableCell>
-                <TableCell size='small'>
-                  <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
-                </TableCell>
+                <Hidden smDown>
+                  <TableCell size='small'>
+                    <Typography variant="body1" gutterBottom><strong>Name</strong></Typography>
+                  </TableCell>
+                  <TableCell size='small'>
+                    <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
+                  </TableCell>                  
+                </Hidden>
                 <TableCell size='small'>
                   <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
                 </TableCell>
@@ -129,16 +131,18 @@ export default function FormulaDisplay() {
                       </Grid>
                     </Box>
                   </TableCell>
-                  <TableCell size='small'>
-                    <Typography variant="body1" gutterBottom>
-                      {d.name}
-                    </Typography>
-                  </TableCell>
-                  <TableCell size='small'>
-                    <Typography variant="body1" gutterBottom>
-                      {d.is_conclusion ? "Conclusion" : "Premise"}
-                    </Typography>
-                  </TableCell>
+                  <Hidden smDown>
+                    <TableCell size='small'>
+                      <Typography variant="body1" gutterBottom>
+                        {d.name}
+                      </Typography>
+                    </TableCell>
+                    <TableCell size='small'>
+                      <Typography variant="body1" gutterBottom>
+                        {d.is_conclusion ? "Conclusion" : "Premise"}
+                      </Typography>
+                    </TableCell>                    
+                  </Hidden>
                   <TableCell size='small'>
                     <Typography variant="body1" gutterBottom>
                       {d.formula_result}

@@ -5,7 +5,7 @@ import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
 import { Box, Card, CardContent, Grid } from '@mui/material';
-import { useTheme, Theme } from '@mui/material';
+import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Button, CircularProgress } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -20,6 +20,8 @@ export default function FormulaEditor() {
   const dispatch: AppDispatch = useAppDispatch();
   
   const theme: Theme = useTheme();
+
+  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
   const isSaving = useSelector(
     (state: RootState) => state.formula.save.isSaving
@@ -166,6 +168,7 @@ export default function FormulaEditor() {
             <Grid item xs={6} md={6}>
               <Button
                 variant="contained"
+                style={{ height: isSmDown ? '64px' : undefined }}
                 color="primary"
                 onClick={submit}
                 disabled={disableButton}
@@ -182,6 +185,7 @@ export default function FormulaEditor() {
               {formula.id !== 0 ? (
                 <Button
                   variant="outlined"
+                  style={{ height: isSmDown ? '64px' : undefined }}
                   color="primary"
                   onClick={resetForm}
                   disabled={disableButton}
@@ -191,6 +195,7 @@ export default function FormulaEditor() {
               ) : (
                 <Button
                   variant="outlined"
+                  style={{ height: isSmDown ? '64px' : undefined }}
                   color="primary"
                   onClick={resetForm}
                   disabled={disableButton}

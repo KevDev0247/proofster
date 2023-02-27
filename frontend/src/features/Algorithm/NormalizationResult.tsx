@@ -48,13 +48,13 @@ export default function NormalizationResult() {
                           {(() => {
                             switch (stopStage) {
                               case 3:
-                                return `${nnfName} Step ${resultIndex + 1}`
+                                return `${nnfName} ${resultIndex + 1}`
                               case 6:
-                                return `${pnfName} Step ${resultIndex + 1}`
+                                return `${pnfName} ${resultIndex + 1}`
                               case 8:
-                                return `${cnfName} Step ${resultIndex + 1}`
+                                return `${cnfName} ${resultIndex + 1}`
                               case 9:
-                                return `${preprocessName} Step ${resultIndex + 1}`
+                                return `${preprocessName} ${resultIndex + 1}`
                               default:
                                 return defaultName
                             }

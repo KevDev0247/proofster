@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
-import { Alert, FormHelperText, Grid } from '@mui/material';
+import { Alert, FormHelperText, Grid, Hidden } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -21,7 +21,7 @@ import {
 } from './algorithmSlice';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
-  cnfSubtitle, preprocessSubtitle, 
+  cnfSubtitle, preprocessSubtitle,
   formulaUpdatedWarning, argumentEmptyError
 } from '../../constants';
 
@@ -161,8 +161,8 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       )}
       {showCacheWarning && (
         <Grid item container xs={12} md={12} justifyContent="center">
-          <Alert 
-            onClose={handleCloseWarning} 
+          <Alert
+            onClose={handleCloseWarning}
             severity="warning"
           >
             {formulaUpdatedWarning}
@@ -211,14 +211,14 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
                       return prompt
                   }
                 })()}
-              </Alert>              
+              </Alert>
             </Grid>
           </Grid>
         </>
       ) : null}
       {(currentStage != stopStage || currentStage == 0) ? (
         <>
-          <Grid item xs={4} md={6}>
+          <Grid item xs={5.5} md={6} container>
             <Button
               variant="contained"
               color="primary"
@@ -235,24 +235,38 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
         </>
       ) :
         <>
-          <Grid item xs={4} md={6} container>
+          <Grid item xs={5.5} sm={6} md={6} container>
             <Alert severity="success">
               Algorithm Completed!
             </Alert>
           </Grid>
         </>
       }
-      <Grid item xs={6} md={4.5} container justifyContent="flex-end">
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={clear}
-          disabled={disableButton}
-        >
-          Clear Cache
-        </Button>
-      </Grid>
-      <Grid item xs={2} md={1.5} container justifyContent="flex-end">
+      <Hidden smDown>
+        <Grid item xs={4} sm={4.5} md={4.5} container justifyContent="flex-end">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={clear}
+            disabled={disableButton}
+          >
+            Clear Cache
+          </Button>
+        </Grid>
+      </Hidden>
+      <Hidden smUp>
+        <Grid item xs={4} container>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={clear}
+            disabled={disableButton}
+          >
+            Clear Cache
+          </Button>
+        </Grid>
+      </Hidden>
+      <Grid item xs={2.5} sm={1.5} md={1.5} container justifyContent="flex-end">
         <Button
           variant="outlined"
           color="primary"
