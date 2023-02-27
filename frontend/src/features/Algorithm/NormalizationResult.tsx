@@ -111,7 +111,7 @@ export default function NormalizationResult() {
                       ) : (
                         <Grid item xs={12} md={12} container justifyContent="center">
                           <Typography variant="h5" component="h1" gutterBottom>
-                            Step Not Applicable since argument does not contain a conclusion
+                            Step not applicable since argument does not contain a conclusion
                           </Typography>
                         </Grid>
                       )}
