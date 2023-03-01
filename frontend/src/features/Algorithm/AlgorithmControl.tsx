@@ -4,6 +4,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { Alert, FormHelperText, Grid, Hidden } from '@mui/material';
+import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -34,6 +35,10 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const { showFullControl } = props;
 
   const dispatch: AppDispatch = useAppDispatch();
+
+  const theme: Theme = useTheme();
+
+  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
   const options: Option[] = [
     { label: 'Normalize to Negation Normal Form', value: '3' },
@@ -125,7 +130,6 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           toast.success(response.payload);
           dispatch(setCompletedStage())
           dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956')).then(() => {
-            console.log("hi")
             dispatch(nextStage());
           });
         })
@@ -242,19 +246,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           </Grid>
         </>
       }
-      <Hidden smDown>
-        <Grid item xs={4} sm={4.5} md={4.5} container justifyContent="flex-end">
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={clear}
-            disabled={disableButton}
-          >
-            Clear Cache
-          </Button>
-        </Grid>
-      </Hidden>
-      <Hidden smUp>
+      {isSmDown ? (
         <Grid item xs={4} container>
           <Button
             variant="outlined"
@@ -264,8 +256,19 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
           >
             Clear Cache
           </Button>
-        </Grid>
-      </Hidden>
+        </Grid>        
+      ) : (
+        <Grid item xs={4} sm={4.5} md={4.5} container justifyContent="flex-end">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={clear}
+            disabled={disableButton}
+          >
+            Clear Cache
+          </Button>
+        </Grid>        
+      )}
       <Grid item xs={2.5} sm={1.5} md={1.5} container justifyContent="flex-end">
         <Button
           variant="outlined"

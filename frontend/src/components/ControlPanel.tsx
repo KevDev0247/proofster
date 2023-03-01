@@ -3,6 +3,7 @@ import { useTheme, Theme } from '@mui/material';
 import FormulaDisplay from '../features/Formula/FormulaDisplay';
 import AlgorithmControl from '../features/Algorithm/AlgorithmControl';
 
+
 export default function ControlPanel() {
 
   const theme: Theme = useTheme();

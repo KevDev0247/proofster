@@ -12,6 +12,7 @@ import AlgorithmControl from './AlgorithmControl';
 import { cnfName, nnfName } from '../../constants';
 import { pnfName, preprocessName, defaultName } from './../../constants';
 
+
 export default function NormalizationResult() {
   const dispatch: AppDispatch = useAppDispatch();
 

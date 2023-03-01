@@ -15,10 +15,11 @@ import { createFormula, getFormulas, updateFormula } from './formulaApi';
 import { setShowValidation, setSelected } from './formulaSlice';
 import { setDisableButton } from '../../store/globalSlice';
 
+
 export default function FormulaEditor() {
 
   const dispatch: AppDispatch = useAppDispatch();
-  
+
   const theme: Theme = useTheme();
 
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
@@ -106,20 +107,20 @@ export default function FormulaEditor() {
       <Card
         sx={{ boxShadow: 3 }}
       >
-      <Box sx={{ 
-        bgcolor: theme.palette.primary.main, 
-        color: 'white', 
-        py: 2, 
-        pl: 2 
-      }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
-            <Typography variant="h6" component="h1">
-              Argument Editor
-            </Typography>            
+        <Box sx={{
+          bgcolor: theme.palette.primary.main,
+          color: 'white',
+          py: 2,
+          pl: 2
+        }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={12}>
+              <Typography variant="h6" component="h1">
+                Argument Editor
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
+        </Box>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
@@ -182,27 +183,15 @@ export default function FormulaEditor() {
             </Grid>
             <Grid item xs={6} md={6} container justifyContent="flex-end">
               &nbsp;
-              {formula.id !== 0 ? (
-                <Button
-                  variant="outlined"
-                  style={{ height: isSmDown ? '64px' : undefined }}
-                  color="primary"
-                  onClick={resetForm}
-                  disabled={disableButton}
-                >
-                  Cancel
-                </Button>
-              ) : (
-                <Button
-                  variant="outlined"
-                  style={{ height: isSmDown ? '64px' : undefined }}
-                  color="primary"
-                  onClick={resetForm}
-                  disabled={disableButton}
-                >
-                  Reset
-                </Button>
-              )}
+              <Button
+                variant="outlined"
+                style={{ height: isSmDown ? '64px' : undefined }}
+                color="primary"
+                onClick={resetForm}
+                disabled={disableButton}
+              >
+                {formula.id !== 0 ? "Cancel" : "Reset"}
+              </Button>
             </Grid>
           </Grid>
         </CardContent>

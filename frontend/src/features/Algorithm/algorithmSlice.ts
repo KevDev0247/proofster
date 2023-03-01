@@ -3,7 +3,7 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { getResults, normalize } from "./algorithmApi";
 
 export const algorithmSlice = createSlice({
-  name: "normalizer",
+  name: "algorithm",
   initialState: {
     normalize: {
       isLoading: false,
