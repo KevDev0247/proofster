@@ -130,7 +130,8 @@ def lambda_handler(event, context):
     formula = transpile(formula_postfix)
     body = {
         'formula_json': formula.to_json(),
-        'formula_result': formula.to_string()
+        'formula_result': formula.to_string(),
+        'formula_postfix': ' '.join(formula_postfix)
     }
 
     return {
