@@ -7,6 +7,7 @@ from models.Function import Function
 from models.Unary import Unary
 from models.Variable import Variable
 
+
 def transpile(tokens: List[str]) -> Formula:
     stack = []
     var_count = {}
@@ -85,12 +86,48 @@ def transpile(tokens: List[str]) -> Formula:
     formula.set_var_count(var_count)
     return formula
 
+
+def execute_shunting_yard(tokens: List[str]) -> List[str]:
+    postfix_queue = []
+    operator_stack = []
+
+    for t, token in enumerate(tokens):
+        if token == "FORM":
+            function = [token, tokens[t + 1], tokens[t + 2]]
+            postfix_queue.insert(0, function)
+
+        if token == "FORALL" or token == "EXIST":
+            quantifier = [token, tokens[t + 1]]
+            operator_stack.append(quantifier)
+
+        if token == "->" or token == "<->" or token == "AND" or token == "OR" or token == "NOT":
+            operator_stack.append(token)
+            
+        if token == ")":
+            operator = operator_stack.pop()
+            postfix_queue.insert(0, operator)
+
+    while operator_stack:
+        postfix_queue.insert(0, operator_stack.pop())
+    postfix_queue.reverse()
+
+    result = []
+    for item in postfix_queue:
+        if isinstance(item, list):
+            result += [sub_item for sub_item in item]
+        else:
+            result.append(item)
+    return result
+
+
 def lambda_handler(event, context):
+    print(event)
     body = json.loads(event['body'])
-    formula_postfix = body.get("formula_postfix")
-    tokens = formula_postfix.split()
+    formula_infix = body.get("formula_infix")
+    tokens = formula_infix.split()
     
-    formula = transpile(tokens)
+    formula_postfix = execute_shunting_yard(tokens)
+    formula = transpile(formula_postfix)
     body = {
         'formula_json': formula.to_json(),
         'formula_result': formula.to_string()
