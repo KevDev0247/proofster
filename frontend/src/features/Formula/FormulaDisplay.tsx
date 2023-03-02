@@ -60,6 +60,7 @@ export default function FormulaDisplay() {
       id: d.id,
       name: d.name,
       formula_postfix: d.formula_postfix,
+      formula_infix: d.formula_infix,
       formula_result: d.formula_result,
       is_conclusion: d.is_conclusion,
       workspace_id: d.workspace_id,
