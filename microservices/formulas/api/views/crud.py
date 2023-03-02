@@ -1,6 +1,5 @@
 import json
 import os
-import uuid
 import aiohttp
 from datetime import datetime
 from django.http import JsonResponse
@@ -18,24 +17,25 @@ from ..enums import Stage
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaCrudAsync(View):
 
-    async def transpile(self, formula_postfix):
+    async def transpile(self, formula_infix):
         try:
             async with aiohttp.ClientSession() as session:
                 transpiler_url = os.getenv('TRANSPILER_LAMBDA_URL')
                 response = await session.post(
                     transpiler_url, json={
-                        'formula_postfix': formula_postfix
+                        'formula_infix': formula_infix
                     }
                 )
                 result = await response.text()
                 return json.loads(result)
         except Exception as e:
+            print(e)
             return None
     
     async def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
-        formula_postfix = data.get('formula_postfix')
-        result = await self.transpile(formula_postfix)
+        formula_infix = data.get('formula_infix')
+        result = await self.transpile(formula_infix)
         if not result:
             return JsonResponse({
                 'message': "Error Occurred during formula transpilation",
@@ -44,10 +44,12 @@ class FormulaCrudAsync(View):
 
         formula_json = result.get('formula_json') or {}
         formula_result = result.get('formula_result') or ""
+        formula_postfix = result.get('formula_postfix') or ""
         
         transpiled = {
             'name': data.get('name'),
             'is_conclusion': data.get('is_conclusion'),
+            'formula_infix': formula_infix,
             'formula_postfix': formula_postfix,
             'formula_json': formula_json,
             'formula_result': formula_result,
@@ -79,15 +81,16 @@ class FormulaCrudAsync(View):
                 'status': status.HTTP_400_BAD_REQUEST
             })
 
-        updated_formula_postfix = data.get("formula_postfix")
-        if updated_formula_postfix != formula.formula_postfix:
-            result = await self.transpile(updated_formula_postfix)
+        updated_formula_infix = data.get("formula_infix")
+        if updated_formula_infix != formula.formula_infix:
+            result = await self.transpile(updated_formula_infix)
             if not result:
                 return JsonResponse({
-                    'message': "Error Occurred during formula transpilation",
+                    'message': "Error occurred during formula transpilation",
                     'status': status.HTTP_400_BAD_REQUEST
                 })
             data['formula_json'] = result.get('formula_json') or {}
+            data['formula_postfix'] = result.get('formula_postfix') or ""
             data['formula_result'] = result.get('formula_result') or ""
             
         serializer = FormulaSerializer(
