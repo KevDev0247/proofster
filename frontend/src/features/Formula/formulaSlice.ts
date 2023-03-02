@@ -1,11 +1,13 @@
 /* eslint-disable */
 import { createSlice } from "@reduxjs/toolkit";
-import { 
+import { IFormula } from './../../models/formula';
+import {
   getFormulas, 
   createFormula,
   updateFormula,
   deleteFormula 
 } from "./formulaApi";
+import { infixToReadable } from "./formulaService";
 
 export const formulaSlice = createSlice({
   name: "formula",
@@ -43,17 +45,23 @@ export const formulaSlice = createSlice({
   extraReducers: {
     // Async reducers, mostly calling backend api endpoints
     [getFormulas.pending.type]: (state, action) => {
-      state.list.status = "pending",
-      state.list.isLoading = true
+      state.list.status = "pending";
+      state.list.isLoading = true;
     },
     [getFormulas.fulfilled.type]: (state, action) => {
-      state.list.status = "success"
+      state.list.status = "success";
+      state.list.isLoading = false;
+      
       state.list.values = action.payload
-      state.list.isLoading = false
+        ? action.payload.map((formula: IFormula) => ({
+            ...formula,
+            formula_infix: infixToReadable(formula.formula_infix)
+          }))
+        : [];
     },
     [getFormulas.rejected.type]: (state, action) => {
-      state.list.status = "failed",
-      state.list.isLoading = false
+      state.list.status = "failed";
+      state.list.isLoading = false;
     },
     [createFormula.fulfilled.type]: (state, action) => {
       state.save.isSaving = false;
