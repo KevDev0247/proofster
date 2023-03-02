@@ -40,6 +40,7 @@ export const algorithmSlice = createSlice({
       state.normalize.completedStage = 0;
       state.normalize.currentStage = 0;
       state.normalize.status = "";
+      state.normalize.error = "";
     },
     setError: (state, action) => {
       state.normalize.error = action.payload;

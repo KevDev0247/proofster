@@ -98,6 +98,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
 
   const handleCloseError = () => {
     setShowError(false);
+    dispatch(setError(""));
   };
 
   const handleCloseWarning = () => {

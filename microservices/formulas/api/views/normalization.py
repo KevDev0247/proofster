@@ -94,8 +94,7 @@ class NormalizationAsync(View):
 
         names = [formula.name for formula in argument]
         ids = [formula.formula_id for formula in argument]
-        conclusion_id = "" if len(
-            conclusion) == 0 else conclusion[0].formula_id
+        conclusion_id = "" if len(conclusion) == 0 else conclusion[0].formula_id
 
         step_one_json = result.get(step_one_json_key) or []
         step_one_string = result.get(step_one_string_key) or ''
