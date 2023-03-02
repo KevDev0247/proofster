@@ -64,13 +64,13 @@ export default function FormulaEditor() {
   const submit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (formula.name === "" || formula.formula_postfix == "") {
+    if (formula.name === "" || formula.formula_infix == "") {
       dispatch(setShowValidation(true));
       return;
     }
 
     const action =
-      selected.id === 0
+      formula.id === 0
         ? createFormula(formula)
         : updateFormula(formula)
 
@@ -94,6 +94,7 @@ export default function FormulaEditor() {
       id: 0,
       name: "",
       formula_postfix: "",
+      formula_infix: "",
       formula_result: "",
       is_conclusion: false,
       workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
@@ -153,12 +154,12 @@ export default function FormulaEditor() {
             </Grid>
             <Grid item xs={12} md={12}>
               <TextField
-                id="formula_postfix"
-                name="formula_postfix"
+                id="formula_infix"
+                name="formula_infix"
                 label="Formula"
                 variant="outlined"
                 type="text"
-                value={formula.formula_postfix}
+                value={formula.formula_infix}
                 onChange={handleInputChange}
                 placeholder="Enter formula here"
                 fullWidth

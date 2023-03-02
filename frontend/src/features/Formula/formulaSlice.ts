@@ -23,6 +23,7 @@ export const formulaSlice = createSlice({
         id: 0,
         name: "",
         formula_postfix: "",
+        formula_infix: "",
         formula_result: "",
         is_conclusion: false,
         workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
