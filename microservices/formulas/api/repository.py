@@ -84,6 +84,7 @@ def save_bulk_formula(
             'name': name,
             'is_conclusion': f_id == conclusion_id,
             'formula_postfix': None,
+            'formula_infix': None,
             'formula_json': f_json,
             'formula_result': f_string,
             'stage': stage,

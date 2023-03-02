@@ -11,7 +11,7 @@ class Formula(models.Model):
     name = models.CharField(max_length=255)
     is_conclusion = models.BooleanField(default=False)
     formula_postfix = models.TextField(null=True)
-    formula_infix = models.TextField()
+    formula_infix = models.TextField(null=True)
     formula_json = models.JSONField()
     formula_result = models.TextField()
     stage = models.IntegerField()
