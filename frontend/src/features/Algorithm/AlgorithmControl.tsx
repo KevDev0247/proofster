@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
-import { Alert, FormHelperText, Grid, Hidden } from '@mui/material';
+import { RootState, AppDispatch, useAppDispatch } from '../../store/store';
+import { Alert, FormHelperText, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -26,86 +26,85 @@ import {
   formulaUpdatedWarning, argumentEmptyError
 } from '../../constants';
 
+
 interface Option {
   label: string;
   value: string;
 }
+const options: Option[] = [
+  { label: 'Normalize to Negation Normal Form', value: '3' },
+  { label: 'Normalize to Prenex Normal Form', value: '6' },
+  { label: 'Normalize to Conjunctive Normal Form', value: '8' },
+  { label: 'Resolution Proof Preprocessing', value: '9' },
+];
+
 
 export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const { showFullControl } = props;
 
   const dispatch: AppDispatch = useAppDispatch();
-
   const theme: Theme = useTheme();
-
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const options: Option[] = [
-    { label: 'Normalize to Negation Normal Form', value: '3' },
-    { label: 'Normalize to Prenex Normal Form', value: '6' },
-    { label: 'Normalize to Conjunctive Normal Form', value: '8' },
-    { label: 'Resolution Proof Preprocessing', value: '9' },
-  ];
-
-  const isLoading = useSelector(
-    (state: RootState) => state.algorithm.normalize.isLoading
-  );
-  const completedStage = useSelector(
-    (state: RootState) => state.algorithm.normalize.completedStage
-  );
-  const currentStage = useSelector(
-    (state: RootState) => state.algorithm.normalize.currentStage
-  );
-  const stopStage = useSelector(
-    (state: RootState) => state.algorithm.normalize.stopStage
-  );
-  const error = useSelector(
-    (state: RootState) => state.algorithm.normalize.error
-  );
-  const disableButton = useSelector(
-    (state: RootState) => state.global.disableButton
-  );
-  const showCacheWarning = useSelector(
+  const showCacheWarning: boolean = useSelector(
     (state: RootState) => state.global.showCacheWarning
   );
-  const argumentEmpty = useSelector(
+  const disableButton: boolean = useSelector(
+    (state: RootState) => state.global.disableButton
+  );  
+  const argumentEmpty: boolean = useSelector(
     (state: RootState) => state.global.argumentEmpty
+  );  
+  const isLoading: boolean = useSelector(
+    (state: RootState) => state.algorithm.normalize.isLoading
+  );
+  const completedStage: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.completedStage
+  );
+  const currentStage: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.currentStage
+  );
+  const stopStage: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.stopStage
   );
 
-  const [targetStage, setTargetStage] = useState('');
+  const [showError, setShowError] = useState<boolean>(false);
+  const [showValidation, setShowValidation] = useState<boolean>(false);
 
-  const [showError, setShowError] = useState(false);
 
-  const [showValidation, setShowValidation] = useState(false);
-
+  const error: string = useSelector(
+    (state: RootState) => state.algorithm.normalize.error
+  );
   useEffect(() => {
     if (error.length != 0)
       setShowError(true);
     else
       setShowError(false);
   }, [error]);
-
+  
+  const [targetStage, setTargetStage] = useState<string>('');
   useEffect(() => {
     if (targetStage != '')
       setShowValidation(false);
   }, [targetStage]);
 
-  const handleOptionChange = (event: SelectChangeEvent) => {
+
+  const handleOptionChange = (event: SelectChangeEvent): void => {
     dispatch(clearCache());
     setTargetStage(event.target.value);
     dispatch(setStopStage(parseInt(event.target.value)));
   };
 
-  const handleCloseError = () => {
+  const handleCloseError = (): void => {
     setShowError(false);
     dispatch(setError(""));
   };
 
-  const handleCloseWarning = () => {
+  const handleCloseWarning = (): void => {
     dispatch(setShowCacheWarning(false));
   };
 
-  const execute = (e: React.SyntheticEvent) => {
+  const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
     const normalizeAction = normalize({
@@ -118,12 +117,10 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       setShowValidation(true);
       return;
     }
-
     if (argumentEmpty) {
       dispatch(setError(argumentEmptyError));
       return;
     }
-
     if (currentStage === completedStage)
       dispatch(normalizeAction)
         .unwrap()
@@ -141,16 +138,17 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
       dispatch(nextStage());
   }
 
-  const clear = () => {
+  const clear = (): void => {
     dispatch(clearCache());
     dispatch(setShowCacheWarning(false));
     setShowError(false);
   }
 
-  const reset = () => {
+  const reset = (): void => {
     dispatch(resetStage());
     setShowValidation(false);
   }
+  
 
   return (
     <>

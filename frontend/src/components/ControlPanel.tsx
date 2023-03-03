@@ -5,7 +5,6 @@ import AlgorithmControl from '../features/Algorithm/AlgorithmControl';
 
 
 export default function ControlPanel() {
-
   const theme: Theme = useTheme();
 
   return (

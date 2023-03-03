@@ -16,23 +16,23 @@ import { pnfName, preprocessName, defaultName } from './../../constants';
 export default function NormalizationResult() {
   const dispatch: AppDispatch = useAppDispatch();
 
-  const renderResults = useSelector(
+  const renderResults: INormalized[] = useSelector(
     (state: RootState) => state.algorithm.normalize.renderResults
   );
-
-  const stopStage = useSelector(
+  const stopStage: number = useSelector(
     (state: RootState) => state.algorithm.normalize.stopStage
   );
 
-  const bottomRef = useRef<HTMLDivElement>(null);
 
+  const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [renderResults])
+  }, [renderResults]);
 
   useEffect(() => {
     dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956'))
   }, []);
+
 
   return (
     <>

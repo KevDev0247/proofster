@@ -11,42 +11,45 @@ import {
 } from '@mui/material';
 import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from './formulaApi';
-import { RootState, useAppDispatch } from '../../store/store';
+import { RootState, AppDispatch, useAppDispatch } from '../../store/store';
 import { setShowValidation, setSelected } from './formulaSlice';
 import { setShowCacheWarning, setArgumentEmpty } from '../../store/globalSlice';
 
 
 export default function FormulaDisplay() {
-  const dispatch = useAppDispatch();
+  const dispatch: AppDispatch = useAppDispatch();
 
-  const formulaList = useSelector(
-    (state: RootState) => state.formula.list.values
-  );
-  const isLoadingTable = useSelector(
+  const isLoadingTable: boolean = useSelector(
     (state: RootState) => state.formula.list.isLoading
   );
-  const isSaving = useSelector(
+  const isSaving: boolean = useSelector(
     (state: RootState) => state.formula.save.isSaving
   );
-  const isDeleting = useSelector(
+  const isDeleting: boolean = useSelector(
     (state: RootState) => state.formula.save.isDeleting
   );
-  const isUpdated = useSelector(
-    (state: RootState) => state.formula.save.isUpdated
-  );
+
 
   useEffect(() => {
     dispatch(getFormulas({
       workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
       stage: 0
     }));
-  }, [dispatch]);
+  }, []);
 
+
+  const isUpdated: boolean = useSelector(
+    (state: RootState) => state.formula.save.isUpdated
+  );  
   useEffect(() => {
     if (isUpdated)
       dispatch(setShowCacheWarning(true));
   }, [isUpdated]);
+  
 
+  const formulaList: IFormula[] = useSelector(
+    (state: RootState) => state.formula.list.values
+  );  
   useEffect(() => {
     if (formulaList.length == 0)
       dispatch(setArgumentEmpty(true));
@@ -54,7 +57,8 @@ export default function FormulaDisplay() {
       dispatch(setArgumentEmpty(false));
   }, [formulaList]);
 
-  const selectFormula = (d: IFormula) => {
+
+  const selectFormula = (d: IFormula): void => {
     dispatch(setShowValidation(false));
     dispatch(setSelected({
       id: d.id,
@@ -68,7 +72,7 @@ export default function FormulaDisplay() {
     }));
   };
 
-  const removeFormula = (id: number) => {
+  const removeFormula = (id: number): void => {
     if (id)
       dispatch(deleteFormula(id))
         .unwrap()
@@ -83,6 +87,7 @@ export default function FormulaDisplay() {
           toast.error(error);
         });
   };
+
 
   return (
     <>

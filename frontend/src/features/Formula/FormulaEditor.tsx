@@ -21,51 +21,46 @@ interface SymbolButton {
   label: string;
   value: string;
 }
+const symbolButtonsOne: SymbolButton[] = [
+  { label: '(', value: ' ( ' },
+  { label: ')', value: ' ) ' },
+  { label: '¬', value: ' ¬ ' },    
+  { label: '∀', value: ' ∀' },
+  { label: '∃', value: ' ∃' },
+];
+const symbolButtonsTwo: SymbolButton[] = [
+  { label: '∨', value: ' ∨ ' },
+  { label: '∧', value: ' ∧ ' },
+  { label: '⇒', value: ' ⇒ ' },
+  { label: '⇔', value: ' ⇔ ' },
+  { label: 'F(x)', value: ' F( ) ' },
+];
+
 
 export default function FormulaEditor() {
-
   const dispatch: AppDispatch = useAppDispatch();
-
   const theme: Theme = useTheme();
-
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const symbolButtonsOne: SymbolButton[] = [
-    { label: '(', value: ' ( ' },
-    { label: ')', value: ' ) ' },
-    { label: '¬', value: ' ¬ ' },    
-    { label: '∀', value: ' ∀' },
-    { label: '∃', value: ' ∃' },
-  ]
 
-  const symbolButtonsTwo: SymbolButton[] = [
-    { label: '∨', value: ' ∨ ' },
-    { label: '∧', value: ' ∧ ' },
-    { label: '⇒', value: ' ⇒ ' },
-    { label: '⇔', value: ' ⇔ ' },
-    { label: 'F(x)', value: ' F( ) ' },
-  ]
-
-  const isSaving = useSelector(
+  const disableButton: boolean = useSelector(
+    (state: RootState) => state.global.disableButton
+  );  
+  const isSaving: boolean = useSelector(
     (state: RootState) => state.formula.save.isSaving
   );
-  const isDeleting = useSelector(
+  const isDeleting: boolean = useSelector(
     (state: RootState) => state.formula.save.isDeleting
   );
-  const showValidation = useSelector(
+  const showValidation: boolean = useSelector(
     (state: RootState) => state.formula.save.showValidation
   );
-  const selected = useSelector(
+
+
+  const selected: IFormula = useSelector(
     (state: RootState) => state.formula.save.selected
   );
-  const disableButton = useSelector(
-    (state: RootState) => state.global.disableButton
-  );
-
   const [formula, setFormula] = useState<IFormula>(selected);
-
-  const formulaInfixRef = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     setFormula(selected);
   }, [selected]);
@@ -77,7 +72,8 @@ export default function FormulaEditor() {
       dispatch(setDisableButton(false));
   }, [isSaving, isDeleting]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value, checked } = e.target;
     setFormula((prevState: IFormula) => ({
       ...prevState,
@@ -85,10 +81,12 @@ export default function FormulaEditor() {
     }));
   };
 
+  const formulaInfixRef = useRef<HTMLInputElement>(null); 
+
   const handleSymbolSelection = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     value: string,
-  ) => {
+  ): void => {
     const inputElement = formulaInfixRef.current;
     if (inputElement) {
       const cursorPosition = inputElement.selectionStart || 0;
@@ -108,7 +106,7 @@ export default function FormulaEditor() {
     }
   }
 
-  const submit = (e: React.SyntheticEvent) => {
+  const submit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
     if (formula.name === "" || formula.formula_infix == "") {
@@ -141,7 +139,7 @@ export default function FormulaEditor() {
       });
   };
 
-  const resetForm = () => {
+  const resetForm = (): void => {
     dispatch(setSelected({
       id: 0,
       name: "",
@@ -154,6 +152,7 @@ export default function FormulaEditor() {
     }));
     dispatch(setShowValidation(false));
   };
+
 
   return (
     <>

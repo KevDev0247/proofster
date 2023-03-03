@@ -1,13 +1,18 @@
 import { FORMULA_API } from "../../api";
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import { IFormula } from "../../models/formula";
+
 
 interface IGetFormulasParams {
   workspaceId: string;
   stage: number;
 }
+type GetFormulasThunk = AsyncThunk<IFormula[], IGetFormulasParams, {}>;
+type SaveFormulaThunk = AsyncThunk<any, IFormula, {}>;
+type DeleteFormulaThunk = AsyncThunk<any, number, {}>;
 
-export const getFormulas = createAsyncThunk(
+
+export const getFormulas: GetFormulasThunk = createAsyncThunk(
   "formulas/get", 
   async (params: IGetFormulasParams) => {
     try {
@@ -19,7 +24,7 @@ export const getFormulas = createAsyncThunk(
   }
 );
 
-export const createFormula = createAsyncThunk(
+export const createFormula: SaveFormulaThunk = createAsyncThunk(
   "formula/create",
   async (formula: IFormula) => {
     try {
@@ -31,7 +36,7 @@ export const createFormula = createAsyncThunk(
   }
 );
 
-export const updateFormula = createAsyncThunk(
+export const updateFormula: SaveFormulaThunk = createAsyncThunk(
   "formula/update",
   async (formula: IFormula) => {
     try {
@@ -43,7 +48,7 @@ export const updateFormula = createAsyncThunk(
   }
 );
 
-export const deleteFormula = createAsyncThunk(
+export const deleteFormula: DeleteFormulaThunk = createAsyncThunk(
   "formula/delete",
   async (formulaId: number) => {
     try {
