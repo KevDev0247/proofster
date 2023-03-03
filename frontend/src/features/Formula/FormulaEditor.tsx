@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
-import { Box, Card, CardContent, Grid } from '@mui/material';
+import { Box, ButtonGroup, Card, CardContent, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Button, CircularProgress } from '@mui/material';
@@ -17,6 +17,11 @@ import { setDisableButton } from '../../store/globalSlice';
 import { readableToInfix } from './formulaService';
 
 
+interface EditorButton {
+  label: string;
+  value: string;
+}
+
 export default function FormulaEditor() {
 
   const dispatch: AppDispatch = useAppDispatch();
@@ -24,6 +29,10 @@ export default function FormulaEditor() {
   const theme: Theme = useTheme();
 
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const specialSymbolsOne: string[] = ['(', ')', '∀', '∃', '¬']
+
+  const specialSymbolsTwo: string[] = ['∨', '∧', '⇒', '⇔', 'x']
 
   const isSaving = useSelector(
     (state: RootState) => state.formula.save.isSaving
@@ -43,6 +52,8 @@ export default function FormulaEditor() {
 
   const [formula, setFormula] = useState<IFormula>(selected);
 
+  const formulaInfixRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     setFormula(selected);
   }, [selected]);
@@ -61,6 +72,29 @@ export default function FormulaEditor() {
       [name]: name === "is_conclusion" ? checked : value,
     }));
   };
+
+  const handleSymbolSelection = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    value: string,
+  ) => {
+    const inputElement = formulaInfixRef.current;
+    if (inputElement) {
+      const cursorPosition = inputElement.selectionStart || 0;
+      const currentInfix = formula.formula_infix;
+
+      const newInfix = 
+        currentInfix.substring(0, cursorPosition) +
+        value + 
+        currentInfix.substring(cursorPosition);
+
+      setFormula((prevState: IFormula) => ({
+        ...prevState,
+        formula_infix: newInfix,
+      }));
+
+      inputElement.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+    }
+  }
 
   const submit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -131,19 +165,6 @@ export default function FormulaEditor() {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formula.is_conclusion}
-                    name="is_conclusion"
-                    color="primary"
-                    onChange={handleInputChange}
-                  />
-                }
-                label="Conclusion"
-              />
-            </Grid>
-            <Grid item xs={12} md={12}>
               <TextField
                 id="name"
                 name="name"
@@ -158,20 +179,67 @@ export default function FormulaEditor() {
                 helperText={showValidation && 'Name is required'}
               />
             </Grid>
-            <Grid item xs={12} md={12}>
-              <TextField
-                id="formula_infix"
-                name="formula_infix"
-                label="Formula"
-                variant="outlined"
-                type="text"
-                value={formula.formula_infix}
-                onChange={handleInputChange}
-                placeholder="Enter formula here"
-                fullWidth
-                error={showValidation}
-                helperText={showValidation && 'Formula is required'}
-              />
+            <Grid item xs={12} md={12} container spacing={1}>
+              <Grid item xs={12} md={12}>
+                <TextField
+                  id="formula_infix"
+                  name="formula_infix"
+                  label="Formula"
+                  variant="outlined"
+                  type="text"
+                  inputRef={formulaInfixRef}
+                  value={formula.formula_infix}
+                  onChange={handleInputChange}
+                  placeholder="Enter formula here"
+                  fullWidth
+                  error={showValidation}
+                  helperText={showValidation && 'Formula is required'}
+                />
+              </Grid>
+              <Grid item xs={12} md={10} container spacing={1} alignItems="center">
+                <Grid item xs={12} md={6}>
+                  <ToggleButtonGroup 
+                    size="large"
+                    onChange={handleSymbolSelection}
+                    aria-label="special symbol group one"
+                  >
+                    {specialSymbolsOne.map((label) => (
+                      <ToggleButton key={label} value={label} sx={{ width: 66, textTransform: 'none' }}>
+                        <Typography variant="h5"><strong>{label}</strong></Typography>
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <ToggleButtonGroup 
+                    size="large"
+                    onChange={handleSymbolSelection}
+                    aria-label="special symbol group two"
+                  >
+                    {specialSymbolsTwo.map((label) => (
+                      <ToggleButton key={label} value={label} sx={{ width: 66, textTransform: 'none' }}>
+                        <Typography variant="h5"><strong>{label}</strong></Typography>
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} md={2} container alignItems="center">
+                <Grid item xs={12} md={12} container justifyContent="flex-end">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={formula.is_conclusion}
+                        name="is_conclusion"
+                        color="primary"
+                        onChange={handleInputChange}
+                      />
+                    }
+                    label="Conclusion"
+                    labelPlacement="start"
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={6} md={6}>
               <Button
