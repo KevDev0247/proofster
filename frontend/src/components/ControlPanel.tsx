@@ -1,7 +1,7 @@
 import { Grid, Card, Box, CardContent, Typography } from '@mui/material';
 import { useTheme, Theme } from '@mui/material';
-import FormulaDisplay from '../features/Formula/FormulaDisplay';
-import AlgorithmControl from '../features/Algorithm/AlgorithmControl';
+import FormulaDisplay from './formula/FormulaDisplay';
+import AlgorithmControl from './algorithm/AlgorithmControl';
 
 
 export default function ControlPanel() {

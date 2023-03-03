@@ -1,7 +1,7 @@
-import FormulaEditor from './../features/Formula/FormulaEditor';
+import FormulaEditor from './formula/FormulaEditor';
 import { Grid } from '@mui/material';
 import ControlPanel from './ControlPanel';
-import NormalizationResult from '../features/Algorithm/NormalizationResult';
+import NormalizationResult from './algorithm/NormalizationResult';
 
 
 export default function WorkBench() {

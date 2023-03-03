@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { RootState, AppDispatch, useAppDispatch } from '../../store/store';
+import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Alert, FormHelperText, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
@@ -10,8 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { Button, CircularProgress } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { getResults, normalize } from './algorithmApi';
-import { setShowCacheWarning } from '../../store/globalSlice';
+import { getResults, normalize } from '../../network/algorithmApi';
+import { setShowCacheWarning } from '../../slices/globalSlice';
 import {
   nextStage,
   resetStage,
@@ -19,7 +19,7 @@ import {
   setError,
   setStopStage,
   setCompletedStage
-} from './algorithmSlice';
+} from '../../slices/algorithmSlice';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
   cnfSubtitle, preprocessSubtitle,

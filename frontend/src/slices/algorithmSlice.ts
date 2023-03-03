@@ -1,6 +1,6 @@
  /* eslint-disable */
 import { createSlice, current } from "@reduxjs/toolkit";
-import { getResults, normalize } from "./algorithmApi";
+import { getResults, normalize } from "../network/algorithmApi";
 
 
 export const algorithmSlice = createSlice({

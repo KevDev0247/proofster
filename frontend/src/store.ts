@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import formulaSlice from "../features/Formula/formulaSlice";
-import algorithmSlice from "../features/Algorithm/algorithmSlice";
-import globalSlice from "./globalSlice";
+import formulaSlice from "./slices/formulaSlice";
+import algorithmSlice from "./slices/algorithmSlice";
+import globalSlice from "./slices/globalSlice";
 
 export const store = configureStore({
   reducer: {

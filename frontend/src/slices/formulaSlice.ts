@@ -1,13 +1,13 @@
 /* eslint-disable */
 import { createSlice } from "@reduxjs/toolkit";
-import { IFormula } from './../../models/formula';
+import { IFormula } from '../models/formula';
 import {
   getFormulas, 
   createFormula,
   updateFormula,
   deleteFormula 
-} from "./formulaApi";
-import { infixToReadable } from "./formulaService";
+} from "../network/formulaApi";
+import { infixToReadable } from "../utils/infixConverter";
 
 
 export const formulaSlice = createSlice({

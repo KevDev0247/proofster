@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
+import { AppDispatch, RootState, useAppDispatch } from '../../store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
 import { Box, Card, CardContent, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
@@ -11,10 +11,10 @@ import { Button, CircularProgress } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
-import { createFormula, getFormulas, updateFormula } from './formulaApi';
-import { setShowValidation, setSelected } from './formulaSlice';
-import { setDisableButton } from '../../store/globalSlice';
-import { readableToInfix } from './formulaService';
+import { createFormula, getFormulas, updateFormula } from '../../network/formulaApi';
+import { setShowValidation, setSelected } from '../../slices/formulaSlice';
+import { setDisableButton } from '../../slices/globalSlice';
+import { readableToInfix } from '../../utils/infixConverter';
 
 
 interface SymbolButton {

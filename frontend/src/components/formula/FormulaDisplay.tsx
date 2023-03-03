@@ -10,10 +10,10 @@ import {
   TableContainer, TableHead, TableRow
 } from '@mui/material';
 import { IFormula } from '../../models/formula';
-import { deleteFormula, getFormulas } from './formulaApi';
-import { RootState, AppDispatch, useAppDispatch } from '../../store/store';
-import { setShowValidation, setSelected } from './formulaSlice';
-import { setShowCacheWarning, setArgumentEmpty } from '../../store/globalSlice';
+import { deleteFormula, getFormulas } from '../../network/formulaApi';
+import { RootState, AppDispatch, useAppDispatch } from '../../store';
+import { setShowValidation, setSelected } from '../../slices/formulaSlice';
+import { setShowCacheWarning, setArgumentEmpty } from '../../slices/globalSlice';
 
 
 export default function FormulaDisplay() {

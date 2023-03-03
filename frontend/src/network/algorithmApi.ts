@@ -1,7 +1,7 @@
-import { FORMULA_API, NORMALIZER_API } from "../../api";
+import { FORMULA_API, NORMALIZER_API } from "../api";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
-import { serverErrorAddOn } from "../../constants";
-import { INormalized } from "../../models/normalized";
+import { serverErrorAddOn } from "../constants";
+import { INormalized } from "../models/normalized";
 
 
 interface INormalizeRequest {

@@ -1,16 +1,16 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
-import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
+import { AppDispatch, RootState, useAppDispatch } from '../../store';
 import { Grid, Card, CardContent, Typography, Alert } from '@mui/material';
 import {
   Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow
 } from '@mui/material';
-import { IFormulaResult, INormalized } from './../../models/normalized';
-import { getResults } from './algorithmApi';
+import { IFormulaResult, INormalized } from '../../models/normalized';
+import { getResults } from '../../network/algorithmApi';
 import AlgorithmControl from './AlgorithmControl';
 import { cnfName, nnfName } from '../../constants';
-import { pnfName, preprocessName, defaultName } from './../../constants';
+import { pnfName, preprocessName, defaultName } from '../../constants';
 
 
 export default function NormalizationResult() {

@@ -1,6 +1,6 @@
-import { FORMULA_API } from "../../api";
+import { FORMULA_API } from "../api";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
-import { IFormula } from "../../models/formula";
+import { IFormula } from "../models/formula";
 
 
 interface IGetFormulasParams {
