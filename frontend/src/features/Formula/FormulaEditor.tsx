@@ -14,6 +14,7 @@ import TextField from '@mui/material/TextField';
 import { createFormula, getFormulas, updateFormula } from './formulaApi';
 import { setShowValidation, setSelected } from './formulaSlice';
 import { setDisableButton } from '../../store/globalSlice';
+import { readableToInfix } from './formulaService';
 
 
 export default function FormulaEditor() {
@@ -69,10 +70,15 @@ export default function FormulaEditor() {
       return;
     }
 
+    var formulaToSubmit: IFormula = {
+      ...formula,
+      formula_infix: readableToInfix(formula.formula_infix)
+    }
+
     const action =
-      formula.id === 0
-        ? createFormula(formula)
-        : updateFormula(formula)
+      formulaToSubmit.id === 0
+        ? createFormula(formulaToSubmit)
+        : updateFormula(formulaToSubmit)
 
     dispatch(action)
       .unwrap()

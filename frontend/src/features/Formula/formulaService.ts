@@ -1,11 +1,44 @@
 function readableToInfix(readable: string): string {
     var result = "";
-    var tokens = readable.split("  ");
-    for (let i = 0; i < tokens.length; i++) {
 
+    var tokens = readable
+        .substring(1, readable.length - 1)
+        .split("  ");
+    for (let i = 0; i < tokens.length; i++) {
+        var token = tokens[i];
+
+        if (token[1] == "(") 
+            result += " FORM " + token[0] + " " + token[2];
+        
+        if (token[0] == "∀")
+            result += " FORALL " + token[1]
+        
+        if (token[0] == "∃")
+            result += " EXIST " + token[1]
+        
+        if (token == "¬")
+            result += " NOT"
+                
+        if (token == "∧")
+            result += " AND"
+
+        if (token == "∨")
+            result += " OR"
+
+        if (token == "⇒")
+            result += " ->"
+
+        if (token == "⇔")
+            result += " <->"
+
+        if (token === "(") 
+            result += " (";
+        
+        if (token === ")") 
+            result += " )";    
     }
 
-    return result;
+    return result.substring(1, result.length);
 }
 
 function infixToReadable(infix: string): string {
@@ -13,7 +46,7 @@ function infixToReadable(infix: string): string {
 
     var tokens = infix.split(" ");
     for (let i = 0; i < tokens.length; i++) {
-        var token = tokens[i]
+        var token = tokens[i];
 
         if (token === "FORM") {
             result += " " + tokens[i + 1] + "(" + tokens[i + 2] + ") ";
@@ -21,10 +54,10 @@ function infixToReadable(infix: string): string {
         }
 
         else if (token === "FORALL") 
-            result += " ∀"
+            result += " ∀";
 
         else if (token === "EXIST") 
-            result += " ∃ "
+            result += " ∃";
 
         else if (token === "NOT") 
             result += " ¬ ";
