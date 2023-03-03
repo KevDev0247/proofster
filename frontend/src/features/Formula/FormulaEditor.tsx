@@ -4,7 +4,7 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch, RootState, useAppDispatch } from '../../store/store';
 import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
-import { Box, ButtonGroup, Card, CardContent, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box, Card, CardContent, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Button, CircularProgress } from '@mui/material';
@@ -17,7 +17,7 @@ import { setDisableButton } from '../../store/globalSlice';
 import { readableToInfix } from './formulaService';
 
 
-interface EditorButton {
+interface SymbolButton {
   label: string;
   value: string;
 }
@@ -30,9 +30,21 @@ export default function FormulaEditor() {
 
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const specialSymbolsOne: string[] = ['(', ')', '∀', '∃', '¬']
+  const symbolButtonsOne: SymbolButton[] = [
+    { label: '(', value: ' ( ' },
+    { label: ')', value: ' ) ' },
+    { label: '¬', value: ' ¬ ' },    
+    { label: '∀', value: ' ∀' },
+    { label: '∃', value: ' ∃' },
+  ]
 
-  const specialSymbolsTwo: string[] = ['∨', '∧', '⇒', '⇔', 'x']
+  const symbolButtonsTwo: SymbolButton[] = [
+    { label: '∨', value: ' ∨ ' },
+    { label: '∧', value: ' ∧ ' },
+    { label: '⇒', value: ' ⇒ ' },
+    { label: '⇔', value: ' ⇔ ' },
+    { label: 'F(x)', value: ' F( ) ' },
+  ]
 
   const isSaving = useSelector(
     (state: RootState) => state.formula.save.isSaving
@@ -196,32 +208,60 @@ export default function FormulaEditor() {
                   helperText={showValidation && 'Formula is required'}
                 />
               </Grid>
-              <Grid item xs={12} md={10} container spacing={1} alignItems="center">
-                <Grid item xs={12} md={6}>
-                  <ToggleButtonGroup 
-                    size="large"
-                    onChange={handleSymbolSelection}
-                    aria-label="special symbol group one"
-                  >
-                    {specialSymbolsOne.map((label) => (
-                      <ToggleButton key={label} value={label} sx={{ width: 66, textTransform: 'none' }}>
-                        <Typography variant="h5"><strong>{label}</strong></Typography>
-                      </ToggleButton>
-                    ))}
-                  </ToggleButtonGroup>
+              <Grid item xs={12} md={10} container spacing={2} alignItems="center">
+                <Grid item xs={12} md={4}>
+                  {isSmDown ? (
+                    <ToggleButtonGroup 
+                      size="large"
+                      onChange={handleSymbolSelection}
+                      aria-label="special symbol group one"
+                    >
+                      {symbolButtonsOne.map(({ label, value }) => (
+                        <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+                          <Typography variant="h5"><strong>{label}</strong></Typography>
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  ) : (
+                    <ToggleButtonGroup 
+                      size="small"
+                      onChange={handleSymbolSelection}
+                      aria-label="special symbol group one"
+                    >
+                      {symbolButtonsOne.map(({ label, value }) => (
+                        <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
+                          <Typography variant="body1"><strong>{label}</strong></Typography>
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  )}
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <ToggleButtonGroup 
-                    size="large"
-                    onChange={handleSymbolSelection}
-                    aria-label="special symbol group two"
-                  >
-                    {specialSymbolsTwo.map((label) => (
-                      <ToggleButton key={label} value={label} sx={{ width: 66, textTransform: 'none' }}>
-                        <Typography variant="h5"><strong>{label}</strong></Typography>
-                      </ToggleButton>
-                    ))}
-                  </ToggleButtonGroup>
+                  {isSmDown ? (
+                    <ToggleButtonGroup 
+                      size="large"
+                      onChange={handleSymbolSelection}
+                      aria-label="special symbol group two"
+                    >
+                      {symbolButtonsTwo.map(({ label, value }) => (
+                        <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+                          <Typography variant="h5"><strong>{label}</strong></Typography>
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  ) : (
+                    <ToggleButtonGroup 
+                      size="small"
+                      onChange={handleSymbolSelection}
+                      aria-label="special symbol group two"
+                    >
+                      {symbolButtonsTwo.map(({ label, value }) => (
+                        <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
+                          <Typography variant="body1"><strong>{label}</strong></Typography>
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  )}
                 </Grid>
               </Grid>
               <Grid item xs={12} md={2} container alignItems="center">
@@ -265,7 +305,7 @@ export default function FormulaEditor() {
                 onClick={resetForm}
                 disabled={disableButton}
               >
-                {formula.id !== 0 ? "Cancel" : "Reset"}
+                {formula.id !== 0 ? "Cancel" : "Erase"}
               </Button>
             </Grid>
           </Grid>
