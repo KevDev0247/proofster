@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Formula
+from api.models import Formula
 
 
 class FormulaSerializer(serializers.ModelSerializer):

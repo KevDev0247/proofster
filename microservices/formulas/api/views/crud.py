@@ -9,9 +9,9 @@ from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from ..repository import get_formula_by_stage, get_formula, get_formula_by_workspace
-from ..serializers import FormulaSerializer
-from ..enums import Stage
+from api.repository import get_formula_by_stage, get_formula, get_formula_by_workspace
+from api.serializers import FormulaSerializer
+from api.enums import Stage
 
 
 @method_decorator(csrf_exempt, name='dispatch')

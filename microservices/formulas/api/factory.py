@@ -1,5 +1,5 @@
-from .constants import STAGE_DESCRIPTIONS, STAGE_NAMES
-from .enums import Stage
+from api.constants import STAGE_DESCRIPTIONS, STAGE_NAMES
+from api.enums import Stage
 
 
 def create_normalizer_url_key(stage):

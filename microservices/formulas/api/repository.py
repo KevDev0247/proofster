@@ -6,8 +6,8 @@ from datetime import datetime
 from typing import Dict, List
 from asgiref.sync import sync_to_async
 
-from .models import Formula
-from .serializers import FormulaSerializer
+from api.models import Formula
+from api.serializers import FormulaSerializer
 
 
 async def execute_algorithm(
