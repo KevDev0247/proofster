@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "microservices"
+name = "workspaces"
 version = "0.1.0"
 description = ""
 authors = ["Kevin <zhijunwang2002@gmail.com>"]
