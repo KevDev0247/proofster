@@ -15,26 +15,7 @@ import { createFormula, getFormulas, updateFormula } from '../../network/formula
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
 import { setDisableButton } from '../../slices/globalSlice';
 import { readableToInfix } from '../../utils/infixConverter';
-
-
-interface SymbolButton {
-  label: string;
-  value: string;
-}
-const keyboardOne: SymbolButton[] = [
-  { label: '(', value: ' ( ' },
-  { label: ')', value: ' ) ' },
-  { label: '¬', value: ' ¬ ' },    
-  { label: '∀', value: ' ∀' },
-  { label: '∃', value: ' ∃' },
-];
-const keyboardTwo: SymbolButton[] = [
-  { label: '∨', value: ' ∨ ' },
-  { label: '∧', value: ' ∧ ' },
-  { label: '⇒', value: ' ⇒ ' },
-  { label: '⇔', value: ' ⇔ ' },
-  { label: 'F(x)', value: ' F( ) ' },
-];
+import FormulaKeyboard from './FormulaKeyboard';
 
 
 export default function FormulaEditor() {
@@ -45,7 +26,7 @@ export default function FormulaEditor() {
 
   const disableButton: boolean = useSelector(
     (state: RootState) => state.global.disableButton
-  );  
+  );
   const isSaving: boolean = useSelector(
     (state: RootState) => state.formula.save.isSaving
   );
@@ -55,16 +36,11 @@ export default function FormulaEditor() {
   const showValidation: boolean = useSelector(
     (state: RootState) => state.formula.save.showValidation
   );
-
-
   const selected: IFormula = useSelector(
     (state: RootState) => state.formula.save.selected
   );
-  const [formula, setFormula] = useState<IFormula>(selected);
 
-  useEffect(() => {
-    setFormula(selected);
-  }, [selected]);
+  const formulaInfixRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isSaving || isDeleting)
@@ -74,69 +50,25 @@ export default function FormulaEditor() {
   }, [isSaving, isDeleting]);
 
 
-  const formulaInfixRef = useRef<HTMLInputElement>(null); 
-  const cursorPositionRef = useRef<number>(0);
-
-  useEffect(() => {
-    const handleCursorPositionChange = () => {
-      const newCursorPosition = formulaInfixRef.current?.selectionStart || 0;
-      cursorPositionRef.current = newCursorPosition;
-    };
-    if (formulaInfixRef.current) {
-      formulaInfixRef.current.addEventListener('click', handleCursorPositionChange);
-      formulaInfixRef.current.addEventListener('keyup', handleCursorPositionChange);
-      return () => {
-        formulaInfixRef.current?.removeEventListener('click', handleCursorPositionChange);
-        formulaInfixRef.current?.removeEventListener('keyup', handleCursorPositionChange);
-      };
-    }
-  }, []);
-
-  const handleKeyboardClick = (
-    e: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: string,
-  ): void => {
-    const inputElement = formulaInfixRef.current;
-    if (inputElement) {
-      const cursorPosition = cursorPositionRef.current;
-      const currentInfix = formula.formula_infix;
-
-      const newInfix = 
-        currentInfix.substring(0, cursorPosition) +
-        value + 
-        currentInfix.substring(cursorPosition);
-
-      setFormula((prevState: IFormula) => ({
-        ...prevState,
-        formula_infix: newInfix,
-      }));
-
-      const newCursorPosition = cursorPosition + value.length;
-      cursorPositionRef.current = newCursorPosition;
-      inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
-    }
-  }
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value, checked } = e.target;
-    setFormula((prevState: IFormula) => ({
-      ...prevState,
+    dispatch(setSelected({
+      ...selected,
       [name]: name === "is_conclusion" ? checked : value,
     }));
-    cursorPositionRef.current = e.target.selectionStart || 0;
-  };  
+  };
 
   const submit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
-    if (formula.name === "" || formula.formula_infix === "") {
+    if (selected.name === "" || selected.formula_infix === "") {
       dispatch(setShowValidation(true));
       return;
     }
 
     var formulaToSubmit: IFormula = {
-      ...formula,
-      formula_infix: readableToInfix(formula.formula_infix)
+      ...selected,
+      formula_infix: readableToInfix(selected.formula_infix)
     }
 
     const action =
@@ -171,7 +103,6 @@ export default function FormulaEditor() {
       stage: 0
     }));
     dispatch(setShowValidation(false));
-    cursorPositionRef.current = 0;
   };
 
 
@@ -203,7 +134,7 @@ export default function FormulaEditor() {
                 label="Name"
                 variant="outlined"
                 type="text"
-                value={formula.name}
+                value={selected.name}
                 onChange={handleInputChange}
                 placeholder="Enter name here"
                 fullWidth
@@ -220,7 +151,7 @@ export default function FormulaEditor() {
                   variant="outlined"
                   type="text"
                   inputRef={formulaInfixRef}
-                  value={formula.formula_infix}
+                  value={selected.formula_infix}
                   onChange={handleInputChange}
                   placeholder="Enter formula here"
                   fullWidth
@@ -229,80 +160,24 @@ export default function FormulaEditor() {
                 />
               </Grid>
               <Grid item xs={12} md={10} container spacing={2} alignItems="center">
-                <Grid item xs={12} md={4}>
-                  {isSmDown ? (
-                    <ToggleButtonGroup 
-                      size="large"
-                      onChange={handleKeyboardClick}
-                      aria-label="special symbol group one"
-                      exclusive
-                    >
-                      {keyboardOne.map(({ label, value }) => (
-                        <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
-                          <Typography variant="h5"><strong>{label}</strong></Typography>
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
-                  ) : (
-                    <ToggleButtonGroup 
-                      size="small"
-                      onChange={handleKeyboardClick}
-                      aria-label="special symbol group one"
-                      exclusive
-                    >
-                      {keyboardOne.map(({ label, value }) => (
-                        <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
-                          <Typography variant="body1"><strong>{label}</strong></Typography>
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
-                  )}
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  {isSmDown ? (
-                    <ToggleButtonGroup 
-                      size="large"
-                      onChange={handleKeyboardClick}
-                      aria-label="special symbol group two"
-                      exclusive
-                    >
-                      {keyboardTwo.map(({ label, value }) => (
-                        <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
-                          <Typography variant="h5"><strong>{label}</strong></Typography>
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
-                  ) : (
-                    <ToggleButtonGroup 
-                      size="small"
-                      onChange={handleKeyboardClick}
-                      aria-label="special symbol group two"
-                      exclusive
-                    >
-                      {keyboardTwo.map(({ label, value }) => (
-                        <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
-                          <Typography variant="body1"><strong>{label}</strong></Typography>
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
-                  )}
-                </Grid>
+                <FormulaKeyboard
+                  formulaInfixRef={formulaInfixRef}
+                  isSmDown={isSmDown}
+                />
               </Grid>
-              <Grid item xs={12} md={2} container alignItems="center">
-                <Grid item xs={12} md={12} container justifyContent="flex-end">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={formula.is_conclusion}
-                        name="is_conclusion"
-                        color="primary"
-                        onChange={handleInputChange}
-                      />
-                    }
-                    label="Conclusion"
-                    labelPlacement="start"
-                  />
-                </Grid>
+              <Grid item xs={12} md={2} container alignItems="center" justifyContent="flex-end">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={selected.is_conclusion}
+                      name="is_conclusion"
+                      color="primary"
+                      onChange={handleInputChange}
+                    />
+                  }
+                  label="Conclusion"
+                  labelPlacement="start"
+                />
               </Grid>
             </Grid>
             <Grid item xs={6} md={6}>
@@ -329,7 +204,7 @@ export default function FormulaEditor() {
                 onClick={resetForm}
                 disabled={disableButton}
               >
-                {formula.id !== 0 ? "Cancel" : "Erase"}
+                {selected.id !== 0 ? "Cancel" : "Erase"}
               </Button>
             </Grid>
           </Grid>
