@@ -1,7 +1,8 @@
 import './App.css';
 import ControlPanel from './components/ControlPanel';
 import { AppBar, Toolbar, Typography, Container, Grid } from '@mui/material';
-import WorkBench from './components/WorkBench';
+import FormulaEditor from './components/formula/FormulaEditor';
+import NormalizationResult from './components/algorithm/NormalizationResult';
 
 function App() {
   return (
@@ -16,8 +17,16 @@ function App() {
         </Grid>
         <Grid item xs={12} md={12}>
           <Container maxWidth="md">
-            <WorkBench />
-          </Container>        
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={12}>
+                <FormulaEditor />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <ControlPanel />
+              </Grid>
+              <NormalizationResult />
+            </Grid>
+          </Container>
         </Grid>
         <Grid item xs={12} md={12}></Grid>
       </Grid>

@@ -21,14 +21,14 @@ interface SymbolButton {
   label: string;
   value: string;
 }
-const symbolButtonsOne: SymbolButton[] = [
+const keyboardOne: SymbolButton[] = [
   { label: '(', value: ' ( ' },
   { label: ')', value: ' ) ' },
   { label: '¬', value: ' ¬ ' },    
   { label: '∀', value: ' ∀' },
   { label: '∃', value: ' ∃' },
 ];
-const symbolButtonsTwo: SymbolButton[] = [
+const keyboardTwo: SymbolButton[] = [
   { label: '∨', value: ' ∨ ' },
   { label: '∧', value: ' ∧ ' },
   { label: '⇒', value: ' ⇒ ' },
@@ -83,7 +83,7 @@ export default function FormulaEditor() {
 
   const formulaInfixRef = useRef<HTMLInputElement>(null); 
 
-  const handleSymbolSelection = (
+  const handleKeyboardClick = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     value: string,
   ): void => {
@@ -109,7 +109,7 @@ export default function FormulaEditor() {
   const submit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
-    if (formula.name === "" || formula.formula_infix == "") {
+    if (formula.name === "" || formula.formula_infix === "") {
       dispatch(setShowValidation(true));
       return;
     }
@@ -212,10 +212,10 @@ export default function FormulaEditor() {
                   {isSmDown ? (
                     <ToggleButtonGroup 
                       size="large"
-                      onChange={handleSymbolSelection}
+                      onChange={handleKeyboardClick}
                       aria-label="special symbol group one"
                     >
-                      {symbolButtonsOne.map(({ label, value }) => (
+                      {keyboardOne.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
                           <Typography variant="h5"><strong>{label}</strong></Typography>
                         </ToggleButton>
@@ -224,10 +224,10 @@ export default function FormulaEditor() {
                   ) : (
                     <ToggleButtonGroup 
                       size="small"
-                      onChange={handleSymbolSelection}
+                      onChange={handleKeyboardClick}
                       aria-label="special symbol group one"
                     >
-                      {symbolButtonsOne.map(({ label, value }) => (
+                      {keyboardOne.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
                           <Typography variant="body1"><strong>{label}</strong></Typography>
                         </ToggleButton>
@@ -239,10 +239,10 @@ export default function FormulaEditor() {
                   {isSmDown ? (
                     <ToggleButtonGroup 
                       size="large"
-                      onChange={handleSymbolSelection}
+                      onChange={handleKeyboardClick}
                       aria-label="special symbol group two"
                     >
-                      {symbolButtonsTwo.map(({ label, value }) => (
+                      {keyboardTwo.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
                           <Typography variant="h5"><strong>{label}</strong></Typography>
                         </ToggleButton>
@@ -251,10 +251,10 @@ export default function FormulaEditor() {
                   ) : (
                     <ToggleButtonGroup 
                       size="small"
-                      onChange={handleSymbolSelection}
+                      onChange={handleKeyboardClick}
                       aria-label="special symbol group two"
                     >
-                      {symbolButtonsTwo.map(({ label, value }) => (
+                      {keyboardTwo.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
                           <Typography variant="body1"><strong>{label}</strong></Typography>
                         </ToggleButton>
