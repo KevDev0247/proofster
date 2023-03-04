@@ -61,6 +61,7 @@ export default function FormulaEditor() {
     (state: RootState) => state.formula.save.selected
   );
   const [formula, setFormula] = useState<IFormula>(selected);
+
   useEffect(() => {
     setFormula(selected);
   }, [selected]);
@@ -73,15 +74,23 @@ export default function FormulaEditor() {
   }, [isSaving, isDeleting]);
 
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value, checked } = e.target;
-    setFormula((prevState: IFormula) => ({
-      ...prevState,
-      [name]: name === "is_conclusion" ? checked : value,
-    }));
-  };
-
   const formulaInfixRef = useRef<HTMLInputElement>(null); 
+  const cursorPositionRef = useRef<number>(0);
+
+  useEffect(() => {
+    const handleCursorPositionChange = () => {
+      const newCursorPosition = formulaInfixRef.current?.selectionStart || 0;
+      cursorPositionRef.current = newCursorPosition;
+    };
+    if (formulaInfixRef.current) {
+      formulaInfixRef.current.addEventListener('click', handleCursorPositionChange);
+      formulaInfixRef.current.addEventListener('keyup', handleCursorPositionChange);
+      return () => {
+        formulaInfixRef.current?.removeEventListener('click', handleCursorPositionChange);
+        formulaInfixRef.current?.removeEventListener('keyup', handleCursorPositionChange);
+      };
+    }
+  }, []);
 
   const handleKeyboardClick = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -89,7 +98,7 @@ export default function FormulaEditor() {
   ): void => {
     const inputElement = formulaInfixRef.current;
     if (inputElement) {
-      const cursorPosition = inputElement.selectionStart || 0;
+      const cursorPosition = cursorPositionRef.current;
       const currentInfix = formula.formula_infix;
 
       const newInfix = 
@@ -102,9 +111,20 @@ export default function FormulaEditor() {
         formula_infix: newInfix,
       }));
 
-      inputElement.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+      const newCursorPosition = cursorPosition + value.length;
+      cursorPositionRef.current = newCursorPosition;
+      inputElement.setSelectionRange(newCursorPosition, newCursorPosition);
     }
   }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value, checked } = e.target;
+    setFormula((prevState: IFormula) => ({
+      ...prevState,
+      [name]: name === "is_conclusion" ? checked : value,
+    }));
+    cursorPositionRef.current = e.target.selectionStart || 0;
+  };  
 
   const submit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
@@ -151,6 +171,7 @@ export default function FormulaEditor() {
       stage: 0
     }));
     dispatch(setShowValidation(false));
+    cursorPositionRef.current = 0;
   };
 
 
@@ -214,6 +235,7 @@ export default function FormulaEditor() {
                       size="large"
                       onChange={handleKeyboardClick}
                       aria-label="special symbol group one"
+                      exclusive
                     >
                       {keyboardOne.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
@@ -226,6 +248,7 @@ export default function FormulaEditor() {
                       size="small"
                       onChange={handleKeyboardClick}
                       aria-label="special symbol group one"
+                      exclusive
                     >
                       {keyboardOne.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
@@ -241,6 +264,7 @@ export default function FormulaEditor() {
                       size="large"
                       onChange={handleKeyboardClick}
                       aria-label="special symbol group two"
+                      exclusive
                     >
                       {keyboardTwo.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
@@ -253,6 +277,7 @@ export default function FormulaEditor() {
                       size="small"
                       onChange={handleKeyboardClick}
                       aria-label="special symbol group two"
+                      exclusive
                     >
                       {keyboardTwo.map(({ label, value }) => (
                         <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
