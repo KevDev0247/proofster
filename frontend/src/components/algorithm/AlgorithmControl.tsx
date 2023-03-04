@@ -11,20 +11,15 @@ import FormControl from '@mui/material/FormControl';
 import { Button, CircularProgress } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getResults, normalize } from '../../network/algorithmApi';
-import { setShowCacheWarning } from '../../slices/globalSlice';
+import { setShowCacheWarning, setShowError } from '../../slices/globalSlice';
 import {
-  nextStage,
-  resetStage,
-  clearCache,
-  setError,
-  setStopStage,
-  setCompletedStage
+  nextStage, resetStage, clearCache, setError, setStopStage, setCompletedStage
 } from '../../slices/algorithmSlice';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
-  cnfSubtitle, preprocessSubtitle,
-  formulaUpdatedWarning, argumentEmptyError
+  cnfSubtitle, preprocessSubtitle, argumentEmptyError
 } from '../../constants';
+import AlgorithmAlerts from './AlgorithmAlerts';
 
 
 interface Option {
@@ -46,9 +41,6 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const theme: Theme = useTheme();
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const showCacheWarning: boolean = useSelector(
-    (state: RootState) => state.global.showCacheWarning
-  );
   const disableButton: boolean = useSelector(
     (state: RootState) => state.global.disableButton
   );  
@@ -68,19 +60,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
     (state: RootState) => state.algorithm.normalize.stopStage
   );
 
-  const [showError, setShowError] = useState<boolean>(false);
   const [showValidation, setShowValidation] = useState<boolean>(false);
-
-
-  const error: string = useSelector(
-    (state: RootState) => state.algorithm.normalize.error
-  );
-  useEffect(() => {
-    if (error.length != 0)
-      setShowError(true);
-    else
-      setShowError(false);
-  }, [error]);
   
   const [targetStage, setTargetStage] = useState<string>('');
   useEffect(() => {
@@ -93,15 +73,6 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
     dispatch(clearCache());
     setTargetStage(event.target.value);
     dispatch(setStopStage(parseInt(event.target.value)));
-  };
-
-  const handleCloseError = (): void => {
-    setShowError(false);
-    dispatch(setError(""));
-  };
-
-  const handleCloseWarning = (): void => {
-    dispatch(setShowCacheWarning(false));
   };
 
   const execute = (e: React.SyntheticEvent): void => {
@@ -141,7 +112,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
   const clear = (): void => {
     dispatch(clearCache());
     dispatch(setShowCacheWarning(false));
-    setShowError(false);
+    dispatch(setShowError(false));
   }
 
   const reset = (): void => {
@@ -152,27 +123,8 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
 
   return (
     <>
-      {showError && (
-        <Grid item container xs={12} md={12} justifyContent="center">
-          <Alert
-            onClose={handleCloseError}
-            severity="error"
-          >
-            {error}
-          </Alert>
-        </Grid>
-      )}
-      {showCacheWarning && (
-        <Grid item container xs={12} md={12} justifyContent="center">
-          <Alert
-            onClose={handleCloseWarning}
-            severity="warning"
-          >
-            {formulaUpdatedWarning}
-          </Alert>
-        </Grid>
-      )}
-      {showFullControl ? (
+      <AlgorithmAlerts />
+      {showFullControl && (
         <>
           <Grid item xs={12} md={5}>
             <FormControl fullWidth error={showValidation}>
@@ -218,7 +170,7 @@ export default function AlgorithmControl(props: { showFullControl: boolean }) {
             </Grid>
           </Grid>
         </>
-      ) : null}
+      )}
       {(currentStage != stopStage || currentStage == 0) ? (
         <>
           <Grid item xs={5.5} md={6} container>
