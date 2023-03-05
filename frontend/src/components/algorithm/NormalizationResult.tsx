@@ -6,9 +6,9 @@ import {
   Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow
 } from '@mui/material';
+import AlgorithmControl from './AlgorithmControl';
 import { IFormulaResult, INormalized } from '../../models/normalized';
 import { getResults } from '../../network/algorithmApi';
-import AlgorithmControl from './AlgorithmControl';
 import { cnfName, nnfName } from '../../constants';
 import { pnfName, preprocessName, defaultName } from '../../constants';
 
@@ -83,10 +83,14 @@ export default function NormalizationResult() {
                               <TableHead>
                                 <TableRow>
                                   <TableCell size='small'>
-                                    <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
+                                    <Typography variant="body1" gutterBottom>
+                                      <strong>Type</strong>
+                                    </Typography>
                                   </TableCell>
                                   <TableCell size='small'>
-                                    <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
+                                    <Typography variant="body1" gutterBottom>
+                                      <strong>Formula</strong>
+                                    </Typography>
                                   </TableCell>
                                 </TableRow>
                               </TableHead>
@@ -120,7 +124,7 @@ export default function NormalizationResult() {
                   </Grid>
 
                   {resultIndex === renderResults.length - 1 && (
-                    <AlgorithmControl showFullControl={false} />
+                    <AlgorithmControl isInitialStep={false} />
                   )}
                 </Grid>
               </CardContent>

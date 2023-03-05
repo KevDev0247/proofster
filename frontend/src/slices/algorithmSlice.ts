@@ -8,8 +8,10 @@ export const algorithmSlice = createSlice({
   initialState: {
     normalize: {
       isLoading: false,
+      showValidation: false,
       status: "",
       error: "",
+      selectedStage: "",
       currentStage: 0,
       completedStage: 0,
       stopStage: 9,
@@ -43,8 +45,14 @@ export const algorithmSlice = createSlice({
       state.normalize.status = "";
       state.normalize.error = "";
     },
+    setShowValidation: (state, action) => {
+      state.normalize.showValidation = action.payload;
+    },
     setError: (state, action) => {
       state.normalize.error = action.payload;
+    },
+    setSelectedStage: (state, action) => {
+      state.normalize.selectedStage = action.payload;
     },
     setStopStage: (state, action) => {
       state.normalize.stopStage = action.payload;
@@ -89,7 +97,9 @@ export const {
   nextStage, 
   resetStage,
   clearCache,
+  setShowValidation,
   setError,
+  setSelectedStage,
   setStopStage, 
   setCompletedStage
 } = algorithmSlice.actions;
