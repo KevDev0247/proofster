@@ -12,8 +12,8 @@ import (
 )
 
 // CreateNote create new note record
-func CreateNote(userId primitive.ObjectID, title string, content string) (*db.Note, error) {
-	note := db.NewNote(userId, title, content)
+func CreateNote(title string, content string) (*db.Note, error) {
+	note := db.NewNote(title, content)
 	err := mgm.Coll(note).Create(note)
 	if err != nil {
 		return nil, errors.New("cannot create new note")
@@ -59,10 +59,6 @@ func UpdateNote(userId primitive.ObjectID, noteId primitive.ObjectID, request *m
 	err := mgm.Coll(note).FindByID(noteId, note)
 	if err != nil {
 		return errors.New("cannot find note")
-	}
-
-	if note.Author != userId {
-		return errors.New("you cannot update this note")
 	}
 
 	note.Title = request.Title

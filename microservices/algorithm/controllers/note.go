@@ -30,14 +30,7 @@ func CreateNewNote(c *gin.Context) {
 		Success:    false,
 	}
 
-	userId, exists := c.Get("userId")
-	if !exists {
-		response.Message = "cannot get user"
-		response.SendResponse(c)
-		return
-	}
-
-	note, err := services.CreateNote(userId.(primitive.ObjectID), requestBody.Title, requestBody.Content)
+	note, err := services.CreateNote(requestBody.Title, requestBody.Content)
 	if err != nil {
 		response.Message = err.Error()
 		response.SendResponse(c)
