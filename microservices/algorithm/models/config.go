@@ -10,6 +10,7 @@ type EnvConfig struct {
 	ServerAddr                 string `mapstructure:"SERVER_ADDR"`
 	MongodbUri                 string `mapstructure:"MONGO_URI"`
 	MongodbDatabase            string `mapstructure:"MONGO_DATABASE"`
+	RabbitMQUri                string `mapstructure:"RABBITMQ_URI"`
 	UseRedis                   bool   `mapstructure:"USE_REDIS"`
 	RedisDefaultAddr           string `mapstructure:"REDIS_DEFAULT_ADDR"`
 	JWTSecretKey               string `mapstructure:"JWT_SECRET"`

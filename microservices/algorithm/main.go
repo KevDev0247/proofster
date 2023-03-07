@@ -11,31 +11,25 @@ import (
 	"time"
 )
 
-// @title GoLang Rest API Starter Doc
-// @version 1.0
-// @description GoLang - Gin - RESTful - MongoDB - Redis
-// @termsOfService https://swagger.io/terms/
-
-// @contact.name Ebubekir Yiğit
-// @contact.url https://github.com/ebubekiryigit
-// @contact.email ebubekiryigit6@gmail.com
-
-// @license.name MIT License
-// @license.url https://opensource.org/licenses/MIT
-
-// @host localhost:8080
-// @BasePath /
-// @schemes http
-
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Bearer-Token
 func main() {
 	services.LoadConfig()
 	services.InitMongoDB()
 
 	if services.Config.UseRedis {
 		services.CheckRedisConnection()
+	}
+
+	// Initialize RabbitMQ
+	conn, ch, err := services.InitRabbitMQ(services.Config.RabbitMQUri)
+	if err != nil {
+		log.Fatalf("failed to initialize RabbitMQ: %v", err)
+	}
+	defer conn.Close()
+	defer ch.Close()
+
+	// Start listening for messages
+	if err := services.ListenForFormulas(conn, ch); err != nil {
+		log.Fatalf("failed to listen for formulas: %v", err)
 	}
 
 	routes.InitGin()
