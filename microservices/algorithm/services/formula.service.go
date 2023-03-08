@@ -19,7 +19,7 @@ func SaveBulkFormula(
 		bson.M{"workspace_id": workspaceId},
 	)
 	if err != nil {
-		return errors.New("cannot save formulas")
+		return errors.New("cannot get formulas")
 	}
 
 	if len(existing) != 0 {
