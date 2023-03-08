@@ -1,13 +1,13 @@
 package services
 
 import (
-	"log"
 	"bytes"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	db "proofster/algorithm/models/db"
-	// "proofster/algorithm/utils"
+	"proofster/algorithm/utils"
 	"sync"
 )
 
@@ -55,11 +55,7 @@ func executeAlgorithm(
 		return
 	}
 
-	log.Printf("%v", result)
-
-	resultChan <- map[string]interface{}{
-		"data": result,
-	}
+	resultChan <- result
 }
 
 func Normalize(
@@ -67,12 +63,12 @@ func Normalize(
 	workspaceId string,
 	algorithm int,
 ) error {
-	// stepOneJsonKey := utils.CreateStepOneKey(stage, "json")
-	// stepTwoJsonKey := utils.CreateStepTwoKey(stage, "json")
-	// stepThreeJsonKey := utils.CreateStepThreeKey(stage, "json")
-	// stepOneStringKey := utils.CreateStepOneKey(stage, "string")
-	// stepTwoStringKey := utils.CreateStepTwoKey(stage, "string")
-	// stepThreeStringKey := utils.CreateStepThreeKey(stage, "string")
+	stepOneJsonKey := utils.CreateStepOneKey(stage, "json")
+	stepTwoJsonKey := utils.CreateStepTwoKey(stage, "json")
+	stepThreeJsonKey := utils.CreateStepThreeKey(stage, "json")
+	stepOneStringKey := utils.CreateStepOneKey(stage, "string")
+	stepTwoStringKey := utils.CreateStepTwoKey(stage, "string")
+	stepThreeStringKey := utils.CreateStepThreeKey(stage, "string")
 
 	initialSteps, err := GetStepByStage(workspaceId, 0)
 	if err != nil {
@@ -100,9 +96,7 @@ func Normalize(
 	}
 	if len(conclusion) == 0 && isProof {
 		return errors.New("no conclusion was provided for proof preprocessing")
-	}	
-
-	log.Printf("%v", 3)
+	}
 
 	resultChan := make(chan map[string]interface{}, 1)
 	errChan := make(chan error) 
@@ -118,78 +112,67 @@ func Normalize(
 	close(resultChan)
 
 	result := <-resultChan
-	log.Printf("%v", result["data"])
-
-	// resultMap := <-resultChan
-	// log.Printf("%v", resultMap["data"])
-
-	// result := resultMap["data"].(map[string]interface{})
 	
-	// errMsg := <-errChan
-	// if errMsg != nil {
-	// 	return errors.New("error occurred during normalization")
-	// }
+	ids := []string{}
+	conclusionId := ""
+	for _, step := range argument {
+		ids = append(ids, step.FormulaId)
 
-	// ids := []string{}
-	// conclusionId := ""
-	// for _, step := range argument {
-	// 	ids = append(ids, step.FormulaId)
+		if step.IsConclusion {
+			conclusionId = step.FormulaId
+		}
+	}
+	log.Printf("%v", result)
+	
+	if (result[stepOneJsonKey] != nil && result[stepOneStringKey] != nil) {
+		stepOneJsons := utils.ConvertToMapSlice(result[stepOneJsonKey].([]interface{}))
+		stepOneStrings := utils.ConvertToStringSlice(result[stepOneStringKey].([]interface{}))
+		err = SaveBulkSteps(
+			ids,
+			stepOneStrings,
+			stepOneJsons,
+			conclusionId,
+			workspaceId,
+			stage+1,
+			algorithm,
+			utils.CreateStageDescription(stage+1),
+		)
+		if err != nil {
+			return errors.New("error occurred during step one saving")
+		}
+	}
 
-	// 	if result["is_conclusion"].(bool) {
-	// 		conclusionId = result["formula_id"].(string)
-	// 	}
-	// }
+	stepTwoJsons := utils.ConvertToMapSlice(result[stepTwoJsonKey].([]interface{}))
+	stepTwoStrings := utils.ConvertToStringSlice(result[stepTwoStringKey].([]interface{}))
+	err = SaveBulkSteps(
+		ids,
+		stepTwoStrings,
+		stepTwoJsons,
+		conclusionId,
+		workspaceId,
+		stage+2,
+		algorithm,
+		utils.CreateStageDescription(stage+2),
+	)
+	if err != nil {
+		return errors.New("error occurred during step two saving")
+	}
 
-	// stepOneJsons := result[stepOneJsonKey].([]map[string]interface{})
-	// stepOneStrings := result[stepOneStringKey].([]string)
-	// log.Printf("%v", stepOneJsons)
-	// err = SaveBulkSteps(
-	// 	ids,
-	// 	stepOneStrings,
-	// 	stepOneJsons,
-	// 	conclusionId,
-	// 	workspaceId,
-	// 	stage+1,
-	// 	algorithm,
-	// 	"",
-	// )
-	// if err != nil {
-	// 	return errors.New("error occurred during step one saving")
-	// }
-
-	// stepTwoJsons := result[stepTwoJsonKey].([]map[string]interface{})
-	// stepTwoStrings := result[stepTwoStringKey].([]string)
-	// log.Printf("%v", stepTwoJsons)
-	// err = SaveBulkSteps(
-	// 	ids,
-	// 	stepTwoStrings,
-	// 	stepTwoJsons,
-	// 	conclusionId,
-	// 	workspaceId,
-	// 	stage+2,
-	// 	algorithm,
-	// 	"",
-	// )
-	// if err != nil {
-	// 	return errors.New("error occurred during step two saving")
-	// }
-
-	// stepThreeJsons := result[stepThreeJsonKey].([]map[string]interface{})
-	// stepThreeStrings := result[stepThreeStringKey].([]string)
-	// log.Printf("%v", stepThreeJsons)
-	// err = SaveBulkSteps(
-	// 	ids,
-	// 	stepThreeStrings,
-	// 	stepThreeJsons,
-	// 	conclusionId,
-	// 	workspaceId,
-	// 	stage+3,
-	// 	algorithm,
-	// 	"",
-	// )
-	// if err != nil {
-	// 	return errors.New("error occurred during step three saving")
-	// }
+	stepThreeJsons := utils.ConvertToMapSlice(result[stepThreeJsonKey].([]interface{}))
+	stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
+	err = SaveBulkSteps(
+		ids,
+		stepThreeStrings,
+		stepThreeJsons,
+		conclusionId,
+		workspaceId,
+		stage+3,
+		algorithm,
+		utils.CreateStageDescription(stage+3),
+	)
+	if err != nil {
+		return errors.New("error occurred during step three saving")
+	}
 
 	return nil
 }
