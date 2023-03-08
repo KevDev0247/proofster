@@ -54,7 +54,7 @@ func CreateStageName(stage int) string {
 	if stage < 0 || stage >= len(STAGE_NAMES) {
 		return ""
 	}
-	return STAGE_NAMES[stage]
+	return STAGE_NAMES[stage-1]
 }
 
 func CreateStageDescription(stage int) string {
@@ -72,6 +72,6 @@ func CreateStageDescription(stage int) string {
 	if stage < 0 || stage >= len(STAGE_DESCRIPTIONS) {
 		return ""
 	}
-	return STAGE_DESCRIPTIONS[stage]
+	return STAGE_DESCRIPTIONS[stage-1]
 }
 

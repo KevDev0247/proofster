@@ -125,25 +125,11 @@ func Normalize(
 	log.Printf("%v", result)
 	
 	stage++
-	stepOneJsons := []map[string]interface{}{}
-	stepOneStrings := []string{}
+	stepOneJsons := make([]map[string]interface{}, len(ids))
+	stepOneStrings := make([]string, len(ids))
 	if (result[stepOneJsonKey] != nil && result[stepOneStringKey] != nil) {
 		stepOneJsons = utils.ConvertToMapSlice(result[stepOneJsonKey].([]interface{}))
 		stepOneStrings = utils.ConvertToStringSlice(result[stepOneStringKey].([]interface{}))
-		err = SaveBulkSteps(
-			ids,
-			stepOneStrings,
-			stepOneJsons,
-			conclusionId,
-			workspaceId,
-			stage,
-			algorithm,
-			utils.CreateStageDescription(stage),
-			utils.CreateStageName(stage),
-		)
-		if err != nil {
-			return errors.New("error occurred during step one saving")
-		}
 	}
 	err = SaveBulkSteps(
 		ids,
