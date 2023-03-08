@@ -9,8 +9,8 @@ import (
 func NormalizeRoute(router *gin.RouterGroup, handlers ...gin.HandlerFunc) {
 	normalize := router.Group("/normalize", handlers...)
 	{
-		normalize.GET(
-			"/:workspace_id",
+		normalize.POST(
+			"",
 			controllers.Normalize,
 		)
 	}

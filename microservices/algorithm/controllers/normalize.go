@@ -6,6 +6,7 @@ import (
 	"proofster/algorithm/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func Normalize(c *gin.Context) {
@@ -14,14 +15,21 @@ func Normalize(c *gin.Context) {
 		Success:    false,
 	}
 
-	workspaceId := c.Param("workspace_id")
+	var requestBody models.NormalizeRequest
+	_ = c.ShouldBindBodyWith(&requestBody, binding.JSON)
+
+	// workspaceId := c.Param("workspace_id")
+	// stage := c.Param("stage")
 	
-	err := services.Transpile(workspaceId)
-	if err != nil {
-		response.Message = err.Error()
-		response.SendResponse(c)
-		return
+	if requestBody.Stage == -1 {
+		err := services.Transpile(requestBody.WorkspaceId)
+		if err != nil {
+			response.Message = err.Error()
+			response.SendResponse(c)
+			return
+		}		
 	}
+
 	
 	response.StatusCode = http.StatusOK
 	response.Success = true

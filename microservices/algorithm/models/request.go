@@ -63,3 +63,9 @@ func (a NoteRequest) Validate() error {
 		validation.Field(&a.Content, validation.Required),
 	)
 }
+
+type NormalizeRequest struct {
+	Stage       int `json:"stage"`
+	WorkspaceId string `json:"workspace_id"`
+	Algorithm   int    `json:"algorithm"`
+}
