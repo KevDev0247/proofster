@@ -17,9 +17,6 @@ func Normalize(c *gin.Context) {
 
 	var requestBody models.NormalizeRequest
 	_ = c.ShouldBindBodyWith(&requestBody, binding.JSON)
-
-	// workspaceId := c.Param("workspace_id")
-	// stage := c.Param("stage")
 	
 	if requestBody.Stage == -1 {
 		err := services.Transpile(requestBody.WorkspaceId)
@@ -28,8 +25,13 @@ func Normalize(c *gin.Context) {
 			response.SendResponse(c)
 			return
 		}		
+	} else {
+		services.Normalize(
+			requestBody.Stage, 
+			requestBody.WorkspaceId,
+			requestBody.Algorithm,
+		)
 	}
-
 	
 	response.StatusCode = http.StatusOK
 	response.Success = true

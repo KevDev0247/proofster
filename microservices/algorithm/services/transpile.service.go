@@ -96,6 +96,7 @@ func Transpile(
 			0,
 			"Initial Step",
 		)
+		
 		steps = append(steps, *step)
 	}
 

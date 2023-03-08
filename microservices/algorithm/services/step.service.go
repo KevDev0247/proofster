@@ -9,6 +9,26 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+func GetStepByStage(
+	workspaceId string,
+	stage int,
+) ([]db.Step, error) {
+	var steps []db.Step
+
+	err := mgm.Coll(&db.Step{}).SimpleFind(
+		&steps,
+		bson.M{
+			"workspace_id": workspaceId,
+			"stage": stage,
+		},
+	)
+	if err != nil {
+		return nil, errors.New("cannot find notes")
+	}
+
+	return steps, nil
+}
+
 func SaveBulkSteps(
 	workspaceId string,
 	stage int,
