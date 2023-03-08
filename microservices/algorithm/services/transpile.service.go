@@ -84,23 +84,30 @@ func Transpile(
 	wg.Wait()
 	close(resultChan)
 
-	steps := []db.Step{}
+	ids := []string{}
+	results := []string{}
+	jsons := make([]map[string]interface{}, len(resultChan))
+	conclusionId := ""
 	for result := range resultChan {
-		step := db.NewStep(
-			result["formula_id"].(string),
-			workspaceId,
-			result["is_conclusion"].(bool),
-			result["formula_result"].(string),
-			result["formula_json"].(map[string]interface{}),
-			0,
-			0,
-			"Initial Step",
-		)
-		
-		steps = append(steps, *step)
+		ids = append(ids, result["formula_id"].(string))
+		results = append(results, result["formula_result"].(string))
+		jsons = append(jsons, result["formula_json"].(map[string]interface{}))
+
+		if result["is_conclusion"].(bool) {
+			conclusionId = result["formula_id"].(string)
+		}
 	}
 
-	SaveBulkSteps(workspaceId, 0, steps)
+	SaveBulkSteps(
+		ids,
+		results,
+		jsons,
+		conclusionId,
+		workspaceId,
+		0,
+		0,
+		"Initial Step",
+	)
 
 	return nil
 }

@@ -19,7 +19,7 @@ func GetStepByStage(
 		&steps,
 		bson.M{
 			"workspace_id": workspaceId,
-			"stage": stage,
+			"stage":        stage,
 		},
 	)
 	if err != nil {
@@ -30,9 +30,14 @@ func GetStepByStage(
 }
 
 func SaveBulkSteps(
+	ids []string,
+	results []string,
+	jsons []map[string]interface{},
+	conclusionId string,
 	workspaceId string,
 	stage int,
-	steps []db.Step,
+	algorithm int,
+	description string,
 ) error {
 	existing := []*db.Step{}
 
@@ -46,7 +51,7 @@ func SaveBulkSteps(
 	if err != nil {
 		return errors.New("cannot get normalized results")
 	}
-	
+
 	if len(existing) != 0 {
 		_, err := mgm.Coll(&db.Step{}).DeleteMany(
 			context.Background(),
@@ -60,9 +65,19 @@ func SaveBulkSteps(
 		}
 	}
 
-	toInsert := make([]interface{}, len(steps))
-	for i := range steps {
-		toInsert[i] = steps[i]
+	toInsert := make([]interface{}, len(ids))
+	for i := range ids {
+		step := db.NewStep(
+			ids[i],
+			workspaceId,
+			ids[i] == conclusionId,
+			results[i],
+			jsons[i],
+			stage,
+			0,
+			description,
+		)
+		toInsert[i] = step
 	}
 
 	_, err = mgm.Coll(&db.Step{}).InsertMany(context.Background(), toInsert)
