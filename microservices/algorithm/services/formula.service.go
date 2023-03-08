@@ -1,7 +1,6 @@
 package services
 
 import (
-	"log"
 	"context"
 	"errors"
 	db "proofster/algorithm/models/db"
@@ -14,8 +13,6 @@ func SaveBulkFormula(
 	formulas []db.Formula,
 )(error) {
 	existing := []*db.Formula{}
-
-	log.Println("workspaceId %w", workspaceId)
 	
 	err := mgm.Coll(&db.Formula{}).SimpleFind(
 		&existing,
@@ -24,8 +21,6 @@ func SaveBulkFormula(
 	if err != nil {
 		return errors.New("cannot save formulas")
 	}
-
-	log.Println("existing %w", existing)
 
 	if len(existing) != 0 {
 		_, err := mgm.Coll(&db.Formula{}).DeleteMany(

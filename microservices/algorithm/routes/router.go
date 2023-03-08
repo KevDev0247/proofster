@@ -22,6 +22,7 @@ func New() *gin.Engine {
 	{
 		PingRoute(v1)
 		NoteRoute(v1)
+		NormalizeRoute(v1)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

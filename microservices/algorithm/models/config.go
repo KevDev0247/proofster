@@ -11,6 +11,7 @@ type EnvConfig struct {
 	MongodbUri                 string `mapstructure:"MONGO_URI"`
 	MongodbDatabase            string `mapstructure:"MONGO_DATABASE"`
 	RabbitMQUri                string `mapstructure:"RABBITMQ_URI"`
+	TranspilerUrl              string `mapstructure:"TRANSPILER_LAMBDA_URL"`
 	UseRedis                   bool   `mapstructure:"USE_REDIS"`
 	RedisDefaultAddr           string `mapstructure:"REDIS_DEFAULT_ADDR"`
 	JWTSecretKey               string `mapstructure:"JWT_SECRET"`
