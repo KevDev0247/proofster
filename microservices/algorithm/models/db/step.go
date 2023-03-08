@@ -1,30 +1,27 @@
 package models
 
 import (
-	"encoding/json"
-
-	"github.com/google/uuid"
 	"github.com/kamva/mgm/v3"
 )
 
 type Step struct {
 	mgm.DefaultModel `bson:",inline"`
-	FormulaId        uuid.UUID       `bson:"formula_id" json:"formula_id"`
-	WorkspaceId      uuid.UUID       `bson:"workspace_id" json:"workspace_id"`
-	IsConclusion     bool            `bson:"is_conclusion" json:"is_conclusion"`
-	FormulaJson      json.RawMessage `bson:"formula_json" json:"formula_json"`
-	FormulaResult    string          `bson:"formula_result" json:"formula_result"`
-	Stage            int             `bson:"stage" json:"stage"`
-	Algorithm        int             `bson:"algorithm" json:"algorithm"`
-	Description      string          `bson:"description" json:"description"`
+	FormulaId        string                 `bson:"formula_id" json:"formula_id"`
+	WorkspaceId      string                 `bson:"workspace_id" json:"workspace_id"`
+	IsConclusion     bool                   `bson:"is_conclusion" json:"is_conclusion"`
+	FormulaJson      map[string]interface{} `bson:"formula_json" json:"formula_json"`
+	FormulaResult    string                 `bson:"formula_result" json:"formula_result"`
+	Stage            int                    `bson:"stage" json:"stage"`
+	Algorithm        int                    `bson:"algorithm" json:"algorithm"`
+	Description      string                 `bson:"description" json:"description"`
 }
 
 func NewStep(
-	formulaId uuid.UUID,
-	workspaceId uuid.UUID,
+	formulaId string,
+	workspaceId string,
 	isConclusion bool,
 	formulaResult string,
-	formulaJson json.RawMessage,
+	formulaJson map[string]interface{},
 	stage int,
 	algorithm int,
 	description string,

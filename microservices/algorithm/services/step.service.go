@@ -9,14 +9,14 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func SaveBulkNormalized(
+func SaveBulkSteps(
 	workspaceId string,
 	stage int,
 	steps []db.Step,
 ) error {
 	existing := []*db.Step{}
 
-	err := mgm.Coll(&db.Formula{}).SimpleFind(
+	err := mgm.Coll(&db.Step{}).SimpleFind(
 		&existing,
 		bson.M{
 			"workspace_id": workspaceId,
@@ -26,7 +26,7 @@ func SaveBulkNormalized(
 	if err != nil {
 		return errors.New("cannot get normalized results")
 	}
-
+	
 	if len(existing) != 0 {
 		_, err := mgm.Coll(&db.Step{}).DeleteMany(
 			context.Background(),
@@ -42,7 +42,7 @@ func SaveBulkNormalized(
 
 	toInsert := make([]interface{}, len(steps))
 	for i := range steps {
-		toInsert[i] = &steps[i]
+		toInsert[i] = steps[i]
 	}
 
 	_, err = mgm.Coll(&db.Step{}).InsertMany(context.Background(), toInsert)

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	db "proofster/algorithm/models/db"
 	"sync"
@@ -13,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func TranspileSingleFormula(
+func CallTranspiler(
 	formula *db.Formula,
 	resultChan chan<- map[string]interface{},
 	wg *sync.WaitGroup,
@@ -56,6 +55,7 @@ func TranspileSingleFormula(
 
 	resultChan <- map[string]interface{}{
 		"formula_id":      formula.FormulaId,
+		"is_conclusion":   formula.IsConclusion,
 		"formula_json":    responseMap["formula_json"],
 		"formula_postfix": responseMap["formula_postfix"],
 		"formula_result":  responseMap["formula_result"],
@@ -78,15 +78,28 @@ func Transpile(
 
 	for _, formula := range formulas {
 		wg.Add(1)
-		go TranspileSingleFormula(formula, resultChan, &wg)
+		go CallTranspiler(formula, resultChan, &wg)
 	}
 
 	wg.Wait()
 	close(resultChan)
 
+	steps := []db.Step{}
 	for result := range resultChan {
-		log.Println(result)
+		step := db.NewStep(
+			result["formula_id"].(string),
+			workspaceId,
+			result["is_conclusion"].(bool),
+			result["formula_result"].(string),
+			result["formula_json"].(map[string]interface{}),
+			0,
+			0,
+			"Initial Step",
+		)
+		steps = append(steps, *step)
 	}
+
+	SaveBulkSteps(workspaceId, 0, steps)
 
 	return nil
 }
