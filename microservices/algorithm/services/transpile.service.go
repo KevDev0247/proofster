@@ -86,7 +86,7 @@ func Transpile(
 
 	ids := []string{}
 	results := []string{}
-	jsons := make([]map[string]interface{}, len(resultChan))
+	jsons := make([]map[string]interface{}, 0)
 	conclusionId := ""
 	for result := range resultChan {
 		ids = append(ids, result["formula_id"].(string))

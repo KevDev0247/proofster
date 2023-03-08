@@ -7,6 +7,7 @@ import (
 	"errors"
 	"net/http"
 	db "proofster/algorithm/models/db"
+	// "proofster/algorithm/utils"
 	"sync"
 )
 
@@ -30,7 +31,7 @@ func executeAlgorithm(
 	default:
 		algorithmUrl = ""
 	}
-	
+
 	payload, err := json.Marshal(body)
 	if err != nil {
 		errChan <- err
@@ -54,6 +55,8 @@ func executeAlgorithm(
 		return
 	}
 
+	log.Printf("%v", result)
+
 	resultChan <- map[string]interface{}{
 		"data": result,
 	}
@@ -64,9 +67,9 @@ func Normalize(
 	workspaceId string,
 	algorithm int,
 ) error {
-	// stepOneJSONKey := utils.CreateStepOneKey(stage, "json")
-	// stepTwoJSONKey := utils.CreateStepTwoKey(stage, "json")
-	// stepThreeJSONKey := utils.CreateStepThreeKey(stage, "json")
+	// stepOneJsonKey := utils.CreateStepOneKey(stage, "json")
+	// stepTwoJsonKey := utils.CreateStepTwoKey(stage, "json")
+	// stepThreeJsonKey := utils.CreateStepThreeKey(stage, "json")
 	// stepOneStringKey := utils.CreateStepOneKey(stage, "string")
 	// stepTwoStringKey := utils.CreateStepTwoKey(stage, "string")
 	// stepThreeStringKey := utils.CreateStepThreeKey(stage, "string")
@@ -86,19 +89,23 @@ func Normalize(
 		}
 	}
 	argument := append(premises, conclusion...)
-
 	argumentJson := make([]interface{}, 0, len(argument))
 	for _, initialStep := range argument {
 		argumentJson = append(argumentJson, initialStep.FormulaJson)
 	}
 
 	isProof := false
-	if algorithm == 9 {
+	if algorithm == 1 {
 		isProof = true
 	}
+	if len(conclusion) == 0 && isProof {
+		return errors.New("no conclusion was provided for proof preprocessing")
+	}	
+
+	log.Printf("%v", 3)
 
 	resultChan := make(chan map[string]interface{}, 1)
-	errChan := make(chan error)	
+	errChan := make(chan error) 
 	var wg sync.WaitGroup
 	wg.Add(1)
 
@@ -109,27 +116,80 @@ func Normalize(
 
 	wg.Wait()
 	close(resultChan)
-	
+
 	result := <-resultChan
 	log.Printf("%v", result["data"])
 
-	if len(conclusion) == 0 && isProof {
-		return errors.New("no conclusion was provided for proof preprocessing")
-	}
+	// resultMap := <-resultChan
+	// log.Printf("%v", resultMap["data"])
 
-	ids := []string{}
-	for _, formula := range argument {
-		ids = append(ids, formula.FormulaId)
-	}
-
-	// var conclusionID string
-	// if len(conclusion) == 0 {
-	// 	conclusionID = ""
-	// } else {
-	// 	conclusionID = conclusion[0].FormulaId
+	// result := resultMap["data"].(map[string]interface{})
+	
+	// errMsg := <-errChan
+	// if errMsg != nil {
+	// 	return errors.New("error occurred during normalization")
 	// }
 
+	// ids := []string{}
+	// conclusionId := ""
+	// for _, step := range argument {
+	// 	ids = append(ids, step.FormulaId)
 
+	// 	if result["is_conclusion"].(bool) {
+	// 		conclusionId = result["formula_id"].(string)
+	// 	}
+	// }
+
+	// stepOneJsons := result[stepOneJsonKey].([]map[string]interface{})
+	// stepOneStrings := result[stepOneStringKey].([]string)
+	// log.Printf("%v", stepOneJsons)
+	// err = SaveBulkSteps(
+	// 	ids,
+	// 	stepOneStrings,
+	// 	stepOneJsons,
+	// 	conclusionId,
+	// 	workspaceId,
+	// 	stage+1,
+	// 	algorithm,
+	// 	"",
+	// )
+	// if err != nil {
+	// 	return errors.New("error occurred during step one saving")
+	// }
+
+	// stepTwoJsons := result[stepTwoJsonKey].([]map[string]interface{})
+	// stepTwoStrings := result[stepTwoStringKey].([]string)
+	// log.Printf("%v", stepTwoJsons)
+	// err = SaveBulkSteps(
+	// 	ids,
+	// 	stepTwoStrings,
+	// 	stepTwoJsons,
+	// 	conclusionId,
+	// 	workspaceId,
+	// 	stage+2,
+	// 	algorithm,
+	// 	"",
+	// )
+	// if err != nil {
+	// 	return errors.New("error occurred during step two saving")
+	// }
+
+	// stepThreeJsons := result[stepThreeJsonKey].([]map[string]interface{})
+	// stepThreeStrings := result[stepThreeStringKey].([]string)
+	// log.Printf("%v", stepThreeJsons)
+	// err = SaveBulkSteps(
+	// 	ids,
+	// 	stepThreeStrings,
+	// 	stepThreeJsons,
+	// 	conclusionId,
+	// 	workspaceId,
+	// 	stage+3,
+	// 	algorithm,
+	// 	"",
+	// )
+	// if err != nil {
+	// 	return errors.New("error occurred during step three saving")
+	// }
 
 	return nil
 }
