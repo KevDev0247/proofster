@@ -10,8 +10,13 @@ from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
-from api.repository import get_formula_by_stage, get_formula, get_formula_by_workspace
-from api.serializers import FormulaSerializer
+from api.service import (
+    get_formula_by_stage, 
+    get_formula, 
+    get_formula_by_workspace,
+    sync_formulas
+)
+from api.serializers import FormulaSerializer, FormulaLegacySerializer
 from api.enums import Stage
 
 from dotenv import load_dotenv
@@ -60,7 +65,7 @@ class FormulaCrudAsync(View):
             'stage': Stage.ORIGINAL.value,
             'workspace_id': data.get('workspace_id')
         }
-        serializer = FormulaSerializer(data=transpiled)
+        serializer = FormulaLegacySerializer(data=transpiled)
         
         if await sync_to_async(serializer.is_valid)():
             await sync_to_async(serializer.save)()
@@ -97,7 +102,7 @@ class FormulaCrudAsync(View):
             data['formula_postfix'] = result.get('formula_postfix') or ""
             data['formula_result'] = result.get('formula_result') or ""
             
-        serializer = FormulaSerializer(
+        serializer = FormulaLegacySerializer(
             instance=formula, 
             data=data, 
             partial=True
@@ -115,53 +120,77 @@ class FormulaCrudAsync(View):
                 'message': serializer.errors,
                 'status': status.HTTP_400_BAD_REQUEST
             })
-
-
+        
 @method_decorator(csrf_exempt, name='dispatch')
-class FormulaCrudSync(View):
+class Formulas(View):
+
     def post(self, request):
         data = json.loads(request.body.decode('utf-8'))
         formula = {
-            'formula_id': data.get('formula_id'),
+            'name': data.get('name'),
+            'description': data.get('description'),
             'workspace_id': data.get('workspace_id'),
             'is_conclusion': data.get('is_conclusion'),
             'formula_infix': data.get('formula_infix')
         }
-
-        rabbitmq_uri = os.getenv('RABBITMQ_URI')
-        params = pika.URLParameters(rabbitmq_uri)
-
-        connection = pika.BlockingConnection(params)
-        channel = connection.channel()
-
-        channel.basic_publish(
-            exchange='formulas', 
-            routing_key='',
-            body=json.dumps(formula)
-        )
-
-        return JsonResponse({
-            'status': status.HTTP_200_OK
-        })
-
-    def get(self, request):
-        workspace_id = request.GET.get('workspace_id')
-        stage = request.GET.get('stage')
-
-        formulas = []
-        if stage is None:
-            formulas = get_formula_by_workspace(workspace_id)
+        serializer = FormulaSerializer(data=formula)
+        if serializer.is_valid():
+            serializer.save()
         else:
-            formulas = get_formula_by_stage(stage, workspace_id)
-        serializer = FormulaSerializer(
-            formulas,
-            context={'exclude_formula_json': True},
-            many=True
-        )
+            return JsonResponse({
+                'message': serializer.errors,
+                'status': status.HTTP_500_INTERNAL_SERVER_ERROR
+            })
+        
+        sync_formulas(data.get('workspace_id'))
+
         return JsonResponse({
-            'formulas': serializer.data,
+            'formula': serializer.data,
             'status': status.HTTP_200_OK
         })
+    
+    def get(self, request, pk):
+        workspace_id = request.GET.get('workspace_id')
+        formulas = get_formula_by_workspace(workspace_id)
+            
+        return JsonResponse({
+            'formulas': formulas,
+            'status': status.HTTP_200_OK
+        })    
+
+@method_decorator(csrf_exempt, name='dispatch')
+class FormulaDetail(View):
+    
+    def patch(self, request, pk):
+        data = json.loads(request.body.decode('utf-8'))
+
+        formula = get_formula(pk)
+        if formula == None:
+            return JsonResponse({
+                'message': f"Formula with Id: {pk} not found",
+                'status': status.HTTP_400_BAD_REQUEST
+            })
+        
+        serializer = FormulaSerializer(
+            instance=formula, 
+            data=data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.validated_data['updated_at'] = datetime.now()
+            serializer.save()
+
+            sync_formulas(data.get('workspace_id'))
+
+            return JsonResponse({
+                'formula': serializer.data,
+                'status': status.HTTP_200_OK
+            })
+        else:
+            return JsonResponse({
+                'message': serializer.errors,
+                'status': status.HTTP_400_BAD_REQUEST
+            })
 
     def delete(self, request, pk):
         formula = get_formula(pk)
@@ -170,8 +199,11 @@ class FormulaCrudSync(View):
                 'message': f"Formula with Id: {pk} not found",
                 'status': status.HTTP_400_BAD_REQUEST
             })
-
+        workspace_id = formula.workspace_id
+        
         formula.delete()
+        sync_formulas(workspace_id)
+
         return JsonResponse({
             'status': status.HTTP_200_OK
         })

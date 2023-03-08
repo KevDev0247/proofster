@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from asgiref.sync import sync_to_async
 
 from api.enums import Stage
-from api.repository import (
+from api.service import (
     get_formula_by_workspace,
     save_bulk_formula,
     get_formula_by_stage,

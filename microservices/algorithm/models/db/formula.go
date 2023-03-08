@@ -6,10 +6,10 @@ import (
 
 type Formula struct {
 	mgm.DefaultModel `bson:",inline"`
-	FormulaId    string       `json:"formula_id"`
-	WorkspaceId  string       `json:"workspace_id"`
-	IsConclusion bool            `json:"is_conclusion"`
-	FormulaInfix string          `json:"formula_infix"`
+	FormulaId    string       `bson:"formula_id" json:"formula_id"`
+	WorkspaceId  string       `bson:"workspace_id" json:"workspace_id"`
+	IsConclusion bool            `bson:"is_conclusion" json:"is_conclusion"`
+	FormulaInfix string          `bson:"formula_infix" json:"formula_infix"`
 }
 
 func NewFormula(

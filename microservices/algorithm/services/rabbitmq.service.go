@@ -1,9 +1,11 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
+	db "proofster/algorithm/models/db"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -83,22 +85,17 @@ func ListenForFormulas(
 	log.Println("Listening for formulas...")
 	go func() {
 		for msg := range msgs {
-			// For example, show received message in a console.
 			log.Printf(" > Received message: %s\n", msg.Body)
+
+			var formulas []db.Formula
+			err := json.Unmarshal([]byte(msg.Body), &formulas)
+			if err != nil {
+				log.Printf("errors occurred while unpacking json %s\n", err)
+			}
+			
+			SaveBulkFormula(formulas[0].WorkspaceId, formulas)
 		}
 	}()
-
-	// go func() {
-	// 	for d := range msgs {
-	// 		var formulas []Formula
-	// 		if err := json.Unmarshal(d.Body, &formulas); err != nil {
-	// 			log.Printf("Failed to unmarshal message: %v", err)
-	// 			continue
-	// 		}
-	// 		log.Printf("Received formulas: %v", formulas)
-	// 		formulaService.UpdateFormulas(formulas)
-	// 	}
-	// }()
 
 	return nil
 }
