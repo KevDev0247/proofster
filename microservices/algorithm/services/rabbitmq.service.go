@@ -30,11 +30,11 @@ func ListenForFormulas(
 	// Declare a queue
 	q, err := ch.QueueDeclare(
 		"formulas", // name
-		true,      // durable
-		false,     // delete when unused
-		false,     // exclusive
-		false,     // no-wait
-		nil,       // arguments
+		true,       // durable
+		false,      // delete when unused
+		false,      // exclusive
+		false,      // no-wait
+		nil,        // arguments
 	)
 	if err != nil {
 		return err
@@ -43,12 +43,12 @@ func ListenForFormulas(
 	// Declare an exchange
 	err = ch.ExchangeDeclare(
 		"formulas", // name
-		"fanout",  // type
-		true,      // durable
-		false,     // auto-deleted
-		false,     // internal
-		false,     // no-wait
-		nil,       // arguments
+		"fanout",   // type
+		true,       // durable
+		false,      // auto-deleted
+		false,      // internal
+		false,      // no-wait
+		nil,        // arguments
 	)
 	if err != nil {
 		return err
@@ -56,8 +56,8 @@ func ListenForFormulas(
 
 	// Bind the queue to the exchange
 	err = ch.QueueBind(
-		q.Name,    // queue name
-		"",        // routing key
+		q.Name,     // queue name
+		"",         // routing key
 		"formulas", // exchange
 		false,
 		nil,
@@ -81,8 +81,12 @@ func ListenForFormulas(
 	}
 
 	log.Println("Listening for formulas...")
-
-	log.Println(msgs)
+	go func() {
+		for msg := range msgs {
+			// For example, show received message in a console.
+			log.Printf(" > Received message: %s\n", msg.Body)
+		}
+	}()
 
 	// go func() {
 	// 	for d := range msgs {

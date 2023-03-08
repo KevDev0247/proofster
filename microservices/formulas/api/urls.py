@@ -4,6 +4,7 @@ from api.views.normalization import NormalizationSync, NormalizationAsync
 
 urlpatterns = [
     path('create/', FormulaCrudAsync.as_view(), name='post'),
+    path('rabbitmq/', FormulaCrudSync.as_view(), name='post'),
     path('update/<str:pk>', FormulaCrudAsync.as_view(), name='patch'),
     path('get/', FormulaCrudSync.as_view(), name='get'),
     path('delete/<str:pk>', FormulaCrudSync.as_view(), name='delete'),

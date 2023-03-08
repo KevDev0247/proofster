@@ -1,3 +1,4 @@
+import pika
 import json
 import os
 import aiohttp
@@ -12,6 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from api.repository import get_formula_by_stage, get_formula, get_formula_by_workspace
 from api.serializers import FormulaSerializer
 from api.enums import Stage
+
+from dotenv import load_dotenv
+load_dotenv()
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -115,6 +119,30 @@ class FormulaCrudAsync(View):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaCrudSync(View):
+    def post(self, request):
+        data = json.loads(request.body.decode('utf-8'))
+        formula = {
+            'formula_id': data.get('formula_id'),
+            'workspace_id': data.get('workspace_id'),
+            'is_conclusion': data.get('is_conclusion'),
+            'formula_infix': data.get('formula_infix')
+        }
+
+        rabbitmq_uri = os.getenv('RABBITMQ_URI')
+        params = pika.URLParameters(rabbitmq_uri)
+
+        connection = pika.BlockingConnection(params)
+        channel = connection.channel()
+
+        channel.basic_publish(
+            exchange='formulas', 
+            routing_key='',
+            body=json.dumps(formula)
+        )
+
+        return JsonResponse({
+            'status': status.HTTP_200_OK
+        })
 
     def get(self, request):
         workspace_id = request.GET.get('workspace_id')
