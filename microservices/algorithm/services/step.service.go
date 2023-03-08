@@ -1,6 +1,7 @@
 package services
 
 import (
+	"log"
 	"context"
 	"errors"
 	db "proofster/algorithm/models/db"
@@ -38,6 +39,7 @@ func SaveBulkSteps(
 	stage int,
 	algorithm int,
 	description string,
+	stageName string,
 ) error {
 	existing := []*db.Step{}
 
@@ -65,7 +67,7 @@ func SaveBulkSteps(
 		}
 	}
 
-	toInsert := make([]interface{}, len(ids))
+	toInsert := make([]interface{}, 0)
 	for i := range ids {
 		step := db.NewStep(
 			ids[i],
@@ -76,9 +78,12 @@ func SaveBulkSteps(
 			stage,
 			0,
 			description,
+			stageName,
 		)
-		toInsert[i] = step
+		toInsert = append(toInsert, *step)
 	}
+
+	log.Printf("%v", toInsert)
 
 	_, err = mgm.Coll(&db.Step{}).InsertMany(context.Background(), toInsert)
 	if err != nil {

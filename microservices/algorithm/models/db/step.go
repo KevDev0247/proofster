@@ -14,6 +14,7 @@ type Step struct {
 	Stage            int                    `bson:"stage" json:"stage"`
 	Algorithm        int                    `bson:"algorithm" json:"algorithm"`
 	Description      string                 `bson:"description" json:"description"`
+	StageName        string                 `bson:"stage_name" json:"stage_name"`
 }
 
 func NewStep(
@@ -25,6 +26,7 @@ func NewStep(
 	stage int,
 	algorithm int,
 	description string,
+	stageName string,
 ) *Step {
 	return &Step{
 		FormulaId:     formulaId,
@@ -35,5 +37,6 @@ func NewStep(
 		Stage:         stage,
 		Algorithm:     algorithm,
 		Description:   description,
+		StageName:     stageName,
 	}
 }

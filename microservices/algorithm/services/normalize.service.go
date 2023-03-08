@@ -124,24 +124,43 @@ func Normalize(
 	}
 	log.Printf("%v", result)
 	
+	stage++
+	stepOneJsons := []map[string]interface{}{}
+	stepOneStrings := []string{}
 	if (result[stepOneJsonKey] != nil && result[stepOneStringKey] != nil) {
-		stepOneJsons := utils.ConvertToMapSlice(result[stepOneJsonKey].([]interface{}))
-		stepOneStrings := utils.ConvertToStringSlice(result[stepOneStringKey].([]interface{}))
+		stepOneJsons = utils.ConvertToMapSlice(result[stepOneJsonKey].([]interface{}))
+		stepOneStrings = utils.ConvertToStringSlice(result[stepOneStringKey].([]interface{}))
 		err = SaveBulkSteps(
 			ids,
 			stepOneStrings,
 			stepOneJsons,
 			conclusionId,
 			workspaceId,
-			stage+1,
+			stage,
 			algorithm,
-			utils.CreateStageDescription(stage+1),
+			utils.CreateStageDescription(stage),
+			utils.CreateStageName(stage),
 		)
 		if err != nil {
 			return errors.New("error occurred during step one saving")
 		}
 	}
+	err = SaveBulkSteps(
+		ids,
+		stepOneStrings,
+		stepOneJsons,
+		conclusionId,
+		workspaceId,
+		stage,
+		algorithm,
+		utils.CreateStageDescription(stage),
+		utils.CreateStageName(stage),
+	)
+	if err != nil {
+		return errors.New("error occurred during step one saving")
+	}
 
+	stage++
 	stepTwoJsons := utils.ConvertToMapSlice(result[stepTwoJsonKey].([]interface{}))
 	stepTwoStrings := utils.ConvertToStringSlice(result[stepTwoStringKey].([]interface{}))
 	err = SaveBulkSteps(
@@ -150,14 +169,16 @@ func Normalize(
 		stepTwoJsons,
 		conclusionId,
 		workspaceId,
-		stage+2,
+		stage,
 		algorithm,
-		utils.CreateStageDescription(stage+2),
+		utils.CreateStageDescription(stage),
+		utils.CreateStageName(stage),
 	)
 	if err != nil {
 		return errors.New("error occurred during step two saving")
 	}
 
+	stage++
 	stepThreeJsons := utils.ConvertToMapSlice(result[stepThreeJsonKey].([]interface{}))
 	stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
 	err = SaveBulkSteps(
@@ -166,9 +187,10 @@ func Normalize(
 		stepThreeJsons,
 		conclusionId,
 		workspaceId,
-		stage+3,
+		stage,
 		algorithm,
-		utils.CreateStageDescription(stage+3),
+		utils.CreateStageDescription(stage),
+		utils.CreateStageName(stage),
 	)
 	if err != nil {
 		return errors.New("error occurred during step three saving")
