@@ -70,7 +70,7 @@ func Normalize(
 	stepTwoStringKey := utils.CreateStepTwoKey(stage, "string")
 	stepThreeStringKey := utils.CreateStepThreeKey(stage, "string")
 
-	startSteps, err := GetStepByStage(workspaceId, stage)
+	startSteps, err := GetStepByStageAndAlgorithm(workspaceId, stage, algorithm)
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func Normalize(
 	}
 
 	resultChan := make(chan map[string]interface{}, 1)
-	errChan := make(chan error) 
+	errChan := make(chan error)
 	var wg sync.WaitGroup
 	wg.Add(1)
 
@@ -112,7 +112,7 @@ func Normalize(
 	close(resultChan)
 
 	result := <-resultChan
-	
+
 	ids := []string{}
 	conclusionId := ""
 	for _, step := range argument {
@@ -123,11 +123,11 @@ func Normalize(
 		}
 	}
 	log.Printf("%v", result)
-	
+
 	stage++
 	stepOneJsons := make([]map[string]interface{}, len(ids))
 	stepOneStrings := make([]string, len(ids))
-	if (result[stepOneJsonKey] != nil && result[stepOneStringKey] != nil) {
+	if result[stepOneJsonKey] != nil && result[stepOneStringKey] != nil {
 		stepOneJsons = utils.ConvertToMapSlice(result[stepOneJsonKey].([]interface{}))
 		stepOneStrings = utils.ConvertToStringSlice(result[stepOneStringKey].([]interface{}))
 	}
@@ -164,26 +164,26 @@ func Normalize(
 		return errors.New("error occurred during step two saving")
 	}
 
-    stage++
-    if stage == 9 {
-        stepThreeJsons := result[stepThreeJsonKey].([]interface {})
+	stage++
+	if stage == 9 {
+		stepThreeJsons := result[stepThreeJsonKey].([]interface{})
 		log.Printf("here %v", result[stepThreeStringKey])
-        stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
-        err = SaveBulkClauses(
-            ids,
-            stepThreeStrings,
-            stepThreeJsons,
-            conclusionId,
-            workspaceId,
-            stage,
-            algorithm,
-            utils.CreateStageDescription(stage),
-            utils.CreateStageName(stage),
-        )
-        if err != nil {
-            return errors.New("error occurred during step three saving")
-        }
-    } else {
+		stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
+		err = SaveBulkClauses(
+			ids,
+			stepThreeStrings,
+			stepThreeJsons,
+			conclusionId,
+			workspaceId,
+			stage,
+			algorithm,
+			utils.CreateStageDescription(stage),
+			utils.CreateStageName(stage),
+		)
+		if err != nil {
+			return errors.New("error occurred during step three saving")
+		}
+	} else {
 		stepThreeJsons := utils.ConvertToMapSlice(result[stepThreeJsonKey].([]interface{}))
 		stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
 		err = SaveBulkSteps(
@@ -199,7 +199,7 @@ func Normalize(
 		)
 		if err != nil {
 			return errors.New("error occurred during step three saving")
-		}	
+		}
 	}
 
 	return nil

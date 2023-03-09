@@ -110,5 +110,17 @@ func Transpile(
 		"Initial",
 	)
 
+	SaveBulkSteps(
+		ids,
+		results,
+		jsons,
+		conclusionId,
+		workspaceId,
+		0,
+		1,
+		"Initial Step",
+		"Initial",
+	)
+
 	return nil
 }

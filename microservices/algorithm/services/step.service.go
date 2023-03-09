@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+
 	// "log"
 	db "proofster/algorithm/models/db"
 
@@ -10,9 +11,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetStepByStage(
+func GetStepByStageAndAlgorithm(
 	workspaceId string,
 	stage int,
+	algorithm int,
 ) ([]db.Step, error) {
 	var steps []db.Step
 
@@ -21,6 +23,7 @@ func GetStepByStage(
 		bson.M{
 			"workspace_id": workspaceId,
 			"stage":        stage,
+			"algorithm":    algorithm,
 		},
 	)
 	if err != nil {

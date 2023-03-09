@@ -12,12 +12,16 @@ import (
 
 func GetClauseByStage(
 	workspaceId string,
+	algorithm int,
 ) ([]db.Clause, error) {
 	var clauses []db.Clause
 
 	err := mgm.Coll(&db.Clause{}).SimpleFind(
 		&clauses,
-		bson.M{"workspace_id": workspaceId},
+		bson.M{
+			"workspace_id": workspaceId,
+			"algorithm":    algorithm,
+		},
 	)
 	if err != nil {
 		return nil, errors.New("cannot find notes")
