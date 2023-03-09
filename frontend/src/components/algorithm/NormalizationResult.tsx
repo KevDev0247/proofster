@@ -73,7 +73,7 @@ export default function NormalizationResult() {
                     <Grid item xs={12} md={6}>
                       <Alert variant="outlined" severity="info" icon={false}>
                         <Typography variant="h6" component="h1">
-                          {result.stage}
+                          {result.stage_name}
                         </Typography>
                       </Alert>
                     </Grid>
@@ -83,7 +83,7 @@ export default function NormalizationResult() {
                           {result.description}
                         </Alert>
                       </Grid>
-                      {result.formulas.length > 0 ? (
+                      {result.steps.length > 0 ? (
                         <Grid item xs={12} md={12}>
                           <TableContainer>
                             <Table aria-label="formula table">
@@ -102,7 +102,7 @@ export default function NormalizationResult() {
                                 </TableRow>
                               </TableHead>
                               <TableBody>
-                                {result.formulas?.map((d: IFormulaResult, index: number) => (
+                                {result.steps?.map((d: IFormulaResult, index: number) => (
                                   <TableRow key={index}>
                                     <TableCell size='small'>
                                       <Typography variant="body1" gutterBottom>

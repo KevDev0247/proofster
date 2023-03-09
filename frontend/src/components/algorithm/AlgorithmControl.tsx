@@ -82,7 +82,9 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           dispatch(getResults({
             workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
             algorithm: 0
-          }));
+          })).then(() => {
+            dispatch(nextNormalizeStage());
+          });
         })
         .catch((error: PayloadAction<string>) => {
           toast.error(error.payload);
@@ -96,7 +98,9 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           dispatch(getResults({
             workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
             algorithm: 1
-          }));
+          })).then(() => {
+            dispatch(nextPreprocessStage());
+          });
         })
         .catch((error: PayloadAction<string>) => {
           toast.error(error.payload);
