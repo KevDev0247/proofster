@@ -30,7 +30,14 @@ export default function NormalizationResult() {
   }, [renderResults]);
 
   useEffect(() => {
-    dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956'))
+    dispatch(getResults({
+      workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
+      algorithm: 0
+    }));
+    dispatch(getResults({
+      workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
+      algorithm: 1
+    }));
   }, []);
 
 

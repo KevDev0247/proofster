@@ -15,7 +15,8 @@ export const algorithmSlice = createSlice({
       currentStage: 0,
       completedStage: 0,
       stopStage: 9,
-      cachedResults: [],
+      normalizedCached: [],
+      preprocessedCached: [],
       renderResults: []
     },
   },
@@ -24,7 +25,7 @@ export const algorithmSlice = createSlice({
       if (state.normalize.currentStage < 9) {
         state.normalize.currentStage += 1;
         var currStage = state.normalize.currentStage;
-        var cachedResults = [...current(state.normalize.cachedResults)]
+        var cachedResults = [...current(state.normalize.normalizedCached)]
         
         state.normalize.renderResults = [
           ...state.normalize.renderResults,
@@ -37,7 +38,7 @@ export const algorithmSlice = createSlice({
       state.normalize.renderResults = [];
     },
     clearCache: (state) => {
-      state.normalize.cachedResults = [];
+      state.normalize.normalizedCached = [];
       state.normalize.renderResults = [];
       state.normalize.stopStage = 9;
       state.normalize.completedStage = 0;
@@ -84,7 +85,11 @@ export const algorithmSlice = createSlice({
     [getResults.fulfilled.type]: (state, action) => {
       state.normalize.status = "success";
       state.normalize.isLoading = false;
-      state.normalize.cachedResults = action.payload
+
+      if (action.payload.algorithm === 0)
+        state.normalize.normalizedCached = action.payload
+      else
+        state.normalize.preprocessedCached = action.payload.results
     },
     [getResults.rejected.type]: (state, action) => {
       state.normalize.status = "failed";

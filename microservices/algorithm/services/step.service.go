@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	db "proofster/algorithm/models/db"
+	"proofster/algorithm/utils"
+	"sort"
 
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,9 +15,9 @@ import (
 )
 
 func GetPreprocessed(
-	workspaceId string,
+    workspaceId string,
 ) ([]db.StepReturn, error) {
-    var steps []db.StepReturn
+    var steps []db.StepReturnItem
     options := options.Find().SetSort(bson.M{"stage": 1})
 
     coll := mgm.Coll(&db.Preprocessed{})
@@ -34,32 +36,74 @@ func GetPreprocessed(
         return nil, errors.New("cannot find notes")
     }
 
-    return steps, nil
+    stageMap := make(map[int][]db.StepReturnItem)
+    for _, step := range steps {
+        stageMap[step.Stage] = append(stageMap[step.Stage], step)
+    }
+
+    var stageKeys []int
+    for k := range stageMap {
+        stageKeys = append(stageKeys, k)
+    }
+    sort.Ints(stageKeys)
+
+    var groupedSteps []db.StepReturn
+    for _, stage := range stageKeys {
+        group := stageMap[stage]
+        groupedSteps = append(groupedSteps, db.StepReturn{
+            Steps: group,
+            Description: utils.CreateStageDescription(stage),
+            StageName: utils.CreateStageName(stage),
+        })
+    }
+
+    return groupedSteps, nil
 }
 
 func GetNormalized(
 	workspaceId string,
 ) ([]db.StepReturn, error) {
-    var steps []db.StepReturn
-    options := options.Find().SetSort(bson.M{"stage": 1})
+	var steps []db.StepReturnItem
+	options := options.Find().SetSort(bson.M{"stage": 1})
 
-    coll := mgm.Coll(&db.Normalized{})
-    cursor, err := coll.Find(mgm.Ctx(), bson.M{
-        "workspace_id": workspaceId,
-        "stage": bson.M{
-            "$ne": 0,
-        },
-    }, options)
+	coll := mgm.Coll(&db.Normalized{})
+	cursor, err := coll.Find(mgm.Ctx(), bson.M{
+		"workspace_id": workspaceId,
+		"stage": bson.M{
+			"$ne": 0,
+		},
+	}, options)
 
-    if err != nil {
-        return nil, errors.New("cannot find notes")
+	if err != nil {
+		return nil, errors.New("cannot find notes")
+	}
+	err = cursor.All(mgm.Ctx(), &steps)
+	if err != nil {
+		return nil, errors.New("cannot find notes")
+	}
+
+    stageMap := make(map[int][]db.StepReturnItem)
+    for _, step := range steps {
+        stageMap[step.Stage] = append(stageMap[step.Stage], step)
     }
-    err = cursor.All(mgm.Ctx(), &steps)
-    if err != nil {
-        return nil, errors.New("cannot find notes")
+
+    var stageKeys []int
+    for k := range stageMap {
+        stageKeys = append(stageKeys, k)
+    }
+    sort.Ints(stageKeys)
+
+    var groupedSteps []db.StepReturn
+    for _, stage := range stageKeys {
+        group := stageMap[stage]
+        groupedSteps = append(groupedSteps, db.StepReturn{
+            Steps: group,
+            Description: utils.CreateStageDescription(stage),
+            StageName: utils.CreateStageName(stage),
+        })
     }
 
-    return steps, nil
+    return groupedSteps, nil
 }
 
 func GetStepsByStageAndAlgorithm(
