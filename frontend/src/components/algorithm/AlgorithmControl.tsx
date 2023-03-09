@@ -55,12 +55,12 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
     const selectedAlgorithm = selectedStage === '9' ? 1 : 0
     const normalizeAction = normalize({
       stage: normalizationCompleted,
-      workspace_id: '216da6d9-aead-4970-9465-69bfb55d4956',
+      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
       algorithm: selectedAlgorithm,
     });
     const preprocessAction = normalize({
       stage: preprocessingCompleted,
-      workspace_id: '216da6d9-aead-4970-9465-69bfb55d4956',
+      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
       algorithm: selectedAlgorithm,
     });
 
@@ -80,7 +80,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           toast.success(response.payload);
           dispatch(setNormalizationCompleted())
           dispatch(getResults({
-            workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
+            workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
             algorithm: 0
           }));
         })
@@ -94,7 +94,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           toast.success(response.payload);
           dispatch(setPreprocessingCompleted())
           dispatch(getResults({
-            workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
+            workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
             algorithm: 1
           }));
         })
