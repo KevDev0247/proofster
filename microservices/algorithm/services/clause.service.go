@@ -41,10 +41,8 @@ func SaveBulkClauses(
 	description string,
 	stageName string,
 ) error {
-	existing := []*db.Clause{}
-
-	err := mgm.Coll(&db.Clause{}).SimpleFind(
-		&existing,
+	_, err := mgm.Coll(&db.Clause{}).DeleteMany(
+		context.Background(),
 		bson.M{
 			"workspace_id": workspaceId,
 			"stage":        stage,
@@ -52,21 +50,7 @@ func SaveBulkClauses(
 		},
 	)
 	if err != nil {
-		return errors.New("cannot get normalized results")
-	}
-
-	if len(existing) != 0 {
-		_, err := mgm.Coll(&db.Clause{}).DeleteMany(
-			context.Background(),
-			bson.M{
-				"workspace_id": workspaceId,
-				"stage":        stage,
-				"algorithm":    algorithm,
-			},
-		)
-		if err != nil {
-			return errors.New("cannot delete existing normalized results")
-		}
+		return errors.New("cannot delete existing normalized results")
 	}
 
 	log.Printf("%v", ids)

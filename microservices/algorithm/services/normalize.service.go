@@ -75,8 +75,8 @@ func Normalize(
 		return err
 	}
 
-	premises := make([]db.Step, 0)
-	conclusion := make([]db.Step, 0)
+	premises := make([]db.Normalized, 0)
+	conclusion := make([]db.Normalized, 0)
 	for _, step := range startSteps {
 		if step.IsConclusion {
 			conclusion = append(conclusion, step)
@@ -167,7 +167,6 @@ func Normalize(
 	stage++
 	if stage == 9 {
 		stepThreeJsons := result[stepThreeJsonKey].([]interface{})
-		log.Printf("here %v", result[stepThreeStringKey])
 		stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
 		err = SaveBulkClauses(
 			ids,

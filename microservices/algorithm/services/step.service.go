@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 	"errors"
-
-	// "log"
+	"fmt"
+	"log"
 	db "proofster/algorithm/models/db"
 
 	"github.com/kamva/mgm/v3"
@@ -15,20 +15,35 @@ func GetStepByStageAndAlgorithm(
 	workspaceId string,
 	stage int,
 	algorithm int,
-) ([]db.Step, error) {
-	var steps []db.Step
+) ([]db.Normalized, error) {
+	var steps []db.Normalized
 
-	err := mgm.Coll(&db.Step{}).SimpleFind(
-		&steps,
-		bson.M{
-			"workspace_id": workspaceId,
-			"stage":        stage,
-			"algorithm":    algorithm,
-		},
-	)
-	if err != nil {
-		return nil, errors.New("cannot find notes")
+	if algorithm == 0 {
+		err := mgm.Coll(&db.Normalized{}).SimpleFind(
+			&steps,
+			bson.M{
+				"workspace_id": workspaceId,
+				"stage":        stage,
+				"algorithm":    algorithm,
+			},
+		)
+		if err != nil {
+			return nil, errors.New("cannot find notes")
+		}
+	} else {
+		err := mgm.Coll(&db.Preprocessed{}).SimpleFind(
+			&steps,
+			bson.M{
+				"workspace_id": workspaceId,
+				"stage":        stage,
+				"algorithm":    algorithm,
+			},
+		)
+		if err != nil {
+			return nil, errors.New("cannot find notes")
+		}
 	}
+
 
 	return steps, nil
 }
@@ -44,22 +59,8 @@ func SaveBulkSteps(
 	description string,
 	stageName string,
 ) error {
-	existing := []*db.Step{}
-
-	err := mgm.Coll(&db.Step{}).SimpleFind(
-		&existing,
-		bson.M{
-			"workspace_id": workspaceId,
-			"stage":        stage,
-			"algorithm":    algorithm,
-		},
-	)
-	if err != nil {
-		return errors.New("cannot get normalized results")
-	}
-
-	if len(existing) != 0 {
-		_, err := mgm.Coll(&db.Step{}).DeleteMany(
+	if algorithm == 0 {
+		_, err := mgm.Coll(&db.Normalized{}).DeleteMany(
 			context.Background(),
 			bson.M{
 				"workspace_id": workspaceId,
@@ -70,29 +71,66 @@ func SaveBulkSteps(
 		if err != nil {
 			return errors.New("cannot delete existing normalized results")
 		}
-	}
 
-	toInsert := make([]interface{}, 0)
-	for i := range ids {
-		step := db.NewStep(
-			ids[i],
-			workspaceId,
-			ids[i] == conclusionId,
-			results[i],
-			jsons[i],
-			stage,
-			algorithm,
-			description,
-			stageName,
+		toInsert := make([]interface{}, 0)
+		for i := range ids {
+			step := db.NewNormalized(
+				ids[i],
+				workspaceId,
+				ids[i] == conclusionId,
+				results[i],
+				jsons[i],
+				stage,
+				algorithm,
+				description,
+				stageName,
+			)
+			toInsert = append(toInsert, *step)
+		}
+
+		log.Printf("%v", toInsert)
+
+		_, err = mgm.Coll(&db.Normalized{}).InsertMany(context.Background(), toInsert)
+		if err != nil {
+			fmt.Println("InsertMany error:", err)
+			return errors.New("cannot save formulas")
+		}
+	} else {
+		_, err := mgm.Coll(&db.Preprocessed{}).DeleteMany(
+			context.Background(),
+			bson.M{
+				"workspace_id": workspaceId,
+				"stage":        stage,
+				"algorithm":    algorithm,
+			},
 		)
-		toInsert = append(toInsert, *step)
-	}
+		if err != nil {
+			return errors.New("cannot delete existing preprocessed results")
+		}
 
-	// log.Printf("%v", len(toInsert))
+		toInsert := make([]interface{}, 0)
+		for i := range ids {
+			step := db.NewPreprocessed(
+				ids[i],
+				workspaceId,
+				ids[i] == conclusionId,
+				results[i],
+				jsons[i],
+				stage,
+				algorithm,
+				description,
+				stageName,
+			)
+			toInsert = append(toInsert, *step)
+		}
 
-	_, err = mgm.Coll(&db.Step{}).InsertMany(context.Background(), toInsert)
-	if err != nil {
-		return errors.New("cannot save formulas")
+		log.Printf("%v", toInsert)
+
+		_, err = mgm.Coll(&db.Preprocessed{}).InsertMany(context.Background(), toInsert)
+		if err != nil {
+			fmt.Println("InsertMany error:", err)
+			return errors.New("cannot save formulas")
+		}
 	}
 
 	return nil
