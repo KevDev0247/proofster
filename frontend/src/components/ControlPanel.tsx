@@ -12,7 +12,8 @@ import AlgorithmAlerts from './algorithm/AlgorithmAlerts';
 import { 
   clearCache, setStopStage, 
   setShowValidation, 
-  setSelectedStage
+  setSelectedStage,
+  resetStage
 } from '../slices/algorithmSlice';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
@@ -48,7 +49,7 @@ export default function ControlPanel() {
   }, [selectedStage]);
 
   const handleOptionChange = (event: SelectChangeEvent): void => {
-    dispatch(clearCache());
+    dispatch(resetStage());
     dispatch(setSelectedStage(event.target.value));
     dispatch(setStopStage(parseInt(event.target.value)));
   };

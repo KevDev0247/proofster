@@ -149,12 +149,16 @@ class Formulas(View):
             'status': status.HTTP_200_OK
         })
     
-    def get(self, request, pk):
+    def get(self, request):
         workspace_id = request.GET.get('workspace_id')
         formulas = get_formula_by_workspace(workspace_id)
             
+        serializer = FormulaSerializer(
+            formulas,
+            many=True
+        )
         return JsonResponse({
-            'formulas': formulas,
+            'formulas': serializer.data,
             'status': status.HTTP_200_OK
         })    
 

@@ -35,7 +35,7 @@ class Formula(models.Model):
         editable=False
     )
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, null=True)
     is_conclusion = models.BooleanField(default=False)
     formula_infix = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)

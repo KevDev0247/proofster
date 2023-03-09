@@ -8,10 +8,11 @@ import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
 import { getResults, normalize } from '../../network/algorithmApi';
 import { setShowCacheWarning, setShowError } from '../../slices/globalSlice';
-import { setShowValidation } from '../../slices/algorithmSlice';
+import { nextPreprocessStage, setPreprocessingCompleted, setShowValidation } from '../../slices/algorithmSlice';
 import { argumentEmptyError } from '../../constants';
 import {
-  nextStage, resetStage, clearCache, setError, setCompletedStage
+  nextNormalizeStage, resetStage, clearCache, setError, 
+  setNormalizationCompleted,
 } from '../../slices/algorithmSlice';
 
 
@@ -34,11 +35,14 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   const selectedStage: string = useSelector(
     (state: RootState) => state.algorithm.normalize.selectedStage
   );
-  const completedStage: number = useSelector(
-    (state: RootState) => state.algorithm.normalize.completedStage
+  const normalizationCompleted: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.normalizationCompleted
+  );
+  const preprocessingCompleted: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.preprocessingCompleted
   );
   const currentStage: number = useSelector(
-    (state: RootState) => state.algorithm.normalize.currentStage
+    (state: RootState) => state.algorithm.normalize.normalizeCurrent
   );
   const stopStage: number = useSelector(
     (state: RootState) => state.algorithm.normalize.stopStage
@@ -48,10 +52,16 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
+    const selectedAlgorithm = selectedStage === '9' ? 1 : 0
     const normalizeAction = normalize({
-      stage: completedStage,
+      stage: normalizationCompleted,
       workspace_id: '216da6d9-aead-4970-9465-69bfb55d4956',
-      is_proof: parseInt(selectedStage) == 9,
+      algorithm: selectedAlgorithm,
+    });
+    const preprocessAction = normalize({
+      stage: preprocessingCompleted,
+      workspace_id: '216da6d9-aead-4970-9465-69bfb55d4956',
+      algorithm: selectedAlgorithm,
     });
 
     if (isInitialStep && selectedStage === '') {
@@ -62,16 +72,27 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       dispatch(setError(argumentEmptyError));
       return;
     }
-    if (currentStage === completedStage)
+
+    if (currentStage === normalizationCompleted && selectedAlgorithm === 0)
       dispatch(normalizeAction)
         .unwrap()
         .then((response: PayloadAction<string>) => {
           toast.success(response.payload);
-          dispatch(setCompletedStage())
+          dispatch(setNormalizationCompleted())
           dispatch(getResults({
             workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
             algorithm: 0
           }));
+        })
+        .catch((error: PayloadAction<string>) => {
+          toast.error(error.payload);
+        });
+    else if (currentStage === preprocessingCompleted && selectedAlgorithm === 1)
+        dispatch(preprocessAction)
+        .unwrap()
+        .then((response: PayloadAction<string>) => {
+          toast.success(response.payload);
+          dispatch(setPreprocessingCompleted())
           dispatch(getResults({
             workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
             algorithm: 1
@@ -81,7 +102,10 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           toast.error(error.payload);
         });
     else
-      dispatch(nextStage());
+      if (selectedAlgorithm === 0)
+        dispatch(nextNormalizeStage());
+      else
+        dispatch(nextPreprocessStage());
   }
 
   const clear = (): void => {

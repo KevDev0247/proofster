@@ -151,7 +151,7 @@ export default function FormulaDisplay() {
                   </Hidden>
                   <TableCell size='small'>
                     <Typography variant="body1" gutterBottom>
-                      {d.formula_result}
+                      {d.formula_infix}
                     </Typography>
                   </TableCell>
                 </TableRow>

@@ -3,7 +3,7 @@ import axios from "axios";
 let baseUserURL = "http://localhost:8000/api/users/";
 let baseWorkspaceURL = "http://localhost:8001/api/workspaces/";
 let baseFormulaURL = "http://localhost:8002/api/formulas/";
-let baseNormalizerURL = "http://localhost:8002/api/formulas/domain/normalize";
+let baseNormalizerURL = "http://localhost:8080/v1/normalize";
 
 export const USER_API = axios.create({
   baseURL: baseUserURL,

@@ -7,7 +7,7 @@ import { INormalized } from "../models/normalized";
 interface INormalizeRequest {
   stage: number;
   workspace_id: string;
-  is_proof: boolean;
+  algorithm: number;
 }
 interface IGetStepsRequest {
   workspaceId: string;
@@ -21,7 +21,7 @@ export const normalize: NormalizeThunk = createAsyncThunk(
   "normalizer/nnf",
   async (request: INormalizeRequest, { rejectWithValue }) => {
     try {
-      const response = await NORMALIZER_API.post("", request);
+      const response = await NORMALIZER_API.post("/", request);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
