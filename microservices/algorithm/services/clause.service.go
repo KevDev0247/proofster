@@ -13,8 +13,8 @@ import (
 func GetClauses(
 	workspaceId string,
 	algorithm int,
-) ([]db.ClauseReturn, error) {
-	var clauses []db.ClauseReturn
+) ([]db.StepReturn, error) {
+	var clauses []db.StepReturn
 	options := options.Find().SetSort(bson.M{"stage": 1})
 
 	coll := mgm.Coll(&db.Clause{})

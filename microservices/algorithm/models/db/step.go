@@ -78,16 +78,7 @@ func NewPreprocessed(
 	}
 }
 
-type PreprocessedReturn struct {
-	IsConclusion     bool                   `bson:"is_conclusion" json:"is_conclusion"`
-	FormulaResult    string                 `bson:"formula_result" json:"formula_result"`
-	Stage            int                    `bson:"stage" json:"stage"`
-	Algorithm        int                    `bson:"algorithm" json:"algorithm"`
-	Description      string                 `bson:"description" json:"description"`
-	StageName        string                 `bson:"stage_name" json:"stage_name"`
-}
-
-type NormalizedReturn struct {
+type StepReturn struct {
 	IsConclusion     bool                   `bson:"is_conclusion" json:"is_conclusion"`
 	FormulaResult    string                 `bson:"formula_result" json:"formula_result"`
 	Stage            int                    `bson:"stage" json:"stage"`

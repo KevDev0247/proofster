@@ -73,8 +73,7 @@ func GetSteps(c *gin.Context) {
 		response.StatusCode = http.StatusOK
 		response.Success = true
 		response.Data = gin.H{
-			"procedure": procedure,
-			"clauses":   clauses,
+			"result": append(procedure, clauses...),
 		}
 		response.SendResponse(c)
 	} else {
@@ -88,8 +87,7 @@ func GetSteps(c *gin.Context) {
 		response.StatusCode = http.StatusOK
 		response.Success = true
 		response.Data = gin.H{
-			"procedure": procedure,
-			"clauses":   clauses,
+			"result": append(procedure, clauses...),
 		}
 		response.SendResponse(c)		
 	}

@@ -14,8 +14,8 @@ import (
 
 func GetPreprocessed(
 	workspaceId string,
-) ([]db.PreprocessedReturn, error) {
-    var steps []db.PreprocessedReturn
+) ([]db.StepReturn, error) {
+    var steps []db.StepReturn
     options := options.Find().SetSort(bson.M{"stage": 1})
 
     coll := mgm.Coll(&db.Preprocessed{})
@@ -39,8 +39,8 @@ func GetPreprocessed(
 
 func GetNormalized(
 	workspaceId string,
-) ([]db.NormalizedReturn, error) {
-    var steps []db.NormalizedReturn
+) ([]db.StepReturn, error) {
+    var steps []db.StepReturn
     options := options.Find().SetSort(bson.M{"stage": 1})
 
     coll := mgm.Coll(&db.Normalized{})
