@@ -34,13 +34,15 @@ func GetClauses(
 		return nil, errors.New("cannot find notes")
 	}
 
-	var groupedClauses []db.StepReturn
-	groupedClauses = append(groupedClauses, db.StepReturn{
-		Steps: clauses,
-		Description: utils.CreateStageDescription(8),
-		StageName: utils.CreateStageName(8),
-	})
-
+	groupedClauses := []db.StepReturn{}
+	if len(clauses) != 0 {
+		groupedClauses = append(groupedClauses, db.StepReturn{
+			Steps: clauses,
+			Description: utils.CreateStageDescription(8),
+			StageName: utils.CreateStageName(8),
+		})		
+	}
+	
 	return groupedClauses, nil
 }
 

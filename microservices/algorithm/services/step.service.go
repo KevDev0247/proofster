@@ -82,10 +82,14 @@ func GetNormalized(
 		return nil, errors.New("cannot find notes")
 	}
 
+	log.Printf("%v", steps)
+
     stageMap := make(map[int][]db.StepReturnItem)
     for _, step := range steps {
         stageMap[step.Stage] = append(stageMap[step.Stage], step)
     }
+
+	log.Printf("%v", stageMap)
 
     var stageKeys []int
     for k := range stageMap {
@@ -102,6 +106,8 @@ func GetNormalized(
             StageName: utils.CreateStageName(stage),
         })
     }
+
+	log.Printf("%v", groupedSteps)
 
     return groupedSteps, nil
 }

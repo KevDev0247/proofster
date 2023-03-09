@@ -74,12 +74,18 @@ func GetSteps(c *gin.Context) {
 			response.SendResponse(c)
 			return
 		}
-	
+
+		if append(procedure, clauses...) != nil {
+			response.Data = gin.H{
+				"results": append(procedure, clauses...),
+			}			
+		} else {
+			response.Data = gin.H{
+				"results": []string{},
+			}
+		}
 		response.StatusCode = http.StatusOK
 		response.Success = true
-		response.Data = gin.H{
-			"result": append(procedure, clauses...),
-		}
 		response.SendResponse(c)
 	} else {
 		procedure, err := services.GetPreprocessed(workspaceId)
@@ -89,11 +95,17 @@ func GetSteps(c *gin.Context) {
 			return
 		}
 
+		if append(procedure, clauses...) != nil {
+			response.Data = gin.H{
+				"results": append(procedure, clauses...),
+			}			
+		} else {
+			response.Data = gin.H{
+				"results": []string{},
+			}
+		}
 		response.StatusCode = http.StatusOK
 		response.Success = true
-		response.Data = gin.H{
-			"result": append(procedure, clauses...),
-		}
-		response.SendResponse(c)		
+		response.SendResponse(c)	
 	}
 }

@@ -21,7 +21,7 @@ export const normalize: NormalizeThunk = createAsyncThunk(
   "normalizer/nnf",
   async (request: INormalizeRequest, { rejectWithValue }) => {
     try {
-      const response = await NORMALIZER_API.post("/", request);
+      const response = await NORMALIZER_API.post("", request, { withCredentials: true });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -41,8 +41,9 @@ export const getResults: GetResultsThunk = createAsyncThunk(
           algorithm: request.algorithm,
         },
       });
+      console.log(response)
       return {
-        results: response.data.results,
+        results: response.data.data.results,
         algorithm: request.algorithm
       };
     } catch (error) {
