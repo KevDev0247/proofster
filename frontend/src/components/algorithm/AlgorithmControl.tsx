@@ -11,7 +11,7 @@ import { setShowCacheWarning, setShowError } from '../../slices/globalSlice';
 import { nextPreprocessStage, setPreprocessingCompleted, setShowValidation } from '../../slices/algorithmSlice';
 import { argumentEmptyError } from '../../constants';
 import {
-  nextNormalizeStage, resetStage, clearCache, setError, 
+  nextNormalizeStage, resetStage, clearCache, setError,
   setNormalizationCompleted,
 } from '../../slices/algorithmSlice';
 
@@ -41,14 +41,18 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   const preprocessingCompleted: number = useSelector(
     (state: RootState) => state.algorithm.normalize.preprocessingCompleted
   );
-  const currentStage: number = useSelector(
+  const normalizeCurrent: number = useSelector(
     (state: RootState) => state.algorithm.normalize.normalizeCurrent
+  );
+  const preprocessCurrent: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.preprocessCurrent
   );
   const stopStage: number = useSelector(
     (state: RootState) => state.algorithm.normalize.stopStage
   );
 
 
+  // to do: set flags to not normalize again
   const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
@@ -73,7 +77,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
-    if (currentStage === normalizationCompleted && selectedAlgorithm === 0)
+    if (normalizeCurrent === normalizationCompleted && selectedAlgorithm === 0)
       dispatch(normalizeAction)
         .unwrap()
         .then((response: PayloadAction<string>) => {
@@ -89,8 +93,8 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
         .catch((error: PayloadAction<string>) => {
           toast.error(error.payload);
         });
-    else if (currentStage === preprocessingCompleted && selectedAlgorithm === 1)
-        dispatch(preprocessAction)
+    else if (preprocessCurrent === preprocessingCompleted && selectedAlgorithm === 1)
+      dispatch(preprocessAction)
         .unwrap()
         .then((response: PayloadAction<string>) => {
           toast.success(response.payload);
@@ -127,7 +131,14 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
   return (
     <>
-      {(currentStage != stopStage || currentStage == 0) ? (
+      {((normalizeCurrent === stopStage && normalizeCurrent != 0) ||
+        (preprocessCurrent === stopStage && preprocessCurrent != 0)) ? (
+        <Grid item xs={5.5} sm={6} md={6} container>
+          <Alert severity="success">
+            Algorithm Completed!
+          </Alert>
+        </Grid>
+      ) :
         <Grid item xs={5.5} md={6} container>
           <Button
             variant="contained"
@@ -141,12 +152,6 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           >
             {isInitialStep ? 'Execute' : 'NEXT'}
           </Button>
-        </Grid>
-      ) :
-        <Grid item xs={5.5} sm={6} md={6} container>
-          <Alert severity="success">
-            Algorithm Completed!
-          </Alert>
         </Grid>
       }
       {isSmDown ? (
