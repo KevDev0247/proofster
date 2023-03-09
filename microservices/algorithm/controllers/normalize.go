@@ -26,11 +26,16 @@ func Normalize(c *gin.Context) {
 			return
 		}
 	} else {
-		services.Normalize(
+		err := services.Normalize(
 			requestBody.Stage,
 			requestBody.WorkspaceId,
 			requestBody.Algorithm,
 		)
+		if err != nil {
+			response.Message = err.Error()
+			response.SendResponse(c)
+			return
+		}
 	}
 
 	response.StatusCode = http.StatusOK
