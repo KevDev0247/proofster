@@ -13,5 +13,9 @@ func NormalizeRoute(router *gin.RouterGroup, handlers ...gin.HandlerFunc) {
 			"",
 			controllers.Normalize,
 		)
+		normalize.GET(
+			"",
+			controllers.GetSteps,
+		)
 	}
 }

@@ -70,7 +70,7 @@ func Normalize(
 	stepTwoStringKey := utils.CreateStepTwoKey(stage, "string")
 	stepThreeStringKey := utils.CreateStepThreeKey(stage, "string")
 
-	startSteps, err := GetStepByStageAndAlgorithm(workspaceId, stage, algorithm)
+	startSteps, err := GetStepsByStageAndAlgorithm(workspaceId, stage, algorithm)
 	if err != nil {
 		return err
 	}

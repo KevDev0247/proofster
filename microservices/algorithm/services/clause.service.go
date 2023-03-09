@@ -5,29 +5,36 @@ import (
 	"errors"
 	"log"
 	db "proofster/algorithm/models/db"
-
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetClauseByStage(
+
+func GetClauses(
 	workspaceId string,
 	algorithm int,
-) ([]db.Clause, error) {
-	var clauses []db.Clause
+) ([]db.ClauseReturn, error) {
+    var clauses []db.ClauseReturn
+    options := options.Find().SetSort(bson.M{"stage": 1})
 
-	err := mgm.Coll(&db.Clause{}).SimpleFind(
-		&clauses,
-		bson.M{
-			"workspace_id": workspaceId,
-			"algorithm":    algorithm,
-		},
-	)
-	if err != nil {
-		return nil, errors.New("cannot find notes")
-	}
+    coll := mgm.Coll(&db.Clause{})
+    cursor, err := coll.Find(mgm.Ctx(), bson.M{
+        "workspace_id": workspaceId,
+        "stage": bson.M{
+            "$ne": 0,
+        },
+    }, options)
 
-	return clauses, nil
+    if err != nil {
+        return nil, errors.New("cannot find notes")
+    }
+    err = cursor.All(mgm.Ctx(), &clauses)
+    if err != nil {
+        return nil, errors.New("cannot find notes")
+    }
+
+    return clauses, nil
 }
 
 func SaveBulkClauses(

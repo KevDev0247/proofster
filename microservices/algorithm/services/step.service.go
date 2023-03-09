@@ -9,9 +9,60 @@ import (
 
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetStepByStageAndAlgorithm(
+func GetPreprocessed(
+	workspaceId string,
+) ([]db.PreprocessedReturn, error) {
+    var steps []db.PreprocessedReturn
+    options := options.Find().SetSort(bson.M{"stage": 1})
+
+    coll := mgm.Coll(&db.Preprocessed{})
+    cursor, err := coll.Find(mgm.Ctx(), bson.M{
+        "workspace_id": workspaceId,
+        "stage": bson.M{
+            "$ne": 0,
+        },
+    }, options)
+
+    if err != nil {
+        return nil, errors.New("cannot find notes")
+    }
+    err = cursor.All(mgm.Ctx(), &steps)
+    if err != nil {
+        return nil, errors.New("cannot find notes")
+    }
+
+    return steps, nil
+}
+
+func GetNormalized(
+	workspaceId string,
+) ([]db.NormalizedReturn, error) {
+    var steps []db.NormalizedReturn
+    options := options.Find().SetSort(bson.M{"stage": 1})
+
+    coll := mgm.Coll(&db.Normalized{})
+    cursor, err := coll.Find(mgm.Ctx(), bson.M{
+        "workspace_id": workspaceId,
+        "stage": bson.M{
+            "$ne": 0,
+        },
+    }, options)
+
+    if err != nil {
+        return nil, errors.New("cannot find notes")
+    }
+    err = cursor.All(mgm.Ctx(), &steps)
+    if err != nil {
+        return nil, errors.New("cannot find notes")
+    }
+
+    return steps, nil
+}
+
+func GetStepsByStageAndAlgorithm(
 	workspaceId string,
 	stage int,
 	algorithm int,
@@ -43,7 +94,6 @@ func GetStepByStageAndAlgorithm(
 			return nil, errors.New("cannot find notes")
 		}
 	}
-
 
 	return steps, nil
 }
