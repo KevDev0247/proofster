@@ -70,14 +70,14 @@ func Normalize(
 	stepTwoStringKey := utils.CreateStepTwoKey(stage, "string")
 	stepThreeStringKey := utils.CreateStepThreeKey(stage, "string")
 
-	initialSteps, err := GetStepByStage(workspaceId, 0)
+	startSteps, err := GetStepByStage(workspaceId, stage)
 	if err != nil {
 		return err
 	}
 
 	premises := make([]db.Step, 0)
 	conclusion := make([]db.Step, 0)
-	for _, step := range initialSteps {
+	for _, step := range startSteps {
 		if step.IsConclusion {
 			conclusion = append(conclusion, step)
 		} else {
@@ -164,22 +164,42 @@ func Normalize(
 		return errors.New("error occurred during step two saving")
 	}
 
-	stage++
-	stepThreeJsons := utils.ConvertToMapSlice(result[stepThreeJsonKey].([]interface{}))
-	stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
-	err = SaveBulkSteps(
-		ids,
-		stepThreeStrings,
-		stepThreeJsons,
-		conclusionId,
-		workspaceId,
-		stage,
-		algorithm,
-		utils.CreateStageDescription(stage),
-		utils.CreateStageName(stage),
-	)
-	if err != nil {
-		return errors.New("error occurred during step three saving")
+    stage++
+    if stage == 9 {
+        stepThreeJsons := result[stepThreeJsonKey].([]interface {})
+		log.Printf("here %v", result[stepThreeStringKey])
+        stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
+        err = SaveBulkClauses(
+            ids,
+            stepThreeStrings,
+            stepThreeJsons,
+            conclusionId,
+            workspaceId,
+            stage,
+            algorithm,
+            utils.CreateStageDescription(stage),
+            utils.CreateStageName(stage),
+        )
+        if err != nil {
+            return errors.New("error occurred during step three saving")
+        }
+    } else {
+		stepThreeJsons := utils.ConvertToMapSlice(result[stepThreeJsonKey].([]interface{}))
+		stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
+		err = SaveBulkSteps(
+			ids,
+			stepThreeStrings,
+			stepThreeJsons,
+			conclusionId,
+			workspaceId,
+			stage,
+			algorithm,
+			utils.CreateStageDescription(stage),
+			utils.CreateStageName(stage),
+		)
+		if err != nil {
+			return errors.New("error occurred during step three saving")
+		}	
 	}
 
 	return nil

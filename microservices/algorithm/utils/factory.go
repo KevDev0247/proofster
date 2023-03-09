@@ -51,9 +51,6 @@ func CreateStageName(stage int) string {
 	    "Generate Conjunctive Normal Form",
 	    "Generate Clauses",
 	}
-	if stage < 0 || stage >= len(STAGE_NAMES) {
-		return ""
-	}
 	return STAGE_NAMES[stage-1]
 }
 
@@ -68,9 +65,6 @@ func CreateStageDescription(stage int) string {
 	    "We simply drop all the quantifiers in front of the formula. One important sub step is called skolemization, where we remove all the existential quantifiers by substituting each occurrence of bound variable by a function of some variable.",
 	    "A very important step where we obtain the Conjunctive Normal Form of a formula --- conjunction of clauses. We do so by applying distributivity. One big challenge in the algorithm is handling a mix types of recursive calls for all formulas.",
 	    "The last step of preprocessing for resolution proofs is to generate clauses from CNF. It seems very straightforward, but programmatically it requires recursively traversing binary trees to populate clause and clause groups for each formula.",
-	}
-	if stage < 0 || stage >= len(STAGE_DESCRIPTIONS) {
-		return ""
 	}
 	return STAGE_DESCRIPTIONS[stage-1]
 }

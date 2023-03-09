@@ -3,37 +3,33 @@ package services
 import (
 	"context"
 	"errors"
-	// "log"
+	"log"
 	db "proofster/algorithm/models/db"
 
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetStepByStage(
+func GetClauseByStage(
 	workspaceId string,
-	stage int,
-) ([]db.Step, error) {
-	var steps []db.Step
+) ([]db.Clause, error) {
+	var clauses []db.Clause
 
-	err := mgm.Coll(&db.Step{}).SimpleFind(
-		&steps,
-		bson.M{
-			"workspace_id": workspaceId,
-			"stage":        stage,
-		},
+	err := mgm.Coll(&db.Clause{}).SimpleFind(
+		&clauses,
+		bson.M{"workspace_id": workspaceId},
 	)
 	if err != nil {
 		return nil, errors.New("cannot find notes")
 	}
 
-	return steps, nil
+	return clauses, nil
 }
 
-func SaveBulkSteps(
+func SaveBulkClauses(
 	ids []string,
 	results []string,
-	jsons []map[string]interface{},
+	jsons []interface{},
 	conclusionId string,
 	workspaceId string,
 	stage int,
@@ -41,9 +37,9 @@ func SaveBulkSteps(
 	description string,
 	stageName string,
 ) error {
-	existing := []*db.Step{}
+	existing := []*db.Clause{}
 
-	err := mgm.Coll(&db.Step{}).SimpleFind(
+	err := mgm.Coll(&db.Clause{}).SimpleFind(
 		&existing,
 		bson.M{
 			"workspace_id": workspaceId,
@@ -56,7 +52,7 @@ func SaveBulkSteps(
 	}
 
 	if len(existing) != 0 {
-		_, err := mgm.Coll(&db.Step{}).DeleteMany(
+		_, err := mgm.Coll(&db.Clause{}).DeleteMany(
 			context.Background(),
 			bson.M{
 				"workspace_id": workspaceId,
@@ -69,9 +65,12 @@ func SaveBulkSteps(
 		}
 	}
 
+	log.Printf("%v", ids)
+	log.Printf("%v", jsons)
+
 	toInsert := make([]interface{}, 0)
 	for i := range ids {
-		step := db.NewStep(
+		clause := db.NewClause(
 			ids[i],
 			workspaceId,
 			ids[i] == conclusionId,
@@ -82,12 +81,12 @@ func SaveBulkSteps(
 			description,
 			stageName,
 		)
-		toInsert = append(toInsert, *step)
+		toInsert = append(toInsert, *clause)
 	}
 
-	// log.Printf("%v", len(toInsert))
+	log.Printf("%v", toInsert)
 
-	_, err = mgm.Coll(&db.Step{}).InsertMany(context.Background(), toInsert)
+	_, err = mgm.Coll(&db.Clause{}).InsertMany(context.Background(), toInsert)
 	if err != nil {
 		return errors.New("cannot save formulas")
 	}
