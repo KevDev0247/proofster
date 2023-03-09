@@ -3,38 +3,36 @@ package services
 import (
 	"context"
 	"errors"
-	"log"
-	db "proofster/algorithm/models/db"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
+	db "proofster/algorithm/models/db"
 )
-
 
 func GetClauses(
 	workspaceId string,
 	algorithm int,
 ) ([]db.ClauseReturn, error) {
-    var clauses []db.ClauseReturn
-    options := options.Find().SetSort(bson.M{"stage": 1})
+	var clauses []db.ClauseReturn
+	options := options.Find().SetSort(bson.M{"stage": 1})
 
-    coll := mgm.Coll(&db.Clause{})
-    cursor, err := coll.Find(mgm.Ctx(), bson.M{
-        "workspace_id": workspaceId,
-        "stage": bson.M{
-            "$ne": 0,
-        },
-    }, options)
+	coll := mgm.Coll(&db.Clause{})
+	cursor, err := coll.Find(mgm.Ctx(), bson.M{
+		"workspace_id": workspaceId,
+		"algorithm":    algorithm,
+		"stage":        bson.M{"$ne": 0},
+	}, options)
 
-    if err != nil {
-        return nil, errors.New("cannot find notes")
-    }
-    err = cursor.All(mgm.Ctx(), &clauses)
-    if err != nil {
-        return nil, errors.New("cannot find notes")
-    }
+	if err != nil {
+		return nil, errors.New("cannot find notes")
+	}
+	err = cursor.All(mgm.Ctx(), &clauses)
+	if err != nil {
+		return nil, errors.New("cannot find notes")
+	}
 
-    return clauses, nil
+	return clauses, nil
 }
 
 func SaveBulkClauses(
