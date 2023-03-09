@@ -78,7 +78,7 @@ func SaveBulkSteps(
 			results[i],
 			jsons[i],
 			stage,
-			0,
+			algorithm,
 			description,
 			stageName,
 		)
