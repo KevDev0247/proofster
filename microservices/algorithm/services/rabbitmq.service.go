@@ -93,7 +93,9 @@ func ListenForFormulas(
 				log.Printf("errors occurred while unpacking json %s\n", err)
 			}
 			
-			SaveBulkFormula(formulas[0].WorkspaceId, formulas)
+			if len(formulas) > 0 {
+				SaveBulkFormula(formulas[0].WorkspaceId, formulas)
+			}
 		}
 	}()
 
