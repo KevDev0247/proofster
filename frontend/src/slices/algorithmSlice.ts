@@ -51,10 +51,12 @@ export const algorithmSlice = createSlice({
       state.normalize.normalizeCurrent = 0;
       state.normalize.preprocessCurrent = 0;
       state.normalize.renderResults = [];
+      state.normalize.selectedStage = "";
     },
     clearCache: (state) => {
       state.normalize.normalizedCached = [];
       state.normalize.renderResults = [];
+      state.normalize.selectedStage = "";
       state.normalize.stopStage = 9;
       state.normalize.normalizationCompleted = 0;
       state.normalize.normalizeCurrent = 0;

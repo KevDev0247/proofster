@@ -7,6 +7,7 @@ const globalSlice = createSlice({
     showError: false,
     showCacheWarning: false,
     argumentEmpty: true,
+    argumentEdited: false,
   },
   reducers: {
     setDisableButton: (state, action: PayloadAction<boolean>) => {
@@ -20,7 +21,10 @@ const globalSlice = createSlice({
     },
     setArgumentEmpty: (state, action: PayloadAction<boolean>) => {
       state.argumentEmpty = action.payload;
-    }
+    },
+    setArgumentEdited: (state, action: PayloadAction<boolean>) => {
+      state.argumentEdited = action.payload;
+    },
   },
 });
 
@@ -28,7 +32,8 @@ export const {
   setDisableButton,
   setShowError,
   setShowCacheWarning,
-  setArgumentEmpty
+  setArgumentEmpty,
+  setArgumentEdited
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

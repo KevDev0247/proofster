@@ -50,16 +50,16 @@ func GetSteps(c *gin.Context) {
 	}
 
 	workspaceId := c.Query("workspace_id")
-	algorithm := c.Query("algorithm")
-	algo := -1
-	if algorithm == "1" {
-		algo = 1
+	algorithmInput := c.Query("algorithm")
+	algorithm := -1
+	if algorithmInput == "1" {
+		algorithm = 1
 	} else {
-		algo = 0
+		algorithm = 0
 	}
 
 	clauses, err := services.GetClauses(
-		workspaceId, algo,
+		workspaceId, algorithm,
 	)
 	if err != nil {
 		response.Message = err.Error()
@@ -67,7 +67,7 @@ func GetSteps(c *gin.Context) {
 		return
 	}
 
-	if algo == 0 {
+	if algorithm == 0 {
 		procedure, err := services.GetNormalized(workspaceId)
 		if err != nil {
 			response.Message = err.Error()
@@ -78,7 +78,7 @@ func GetSteps(c *gin.Context) {
 		if append(procedure, clauses...) != nil {
 			response.Data = gin.H{
 				"results": append(procedure, clauses...),
-			}			
+			}
 		} else {
 			response.Data = gin.H{
 				"results": []string{},
@@ -98,7 +98,7 @@ func GetSteps(c *gin.Context) {
 		if append(procedure, clauses...) != nil {
 			response.Data = gin.H{
 				"results": append(procedure, clauses...),
-			}			
+			}
 		} else {
 			response.Data = gin.H{
 				"results": []string{},
@@ -106,6 +106,6 @@ func GetSteps(c *gin.Context) {
 		}
 		response.StatusCode = http.StatusOK
 		response.Success = true
-		response.SendResponse(c)	
+		response.SendResponse(c)
 	}
 }

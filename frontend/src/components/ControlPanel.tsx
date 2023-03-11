@@ -10,7 +10,7 @@ import FormulaDisplay from './formula/FormulaDisplay';
 import AlgorithmControl from './algorithm/AlgorithmControl';
 import AlgorithmAlerts from './algorithm/AlgorithmAlerts';
 import { 
-  clearCache, setStopStage, 
+  setStopStage, 
   setShowValidation, 
   setSelectedStage,
   resetStage

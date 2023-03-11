@@ -7,7 +7,7 @@ import { Alert, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
 import { getResults, normalize } from '../../network/algorithmApi';
-import { setShowCacheWarning, setShowError } from '../../slices/globalSlice';
+import { setArgumentEdited, setShowCacheWarning, setShowError } from '../../slices/globalSlice';
 import { nextPreprocessStage, setPreprocessingCompleted, setShowValidation } from '../../slices/algorithmSlice';
 import { argumentEmptyError } from '../../constants';
 import {
@@ -28,6 +28,9 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   );
   const argumentEmpty: boolean = useSelector(
     (state: RootState) => state.global.argumentEmpty
+  );
+  const argumentEdited: boolean = useSelector(
+    (state: RootState) => state.global.argumentEdited
   );
   const isLoading: boolean = useSelector(
     (state: RootState) => state.algorithm.normalize.isLoading
@@ -57,6 +60,12 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
     e.preventDefault();
 
     const selectedAlgorithm = selectedStage === '9' ? 1 : 0
+
+    const transpileAction = normalize({
+      stage: -1,
+      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+      algorithm: 0,
+    });
     const normalizeAction = normalize({
       stage: normalizationCompleted,
       workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
@@ -77,6 +86,18 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
+    if (argumentEdited) {
+      dispatch(transpileAction)
+        .unwrap()
+        .then((response: PayloadAction<string>) => {
+          toast.success(response.payload);
+          dispatch(setArgumentEdited(false));
+        })
+        .catch((error: PayloadAction<string>) => {
+          toast.error(error.payload);
+        });;
+      return;
+    }
     if (normalizeCurrent === normalizationCompleted && selectedAlgorithm === 0)
       dispatch(normalizeAction)
         .unwrap()
@@ -150,7 +171,10 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
               <CircularProgress color="secondary" size={20} />
             }
           >
-            {isInitialStep ? 'Execute' : 'NEXT'}
+            {argumentEdited ?
+              'Transpile'
+              : isInitialStep ? 'Execute' : 'Next'
+            }
           </Button>
         </Grid>
       }

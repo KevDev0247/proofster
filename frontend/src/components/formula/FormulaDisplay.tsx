@@ -13,7 +13,7 @@ import { IFormula } from '../../models/formula';
 import { deleteFormula, getFormulas } from '../../network/formulaApi';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
-import { setShowCacheWarning, setArgumentEmpty } from '../../slices/globalSlice';
+import { setShowCacheWarning, setArgumentEmpty, setArgumentEdited } from '../../slices/globalSlice';
 
 
 export default function FormulaDisplay() {
@@ -82,6 +82,7 @@ export default function FormulaDisplay() {
             workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
             stage: 0
           }));
+          dispatch(setArgumentEdited(true));
         })
         .catch((error) => {
           toast.error(error);
