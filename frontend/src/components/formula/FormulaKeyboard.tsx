@@ -79,16 +79,16 @@ export default function FormulaKeyboard(
     const inputElement = formulaInfixRef.current;
     if (inputElement) {
       const cursorPosition = cursorPositionRef.current;
-      const currentInfix = selected.formula_infix;
+      const currentInput = selected.formula_input;
 
-      const newInfix =
-        currentInfix.substring(0, cursorPosition) +
+      const newInput =
+        currentInput.substring(0, cursorPosition) +
         value +
-        currentInfix.substring(cursorPosition);
+        currentInput.substring(cursorPosition);
 
       dispatch(setSelected({
         ...selected,
-        formula_infix: newInfix,
+        formula_input: newInput,
       }));
 
       const newCursorPosition = cursorPosition + value.length;

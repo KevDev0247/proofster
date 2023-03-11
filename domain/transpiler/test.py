@@ -1,6 +1,6 @@
 import json
 import unittest
-from test_input import event_input
+from test_input import event_input_infix, event_input_postfix
 from service import lambda_handler, transpile, execute_shunting_yard
 
 
@@ -17,9 +17,15 @@ class Test(unittest.TestCase):
         actual = execute_shunting_yard(input)
         self.assertEqual(actual, expected)
 
-    def test_lambda_handler(self):
-        response = lambda_handler(event_input, None)
+    def test_lambda_handler_with_infix(self):
+        response = lambda_handler(event_input_infix, None)
         expected = "∀x∃y((F(y) ∧ G(y)) ∨ (F(x) ⇒ G(x)))"
         actual = json.loads(response['body'])['formula_result']
         self.assertEqual(actual, expected)
+
+    def test_lambda_handler_with_postfix(self):
+        response = lambda_handler(event_input_postfix, None)
+        expected = "∀x∃y((F(y) ∧ G(y)) ∨ (F(x) ⇒ G(x)))"
+        actual = json.loads(response['body'])['formula_result']
+        self.assertEqual(actual, expected)    
         

@@ -88,12 +88,13 @@ func ListenForFormulas(
 		for msg := range msgs {
 			log.Printf(" > Received message: %s\n", msg.Body)
 
-			var formulas []db.Formula
+			formulas := []db.Formula{}
 			err := json.Unmarshal([]byte(msg.Body), &formulas)
 			if err != nil {
 				log.Printf("errors occurred while unpacking json %s\n", err)
 			}
 			
+			// need to fix not deleting bug by refactor into a service
 			if len(formulas) > 0 {
 				repositories.SaveBulkFormula(formulas[0].WorkspaceId, formulas)
 			}

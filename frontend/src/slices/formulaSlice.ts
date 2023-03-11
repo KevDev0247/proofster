@@ -27,7 +27,8 @@ export const formulaSlice = createSlice({
         id: 0,
         name: "",
         formula_postfix: "",
-        formula_infix: "",
+        formula_input: "",
+        input_mode: "",
         formula_result: "",
         is_conclusion: false,
         workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
@@ -60,7 +61,9 @@ export const formulaSlice = createSlice({
       state.list.values = action.payload
         ? action.payload.map((formula: IFormula) => ({
             ...formula,
-            formula_infix: encodedToInfix(formula.formula_infix)
+            formula_input: formula.input_mode === "Infix" 
+                            ? encodedToInfix(formula.formula_input) 
+                            : formula.formula_input
           }))
         : [];
     },

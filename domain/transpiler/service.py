@@ -121,18 +121,30 @@ def execute_shunting_yard(tokens: List[str]) -> List[str]:
 
 
 def lambda_handler(event, context):
-    print(event)
     body = json.loads(event['body'])
-    formula_infix = body.get("formula_infix")
-    tokens = formula_infix.split()
-    
-    formula_postfix = execute_shunting_yard(tokens)
-    formula = transpile(formula_postfix)
-    body = {
-        'formula_json': formula.to_json(),
-        'formula_result': formula.to_string(),
-        'formula_postfix': ' '.join(formula_postfix)
-    }
+    input_mode = body.get("input_mode")
+    formula_input = body.get("formula_input")
+    tokens = formula_input.split()
+
+    body = {}
+    if input_mode == "Infix" or input_mode == "Natural":
+        formula_postfix_tokens = execute_shunting_yard(tokens)
+        formula = transpile(formula_postfix_tokens)
+
+        body = {
+            'formula_json': formula.to_json(),
+            'formula_result': formula.to_string(),
+            'formula_postfix': ' '.join(formula_postfix_tokens)
+        }
+    if input_mode == "Postfix":
+        formula_postfix = formula_input
+        formula = transpile(tokens)
+
+        body = {
+            'formula_json': formula.to_json(),
+            'formula_result': formula.to_string(),
+            'formula_postfix': formula_postfix
+        }
 
     return {
         'statusCode': 200,

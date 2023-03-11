@@ -17,7 +17,8 @@ func Call_Transpiler(
 	defer wg.Done()
 
 	payload, err := json.Marshal(map[string]string{
-		"formula_infix": formula.FormulaInfix,
+		"formula_input": formula.FormulaInput,
+		"input_mode": formula.InputMode,
 	})
 	if err != nil {
 		resultChan <- map[string]interface{}{

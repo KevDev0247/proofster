@@ -38,8 +38,11 @@ export default function FormulaEditor() {
   const selected: IFormula = useSelector(
     (state: RootState) => state.formula.save.selected
   );
+  const inputMode: string = useSelector(
+    (state: RootState) => state.formula.save.inputMode
+  )
 
-  const formulaInfixRef = useRef<HTMLInputElement>(null);
+  const formulaInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isSaving || isDeleting)
@@ -60,14 +63,19 @@ export default function FormulaEditor() {
   const submit = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
-    if (selected.name === "" || selected.formula_infix === "") {
+    if (selected.name === "" || selected.formula_input === "") {
       dispatch(setShowValidation(true));
       return;
     }
 
+    var formulaInput = selected.formula_input
+    if (inputMode === "Infix") {
+      formulaInput = infixToEncoded(selected.formula_input)
+    }
     var formulaToSubmit: IFormula = {
       ...selected,
-      formula_infix: infixToEncoded(selected.formula_infix)
+      formula_input: formulaInput,
+      input_mode: inputMode,
     }
 
     const action =
@@ -96,7 +104,8 @@ export default function FormulaEditor() {
       id: 0,
       name: "",
       formula_postfix: "",
-      formula_infix: "",
+      formula_input: "",
+      input_mode: "Infix",
       formula_result: "",
       is_conclusion: false,
       workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
@@ -145,13 +154,13 @@ export default function FormulaEditor() {
             <Grid item xs={12} md={12} container spacing={1}>
               <Grid item xs={12} md={12}>
                 <TextField
-                  id="formula_infix"
-                  name="formula_infix"
+                  id="formula_input"
+                  name="formula_input"
                   label="Formula"
                   variant="outlined"
                   type="text"
-                  inputRef={formulaInfixRef}
-                  value={selected.formula_infix}
+                  inputRef={formulaInputRef}
+                  value={selected.formula_input}
                   onChange={handleInputChange}
                   placeholder="Enter formula here"
                   fullWidth
@@ -161,7 +170,7 @@ export default function FormulaEditor() {
               </Grid>
               <Grid item xs={12} md={10} container spacing={2} alignItems="center">
                 <FormulaKeyboard
-                  formulaInfixRef={formulaInfixRef}
+                  formulaInfixRef={formulaInputRef}
                   isSmDown={isSmDown}
                 />
               </Grid>

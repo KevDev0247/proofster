@@ -31,7 +31,8 @@ class Formulas(View):
             'description': data.get('description'),
             'workspace_id': data.get('workspace_id'),
             'is_conclusion': data.get('is_conclusion'),
-            'formula_infix': data.get('formula_infix')
+            'formula_input': data.get('formula_input'),
+            'input_mode': data.get('input_mode')
         }
         serializer = FormulaSerializer(data=formula)
         if serializer.is_valid():

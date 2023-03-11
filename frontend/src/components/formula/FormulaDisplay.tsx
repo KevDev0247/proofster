@@ -64,7 +64,8 @@ export default function FormulaDisplay() {
       id: d.id,
       name: d.name,
       formula_postfix: d.formula_postfix,
-      formula_infix: d.formula_infix,
+      formula_input: d.formula_input,
+      input_mode: d.input_mode,
       formula_result: d.formula_result,
       is_conclusion: d.is_conclusion,
       workspace_id: d.workspace_id,
@@ -152,7 +153,7 @@ export default function FormulaDisplay() {
                   </Hidden>
                   <TableCell size='small'>
                     <Typography variant="body1" gutterBottom>
-                      {d.formula_infix}
+                      {d.formula_input}
                     </Typography>
                   </TableCell>
                 </TableRow>

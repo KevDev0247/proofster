@@ -11,7 +11,8 @@ class Formula(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255, null=True)
     is_conclusion = models.BooleanField(default=False)
-    formula_infix = models.TextField(null=True)
+    formula_input = models.TextField(null=True)
+    input_mode = models.TextField(default="")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 

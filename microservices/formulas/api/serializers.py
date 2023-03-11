@@ -11,7 +11,8 @@ class FormulaSerializer(serializers.ModelSerializer):
         return [
             {
                 'is_conclusion': formula.is_conclusion,
-                'formula_infix': formula.formula_infix,
+                'formula_input': formula.formula_input,
+                'input_mode': formula.input_mode,
                 'workspace_id': str(formula.workspace_id),
                 'formula_id': str(formula.formula_id)
             }
