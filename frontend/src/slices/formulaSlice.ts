@@ -7,7 +7,7 @@ import {
   updateFormula,
   deleteFormula 
 } from "../network/formulaApi";
-import { infixToReadable } from "../utils/infixConverter";
+import { encodedToInfix } from "../utils/encodedToInfix";
 
 
 export const formulaSlice = createSlice({
@@ -22,6 +22,7 @@ export const formulaSlice = createSlice({
       isSaving: false,
       isDeleting: false,
       isUpdated: false,
+      inputMode: "Infix",
       selected: {
         id: 0,
         name: "",
@@ -36,6 +37,9 @@ export const formulaSlice = createSlice({
     },
   },
   reducers: {
+    setInputMode: (state, action) => {
+      state.save.inputMode = action.payload;
+    },
     setSelected: (state, action) => {
       state.save.selected = action.payload;
     },
@@ -56,7 +60,7 @@ export const formulaSlice = createSlice({
       state.list.values = action.payload
         ? action.payload.map((formula: IFormula) => ({
             ...formula,
-            formula_infix: infixToReadable(formula.formula_infix)
+            formula_infix: encodedToInfix(formula.formula_infix)
           }))
         : [];
     },
@@ -103,7 +107,8 @@ export const formulaSlice = createSlice({
   },
 });
 
-export const { 
+export const {
+  setInputMode, 
   setSelected, 
   setShowValidation 
 } = formulaSlice.actions;

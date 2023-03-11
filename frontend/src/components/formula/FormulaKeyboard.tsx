@@ -2,7 +2,7 @@ import { Grid, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { IFormula } from '../../models/formula';
-import { setSelected } from '../../slices/formulaSlice';
+import { setInputMode, setSelected } from '../../slices/formulaSlice';
 import { AppDispatch, RootState, useAppDispatch } from '../../store';
 
 
@@ -24,6 +24,11 @@ const keyboardTwo: IKeyboardButton[] = [
   { label: '⇔', value: ' ⇔ ' },
   { label: 'F(x)', value: ' F( ) ' },
 ];
+const keyboardSetting: IKeyboardButton[] = [
+  { label: 'Infix', value: 'Infix' },
+  { label: 'Postfix', value: 'Postfix' },
+  { label: 'Natural', value: 'Natural' },
+];
 
 
 export default function FormulaKeyboard(
@@ -36,6 +41,9 @@ export default function FormulaKeyboard(
 
   const dispatch: AppDispatch = useAppDispatch();
 
+  const inputMode: string = useSelector(
+    (state: RootState) => state.formula.save.inputMode
+  );
   const selected: IFormula = useSelector(
     (state: RootState) => state.formula.save.selected
   );
@@ -56,6 +64,13 @@ export default function FormulaKeyboard(
     }
   }, []);
 
+
+  const handleInputModeSelection = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    value: string,
+  ): void => {
+    dispatch(setInputMode(value));
+  }
 
   const handleKeyboardClick = (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -85,64 +100,85 @@ export default function FormulaKeyboard(
 
   return (
     <>
-      <Grid item xs={12} md={4}>
-        {isSmDown ? (
-          <ToggleButtonGroup
-            size="large"
-            onChange={handleKeyboardClick}
-            aria-label="special symbol group one"
-            exclusive
-          >
-            {keyboardOne.map(({ label, value }) => (
-              <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
-                <Typography variant="h5"><strong>{label}</strong></Typography>
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-        ) : (
-          <ToggleButtonGroup
-            size="small"
-            onChange={handleKeyboardClick}
-            aria-label="special symbol group one"
-            exclusive
-          >
-            {keyboardOne.map(({ label, value }) => (
-              <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
-                <Typography variant="body1"><strong>{label}</strong></Typography>
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-        )}
+      <Grid item xs={12} md={3.5}>
+        <ToggleButtonGroup
+          size="small"
+          value={inputMode}
+          onChange={handleInputModeSelection}
+          aria-label="special symbol group one"
+          exclusive
+        >
+          {keyboardSetting.map(({ label, value }) => (
+            <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+              <Typography variant="body2"><strong>{label}</strong></Typography>
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
       </Grid>
-      <Grid item xs={12} md={6}>
-        {isSmDown ? (
-          <ToggleButtonGroup
-            size="large"
-            onChange={handleKeyboardClick}
-            aria-label="special symbol group two"
-            exclusive
-          >
-            {keyboardTwo.map(({ label, value }) => (
-              <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
-                <Typography variant="h5"><strong>{label}</strong></Typography>
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-        ) : (
-          <ToggleButtonGroup
-            size="small"
-            onChange={handleKeyboardClick}
-            aria-label="special symbol group two"
-            exclusive
-          >
-            {keyboardTwo.map(({ label, value }) => (
-              <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
-                <Typography variant="body1"><strong>{label}</strong></Typography>
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
-        )}
-      </Grid>
+      {
+        inputMode === "Infix" && (
+          <>
+            <Grid item xs={12} md={4}>
+              {isSmDown ? (
+                <ToggleButtonGroup
+                  size="large"
+                  onChange={handleKeyboardClick}
+                  aria-label="special symbol group one"
+                  exclusive
+                >
+                  {keyboardOne.map(({ label, value }) => (
+                    <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+                      <Typography variant="h5"><strong>{label}</strong></Typography>
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              ) : (
+                <ToggleButtonGroup
+                  size="small"
+                  onChange={handleKeyboardClick}
+                  aria-label="special symbol group one"
+                  exclusive
+                >
+                  {keyboardOne.map(({ label, value }) => (
+                    <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
+                      <Typography variant="body1"><strong>{label}</strong></Typography>
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              )}
+            </Grid>
+            <Grid item xs={12} md={4}>
+              {isSmDown ? (
+                <ToggleButtonGroup
+                  size="large"
+                  onChange={handleKeyboardClick}
+                  aria-label="special symbol group two"
+                  exclusive
+                >
+                  {keyboardTwo.map(({ label, value }) => (
+                    <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+                      <Typography variant="h5"><strong>{label}</strong></Typography>
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              ) : (
+                <ToggleButtonGroup
+                  size="small"
+                  onChange={handleKeyboardClick}
+                  aria-label="special symbol group two"
+                  exclusive
+                >
+                  {keyboardTwo.map(({ label, value }) => (
+                    <ToggleButton key={label} value={value} sx={{ width: 46, textTransform: 'none' }}>
+                      <Typography variant="body1"><strong>{label}</strong></Typography>
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              )}
+            </Grid>
+          </>
+        )
+      }
     </>
   )
 }

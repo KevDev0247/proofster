@@ -14,8 +14,8 @@ import TextField from '@mui/material/TextField';
 import { createFormula, getFormulas, updateFormula } from '../../network/formulaApi';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
 import { setArgumentEdited, setDisableButton } from '../../slices/globalSlice';
-import { readableToInfix } from '../../utils/infixConverter';
 import FormulaKeyboard from './FormulaKeyboard';
+import { infixToEncoded } from '../../utils/infixToEncoded';
 
 
 export default function FormulaEditor() {
@@ -67,7 +67,7 @@ export default function FormulaEditor() {
 
     var formulaToSubmit: IFormula = {
       ...selected,
-      formula_infix: readableToInfix(selected.formula_infix)
+      formula_infix: infixToEncoded(selected.formula_infix)
     }
 
     const action =
