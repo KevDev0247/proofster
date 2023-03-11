@@ -32,7 +32,15 @@ func (a NoteRequest) Validate() error {
 }
 
 type NormalizeRequest struct {
-	Stage       int `json:"stage"`
+	Stage       int    `json:"stage"`
 	WorkspaceId string `json:"workspace_id"`
 	Algorithm   int    `json:"algorithm"`
+}
+
+type MetadataRequest struct {
+	WorkspaceId        string `json:"workspace_id"`
+	ArgumentTranspiled *bool   `json:"argument_saved,omitempty"`
+	CompletedStage     *int    `json:"completed_stage,omitempty"`
+	AllNormalized      *bool   `json:"all_normalized,omitempty"`
+	IsPreprocessed     *bool   `json:"is_preprocessed,omitempty"`
 }
