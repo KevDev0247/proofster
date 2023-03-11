@@ -38,8 +38,6 @@ function readableToInfix(readable: string): string {
             result += " )";    
     }
 
-    console.log(result.substring(1, result.length))
-
     return result.substring(1, result.length);
 }
 
