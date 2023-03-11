@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	models "proofster/algorithm/models"
 	services "proofster/algorithm/services"
-	repositories "proofster/algorithm/repositories"
 )
 
 func Normalize(c *gin.Context) {
@@ -59,7 +58,7 @@ func GetSteps(c *gin.Context) {
 		algorithm = 0
 	}
 
-	clauses, err := repositories.GetClauses(
+	clauses, err := services.BuildClauses(
 		workspaceId, algorithm,
 	)
 	if err != nil {
@@ -69,7 +68,7 @@ func GetSteps(c *gin.Context) {
 	}
 
 	if algorithm == 0 {
-		procedure, err := repositories.GetNormalized(workspaceId)
+		procedure, err := services.BuildOrderedNormalized(workspaceId)
 		if err != nil {
 			response.Message = err.Error()
 			response.SendResponse(c)
@@ -89,7 +88,7 @@ func GetSteps(c *gin.Context) {
 		response.Success = true
 		response.SendResponse(c)
 	} else {
-		procedure, err := repositories.GetPreprocessed(workspaceId)
+		procedure, err := services.BuildOrderedPreprocessed(workspaceId)
 		if err != nil {
 			response.Message = err.Error()
 			response.SendResponse(c)

@@ -4,27 +4,23 @@ import (
 	"context"
 	"errors"
 	"log"
-	db "proofster/algorithm/models/db"
-	"proofster/algorithm/utils"
-
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	db "proofster/algorithm/models/db"
 )
 
 func GetClauses(
 	workspaceId string,
 	algorithm int,
-) ([]db.StepReturn, error) {
-	var clauses []db.StepReturnItem
-	options := options.Find().SetSort(bson.M{"stage": 1})
+) ([]db.StepReturnItem, error) {
+	clauses := []db.StepReturnItem{}
 
 	coll := mgm.Coll(&db.Clause{})
 	cursor, err := coll.Find(mgm.Ctx(), bson.M{
 		"workspace_id": workspaceId,
 		"algorithm":    algorithm,
 		"stage":        bson.M{"$ne": 0},
-	}, options)
+	})
 
 	if err != nil {
 		return nil, errors.New("cannot find notes")
@@ -33,17 +29,8 @@ func GetClauses(
 	if err != nil {
 		return nil, errors.New("cannot find notes")
 	}
-
-	groupedClauses := []db.StepReturn{}
-	if len(clauses) != 0 {
-		groupedClauses = append(groupedClauses, db.StepReturn{
-			Steps: clauses,
-			Description: utils.CreateStageDescription(9),
-			StageName: utils.CreateStageName(9),
-		})		
-	}
 	
-	return groupedClauses, nil
+	return clauses, nil
 }
 
 func SaveBulkClauses(

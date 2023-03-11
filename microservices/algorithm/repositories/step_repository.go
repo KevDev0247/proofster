@@ -6,18 +6,15 @@ import (
 	"fmt"
 	"log"
 	db "proofster/algorithm/models/db"
-	"proofster/algorithm/utils"
-	"sort"
 
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// todo: refactor sorting into service and add repository
 func GetPreprocessed(
     workspaceId string,
-) ([]db.StepReturn, error) {
+) ([]db.StepReturnItem, error) {
     steps := []db.StepReturnItem{}
 
     options := options.Find().SetSort(bson.M{"stage": 1})
@@ -37,33 +34,12 @@ func GetPreprocessed(
         return nil, errors.New("cannot find notes")
     }
 
-    stageMap := make(map[int][]db.StepReturnItem)
-    for _, step := range steps {
-        stageMap[step.Stage] = append(stageMap[step.Stage], step)
-    }
-
-    stageKeys := []int{}
-    for k := range stageMap {
-        stageKeys = append(stageKeys, k)
-    }
-    sort.Ints(stageKeys)
-
-    groupedSteps := []db.StepReturn{}
-    for _, stage := range stageKeys {
-        group := stageMap[stage]
-        groupedSteps = append(groupedSteps, db.StepReturn{
-            Steps: group,
-            Description: utils.CreateStageDescription(stage),
-            StageName: utils.CreateStageName(stage),
-        })
-    }
-
-    return groupedSteps, nil
+    return steps, nil
 }
 
 func GetNormalized(
 	workspaceId string,
-) ([]db.StepReturn, error) {
+) ([]db.StepReturnItem, error) {
 	steps := []db.StepReturnItem{}
 
 	options := options.Find().SetSort(bson.M{"stage": 1})
@@ -83,40 +59,9 @@ func GetNormalized(
 		return nil, errors.New("cannot find notes")
 	}
 
-	log.Printf("%v", steps)
-
-    stageMap := make(map[int][]db.StepReturnItem)
-    for _, step := range steps {
-        stageMap[step.Stage] = append(stageMap[step.Stage], step)
-    }
-
-	log.Printf("%v", stageMap)
-
-    stageKeys := []int{}
-    for k := range stageMap {
-        stageKeys = append(stageKeys, k)
-    }
-    sort.Ints(stageKeys)
-
-    groupedSteps := []db.StepReturn{}
-    for _, stage := range stageKeys {
-        group := stageMap[stage]
-		if group[0].FormulaResult == "" {
-			group = make([]db.StepReturnItem, 0)
-		}
-        groupedSteps = append(groupedSteps, db.StepReturn{
-            Steps: group,
-            Description: utils.CreateStageDescription(stage),
-            StageName: utils.CreateStageName(stage),
-        })
-    }
-
-	log.Printf("%v", groupedSteps)
-
-    return groupedSteps, nil
+    return steps, nil
 }
 
-// todo: refactor into repository
 func GetStepsByStageAndAlgorithm(
 	workspaceId string,
 	stage int,
