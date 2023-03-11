@@ -55,7 +55,8 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   );
 
 
-  // to do: set flags to not normalize again
+  // todo: set flags to not normalize again
+  // todo: workspace feature
   const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
@@ -77,7 +78,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       algorithm: selectedAlgorithm,
     });
 
-    if (isInitialStep && selectedStage === '') {
+    if (isInitialStep && selectedStage === '' && !argumentEdited) {
       dispatch(setShowValidation(true));
       return;
     }

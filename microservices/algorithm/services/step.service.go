@@ -14,12 +14,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// todo: refactor sorting into service and add repository
 func GetPreprocessed(
     workspaceId string,
 ) ([]db.StepReturn, error) {
-    var steps []db.StepReturnItem
-    options := options.Find().SetSort(bson.M{"stage": 1})
+    steps := []db.StepReturnItem{}
 
+    options := options.Find().SetSort(bson.M{"stage": 1})
     coll := mgm.Coll(&db.Preprocessed{})
     cursor, err := coll.Find(mgm.Ctx(), bson.M{
         "workspace_id": workspaceId,
@@ -41,13 +42,13 @@ func GetPreprocessed(
         stageMap[step.Stage] = append(stageMap[step.Stage], step)
     }
 
-    var stageKeys []int
+    stageKeys := []int{}
     for k := range stageMap {
         stageKeys = append(stageKeys, k)
     }
     sort.Ints(stageKeys)
 
-    var groupedSteps []db.StepReturn
+    groupedSteps := []db.StepReturn{}
     for _, stage := range stageKeys {
         group := stageMap[stage]
         groupedSteps = append(groupedSteps, db.StepReturn{
@@ -63,9 +64,9 @@ func GetPreprocessed(
 func GetNormalized(
 	workspaceId string,
 ) ([]db.StepReturn, error) {
-	var steps []db.StepReturnItem
-	options := options.Find().SetSort(bson.M{"stage": 1})
+	steps := []db.StepReturnItem{}
 
+	options := options.Find().SetSort(bson.M{"stage": 1})
 	coll := mgm.Coll(&db.Normalized{})
 	cursor, err := coll.Find(mgm.Ctx(), bson.M{
 		"workspace_id": workspaceId,
@@ -91,15 +92,18 @@ func GetNormalized(
 
 	log.Printf("%v", stageMap)
 
-    var stageKeys []int
+    stageKeys := []int{}
     for k := range stageMap {
         stageKeys = append(stageKeys, k)
     }
     sort.Ints(stageKeys)
 
-    var groupedSteps []db.StepReturn
+    groupedSteps := []db.StepReturn{}
     for _, stage := range stageKeys {
         group := stageMap[stage]
+		if group[0].FormulaResult == "" {
+			group = make([]db.StepReturnItem, 0)
+		}
         groupedSteps = append(groupedSteps, db.StepReturn{
             Steps: group,
             Description: utils.CreateStageDescription(stage),
@@ -112,6 +116,7 @@ func GetNormalized(
     return groupedSteps, nil
 }
 
+// todo: refactor into repository
 func GetStepsByStageAndAlgorithm(
 	workspaceId string,
 	stage int,
@@ -148,6 +153,7 @@ func GetStepsByStageAndAlgorithm(
 	return steps, nil
 }
 
+// todo: refactor into repository
 func SaveBulkSteps(
 	ids []string,
 	results []string,

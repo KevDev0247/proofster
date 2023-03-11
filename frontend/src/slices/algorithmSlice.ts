@@ -3,6 +3,7 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { getResults, normalize } from "../network/algorithmApi";
 
 
+// todo: fetch existing result
 export const algorithmSlice = createSlice({
   name: "algorithm",
   initialState: {

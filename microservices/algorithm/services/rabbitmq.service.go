@@ -82,6 +82,7 @@ func ListenForFormulas(
 		return err
 	}
 
+	// to do, insert edited status to metadata
 	log.Println("Listening for formulas...")
 	go func() {
 		for msg := range msgs {

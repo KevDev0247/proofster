@@ -38,8 +38,8 @@ func GetClauses(
 	if len(clauses) != 0 {
 		groupedClauses = append(groupedClauses, db.StepReturn{
 			Steps: clauses,
-			Description: utils.CreateStageDescription(8),
-			StageName: utils.CreateStageName(8),
+			Description: utils.CreateStageDescription(9),
+			StageName: utils.CreateStageName(9),
 		})		
 	}
 	

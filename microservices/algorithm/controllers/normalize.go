@@ -43,6 +43,7 @@ func Normalize(c *gin.Context) {
 	response.SendResponse(c)
 }
 
+// refactor into steps controller
 func GetSteps(c *gin.Context) {
 	response := &models.Response{
 		StatusCode: http.StatusBadRequest,
