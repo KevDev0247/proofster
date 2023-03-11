@@ -13,7 +13,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import { createFormula, getFormulas, updateFormula } from '../../network/formulaApi';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
-import { setDisableButton } from '../../slices/globalSlice';
+import { setArgumentEdited, setDisableButton } from '../../slices/globalSlice';
 import { readableToInfix } from '../../utils/infixConverter';
 import FormulaKeyboard from './FormulaKeyboard';
 
@@ -84,6 +84,7 @@ export default function FormulaEditor() {
           workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
           stage: 0
         }));
+        dispatch(setArgumentEdited(true));
       })
       .catch((error: PayloadAction<string>) => {
         toast.error(error.payload);

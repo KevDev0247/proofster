@@ -4,7 +4,7 @@ export interface IFormulaResult {
 }
 
 export interface INormalized {
-  stage: string,
-  formulas: IFormulaResult[],
+  stage_name: string,
+  steps: IFormulaResult[],
   description: string
 }

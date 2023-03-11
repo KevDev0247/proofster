@@ -3,6 +3,7 @@ import { createSlice, current } from "@reduxjs/toolkit";
 import { getResults, normalize } from "../network/algorithmApi";
 
 
+// todo: fetch existing result
 export const algorithmSlice = createSlice({
   name: "algorithm",
   initialState: {
@@ -12,36 +13,56 @@ export const algorithmSlice = createSlice({
       status: "",
       error: "",
       selectedStage: "",
-      currentStage: 0,
-      completedStage: 0,
+      normalizeCurrent: 0,
+      normalizationCompleted: 0,
+      preprocessCurrent: 0,
+      preprocessingCompleted: 0,
       stopStage: 9,
-      cachedResults: [],
+      normalizedCached: [],
+      preprocessedCached: [],
       renderResults: []
     },
   },
   reducers: {
-    nextStage: (state) => {
-      if (state.normalize.currentStage < 9) {
-        state.normalize.currentStage += 1;
-        var currStage = state.normalize.currentStage;
-        var cachedResults = [...current(state.normalize.cachedResults)]
+    nextNormalizeStage: (state) => {
+      if (state.normalize.normalizeCurrent < 9) {
+        state.normalize.normalizeCurrent += 1;
+        var currStage = state.normalize.normalizeCurrent;
+        var cachedResults = [...current(state.normalize.normalizedCached)]
         
         state.normalize.renderResults = [
           ...state.normalize.renderResults,
           cachedResults[currStage - 1]
-        ]        
+        ]
+      }
+    },
+    nextPreprocessStage: (state) => {
+      if (state.normalize.preprocessCurrent < 9) {
+        state.normalize.preprocessCurrent += 1;
+        var currStage = state.normalize.preprocessCurrent;
+        var cachedResults = [...current(state.normalize.preprocessedCached)]
+        
+        state.normalize.renderResults = [
+          ...state.normalize.renderResults,
+          cachedResults[currStage - 1]
+        ]
       }
     },
     resetStage: (state) => {
-      state.normalize.currentStage = 0;
+      state.normalize.normalizeCurrent = 0;
+      state.normalize.preprocessCurrent = 0;
       state.normalize.renderResults = [];
+      state.normalize.selectedStage = "";
     },
     clearCache: (state) => {
-      state.normalize.cachedResults = [];
+      state.normalize.normalizedCached = [];
       state.normalize.renderResults = [];
+      state.normalize.selectedStage = "";
       state.normalize.stopStage = 9;
-      state.normalize.completedStage = 0;
-      state.normalize.currentStage = 0;
+      state.normalize.normalizationCompleted = 0;
+      state.normalize.normalizeCurrent = 0;
+      state.normalize.preprocessingCompleted = 0;
+      state.normalize.preprocessCurrent = 0;
       state.normalize.status = "";
       state.normalize.error = "";
     },
@@ -57,9 +78,12 @@ export const algorithmSlice = createSlice({
     setStopStage: (state, action) => {
       state.normalize.stopStage = action.payload;
     },
-    setCompletedStage: (state) => {
-      state.normalize.completedStage += 3;
-    }
+    setNormalizationCompleted: (state) => {
+      state.normalize.normalizationCompleted += 3;
+    },
+    setPreprocessingCompleted: (state) => {
+      state.normalize.preprocessingCompleted += 3;
+    },
   },
   extraReducers: {
     // Async reducers, mostly calling backend api endpoints
@@ -84,7 +108,12 @@ export const algorithmSlice = createSlice({
     [getResults.fulfilled.type]: (state, action) => {
       state.normalize.status = "success";
       state.normalize.isLoading = false;
-      state.normalize.cachedResults = action.payload
+
+      console.log(action.payload)
+      if (action.payload.algorithm === 0)
+        state.normalize.normalizedCached = action.payload.results
+      else
+        state.normalize.preprocessedCached = action.payload.results
     },
     [getResults.rejected.type]: (state, action) => {
       state.normalize.status = "failed";
@@ -94,14 +123,16 @@ export const algorithmSlice = createSlice({
 });
 
 export const {
-  nextStage, 
+  nextNormalizeStage, 
+  nextPreprocessStage,
   resetStage,
   clearCache,
   setShowValidation,
   setError,
   setSelectedStage,
   setStopStage, 
-  setCompletedStage
+  setNormalizationCompleted,
+  setPreprocessingCompleted,
 } = algorithmSlice.actions;
 
 export default algorithmSlice.reducer;

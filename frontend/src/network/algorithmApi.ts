@@ -7,10 +7,14 @@ import { INormalized } from "../models/normalized";
 interface INormalizeRequest {
   stage: number;
   workspace_id: string;
-  is_proof: boolean;
+  algorithm: number;
+}
+interface IGetStepsRequest {
+  workspaceId: string;
+  algorithm: number;
 }
 type NormalizeThunk = AsyncThunk<any, INormalizeRequest, {}>;
-type GetResultsThunk = AsyncThunk<INormalized[], string, {}>;
+type GetResultsThunk = AsyncThunk<any, IGetStepsRequest, {}>;
 
 
 export const normalize: NormalizeThunk = createAsyncThunk(
@@ -29,10 +33,19 @@ export const normalize: NormalizeThunk = createAsyncThunk(
 
 export const getResults: GetResultsThunk = createAsyncThunk(
   "normalizer/fetch",
-  async (workspaceId: string) => {
+  async (request: IGetStepsRequest) => {
     try {
-      const response = await FORMULA_API.get(`domain/results?workspace_id=${workspaceId}`);
-      return response.data.results;
+      const response = await NORMALIZER_API.get("", {
+        params: {
+          workspace_id: request.workspaceId,
+          algorithm: request.algorithm,
+        },
+      });
+      console.log(response)
+      return {
+        results: response.data.data.results,
+        algorithm: request.algorithm
+      };
     } catch (error) {
       console.log(error);
     }

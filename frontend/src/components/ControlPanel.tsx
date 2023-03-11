@@ -10,9 +10,10 @@ import FormulaDisplay from './formula/FormulaDisplay';
 import AlgorithmControl from './algorithm/AlgorithmControl';
 import AlgorithmAlerts from './algorithm/AlgorithmAlerts';
 import { 
-  clearCache, setStopStage, 
+  setStopStage, 
   setShowValidation, 
-  setSelectedStage
+  setSelectedStage,
+  resetStage
 } from '../slices/algorithmSlice';
 import {
   prompt, nnfSubtitle, pnfSubtitle,
@@ -36,6 +37,9 @@ export default function ControlPanel() {
   const dispatch: AppDispatch = useAppDispatch();
   const theme: Theme = useTheme();
 
+  const argumentEdited: boolean = useSelector(
+    (state: RootState) => state.global.argumentEdited
+  )
   const showValidation: boolean = useSelector(
     (state: RootState) => state.algorithm.normalize.showValidation
   );
@@ -47,8 +51,9 @@ export default function ControlPanel() {
       dispatch(setShowValidation(false));
   }, [selectedStage]);
 
+  // refactor selector into component, a control panel without FormulaDisplay
   const handleOptionChange = (event: SelectChangeEvent): void => {
-    dispatch(clearCache());
+    dispatch(resetStage());
     dispatch(setSelectedStage(event.target.value));
     dispatch(setStopStage(parseInt(event.target.value)));
   };

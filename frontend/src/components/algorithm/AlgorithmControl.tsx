@@ -7,11 +7,12 @@ import { Alert, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
 import { getResults, normalize } from '../../network/algorithmApi';
-import { setShowCacheWarning, setShowError } from '../../slices/globalSlice';
-import { setShowValidation } from '../../slices/algorithmSlice';
+import { setArgumentEdited, setShowCacheWarning, setShowError } from '../../slices/globalSlice';
+import { nextPreprocessStage, setPreprocessingCompleted, setShowValidation } from '../../slices/algorithmSlice';
 import { argumentEmptyError } from '../../constants';
 import {
-  nextStage, resetStage, clearCache, setError, setCompletedStage
+  nextNormalizeStage, resetStage, clearCache, setError,
+  setNormalizationCompleted,
 } from '../../slices/algorithmSlice';
 
 
@@ -28,33 +29,56 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   const argumentEmpty: boolean = useSelector(
     (state: RootState) => state.global.argumentEmpty
   );
+  const argumentEdited: boolean = useSelector(
+    (state: RootState) => state.global.argumentEdited
+  );
   const isLoading: boolean = useSelector(
     (state: RootState) => state.algorithm.normalize.isLoading
   );
   const selectedStage: string = useSelector(
     (state: RootState) => state.algorithm.normalize.selectedStage
   );
-  const completedStage: number = useSelector(
-    (state: RootState) => state.algorithm.normalize.completedStage
+  const normalizationCompleted: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.normalizationCompleted
   );
-  const currentStage: number = useSelector(
-    (state: RootState) => state.algorithm.normalize.currentStage
+  const preprocessingCompleted: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.preprocessingCompleted
+  );
+  const normalizeCurrent: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.normalizeCurrent
+  );
+  const preprocessCurrent: number = useSelector(
+    (state: RootState) => state.algorithm.normalize.preprocessCurrent
   );
   const stopStage: number = useSelector(
     (state: RootState) => state.algorithm.normalize.stopStage
   );
 
 
+  // todo: set flags to not normalize again
+  // todo: workspace feature
   const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
+    const selectedAlgorithm = selectedStage === '9' ? 1 : 0
+
+    const transpileAction = normalize({
+      stage: -1,
+      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+      algorithm: 0,
+    });
     const normalizeAction = normalize({
-      stage: completedStage,
-      workspace_id: '216da6d9-aead-4970-9465-69bfb55d4956',
-      is_proof: parseInt(selectedStage) == 9,
+      stage: normalizationCompleted,
+      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+      algorithm: selectedAlgorithm,
+    });
+    const preprocessAction = normalize({
+      stage: preprocessingCompleted,
+      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+      algorithm: selectedAlgorithm,
     });
 
-    if (isInitialStep && selectedStage === '') {
+    if (isInitialStep && selectedStage === '' && !argumentEdited) {
       dispatch(setShowValidation(true));
       return;
     }
@@ -62,21 +86,56 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       dispatch(setError(argumentEmptyError));
       return;
     }
-    if (currentStage === completedStage)
+
+    if (argumentEdited) {
+      dispatch(transpileAction)
+        .unwrap()
+        .then((response: PayloadAction<string>) => {
+          toast.success(response.payload);
+          dispatch(setArgumentEdited(false));
+        })
+        .catch((error: PayloadAction<string>) => {
+          toast.error(error.payload);
+        });;
+      return;
+    }
+    if (normalizeCurrent === normalizationCompleted && selectedAlgorithm === 0)
       dispatch(normalizeAction)
         .unwrap()
         .then((response: PayloadAction<string>) => {
           toast.success(response.payload);
-          dispatch(setCompletedStage())
-          dispatch(getResults('216da6d9-aead-4970-9465-69bfb55d4956')).then(() => {
-            dispatch(nextStage());
+          dispatch(setNormalizationCompleted())
+          dispatch(getResults({
+            workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
+            algorithm: 0
+          })).then(() => {
+            dispatch(nextNormalizeStage());
+          });
+        })
+        .catch((error: PayloadAction<string>) => {
+          toast.error(error.payload);
+        });
+    else if (preprocessCurrent === preprocessingCompleted && selectedAlgorithm === 1)
+      dispatch(preprocessAction)
+        .unwrap()
+        .then((response: PayloadAction<string>) => {
+          toast.success(response.payload);
+          dispatch(setPreprocessingCompleted())
+          dispatch(getResults({
+            workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
+            algorithm: 1
+          })).then(() => {
+            dispatch(nextPreprocessStage());
           });
         })
         .catch((error: PayloadAction<string>) => {
           toast.error(error.payload);
         });
     else
-      dispatch(nextStage());
+      if (selectedAlgorithm === 0)
+        dispatch(nextNormalizeStage());
+      else
+        dispatch(nextPreprocessStage());
   }
 
   const clear = (): void => {
@@ -94,7 +153,14 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
   return (
     <>
-      {(currentStage != stopStage || currentStage == 0) ? (
+      {((normalizeCurrent === stopStage && normalizeCurrent != 0) ||
+        (preprocessCurrent === stopStage && preprocessCurrent != 0)) ? (
+        <Grid item xs={5.5} sm={6} md={6} container>
+          <Alert severity="success">
+            Algorithm Completed!
+          </Alert>
+        </Grid>
+      ) :
         <Grid item xs={5.5} md={6} container>
           <Button
             variant="contained"
@@ -106,14 +172,11 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
               <CircularProgress color="secondary" size={20} />
             }
           >
-            {isInitialStep ? 'Execute' : 'NEXT'}
+            {argumentEdited ?
+              'Transpile'
+              : isInitialStep ? 'Execute' : 'Next'
+            }
           </Button>
-        </Grid>
-      ) :
-        <Grid item xs={5.5} sm={6} md={6} container>
-          <Alert severity="success">
-            Algorithm Completed!
-          </Alert>
         </Grid>
       }
       {isSmDown ? (

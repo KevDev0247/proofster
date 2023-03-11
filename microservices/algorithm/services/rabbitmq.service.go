@@ -1,9 +1,11 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
+	db "proofster/algorithm/models/db"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -30,11 +32,11 @@ func ListenForFormulas(
 	// Declare a queue
 	q, err := ch.QueueDeclare(
 		"formulas", // name
-		true,      // durable
-		false,     // delete when unused
-		false,     // exclusive
-		false,     // no-wait
-		nil,       // arguments
+		true,       // durable
+		false,      // delete when unused
+		false,      // exclusive
+		false,      // no-wait
+		nil,        // arguments
 	)
 	if err != nil {
 		return err
@@ -43,12 +45,12 @@ func ListenForFormulas(
 	// Declare an exchange
 	err = ch.ExchangeDeclare(
 		"formulas", // name
-		"fanout",  // type
-		true,      // durable
-		false,     // auto-deleted
-		false,     // internal
-		false,     // no-wait
-		nil,       // arguments
+		"fanout",   // type
+		true,       // durable
+		false,      // auto-deleted
+		false,      // internal
+		false,      // no-wait
+		nil,        // arguments
 	)
 	if err != nil {
 		return err
@@ -56,8 +58,8 @@ func ListenForFormulas(
 
 	// Bind the queue to the exchange
 	err = ch.QueueBind(
-		q.Name,    // queue name
-		"",        // routing key
+		q.Name,     // queue name
+		"",         // routing key
 		"formulas", // exchange
 		false,
 		nil,
@@ -80,21 +82,23 @@ func ListenForFormulas(
 		return err
 	}
 
+	// to do, insert edited status to metadata
 	log.Println("Listening for formulas...")
+	go func() {
+		for msg := range msgs {
+			log.Printf(" > Received message: %s\n", msg.Body)
 
-	log.Println(msgs)
-
-	// go func() {
-	// 	for d := range msgs {
-	// 		var formulas []Formula
-	// 		if err := json.Unmarshal(d.Body, &formulas); err != nil {
-	// 			log.Printf("Failed to unmarshal message: %v", err)
-	// 			continue
-	// 		}
-	// 		log.Printf("Received formulas: %v", formulas)
-	// 		formulaService.UpdateFormulas(formulas)
-	// 	}
-	// }()
+			var formulas []db.Formula
+			err := json.Unmarshal([]byte(msg.Body), &formulas)
+			if err != nil {
+				log.Printf("errors occurred while unpacking json %s\n", err)
+			}
+			
+			if len(formulas) > 0 {
+				SaveBulkFormula(formulas[0].WorkspaceId, formulas)
+			}
+		}
+	}()
 
 	return nil
 }
