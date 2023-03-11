@@ -2,12 +2,9 @@ package services
 
 import (
 	"context"
-	"errors"
-	models "proofster/algorithm/models/db"
 	"github.com/go-redis/cache/v8"
 	"github.com/go-redis/redis/v8"
 	"github.com/kamva/mgm/v3"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"sync"
@@ -61,32 +58,3 @@ func CheckRedisConnection() {
 	log.Println("Connected to Redis!")
 }
 
-func getNoteCacheKey(userId primitive.ObjectID, noteId primitive.ObjectID) string {
-	return "req:cache:note:" + userId.Hex() + ":" + noteId.Hex()
-}
-
-func CacheOneNote(userId primitive.ObjectID, note *models.Note) {
-	if !Config.UseRedis {
-		return
-	}
-
-	noteCacheKey := getNoteCacheKey(userId, note.ID)
-
-	_ = GetRedisCache().Set(&cache.Item{
-		Ctx:   context.TODO(),
-		Key:   noteCacheKey,
-		Value: note,
-		TTL:   time.Minute,
-	})
-}
-
-func GetNoteFromCache(userId primitive.ObjectID, noteId primitive.ObjectID) (*models.Note, error) {
-	if !Config.UseRedis {
-		return nil, errors.New("no redis client, set USE_REDIS in .env")
-	}
-
-	note := &models.Note{}
-	noteCacheKey := getNoteCacheKey(userId, noteId)
-	err := GetRedisCache().Get(context.TODO(), noteCacheKey, note)
-	return note, err
-}
