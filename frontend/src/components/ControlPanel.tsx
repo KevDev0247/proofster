@@ -36,10 +36,7 @@ const options: Option[] = [
 export default function ControlPanel() {
   const dispatch: AppDispatch = useAppDispatch();
   const theme: Theme = useTheme();
-
-  const argumentEdited: boolean = useSelector(
-    (state: RootState) => state.global.argumentEdited
-  )
+  
   const showValidation: boolean = useSelector(
     (state: RootState) => state.algorithm.normalize.showValidation
   );
@@ -50,8 +47,7 @@ export default function ControlPanel() {
     if (selectedStage != '')
       dispatch(setShowValidation(false));
   }, [selectedStage]);
-
-  // refactor selector into component, a control panel without FormulaDisplay
+  
   const handleOptionChange = (event: SelectChangeEvent): void => {
     dispatch(resetStage());
     dispatch(setSelectedStage(event.target.value));

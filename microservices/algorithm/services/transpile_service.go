@@ -2,15 +2,16 @@ package services
 
 import (
 	"errors"
-	"sync"
-	"github.com/kamva/mgm/v3"
-	"go.mongodb.org/mongo-driver/bson"
 	db "proofster/algorithm/models/db"
 	network "proofster/algorithm/network"
-	repositories "proofster/algorithm/repositories"	
+	repositories "proofster/algorithm/repositories"
+	"sync"
+
+	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
-func CallTranspiler(
+func Transpile(
 	workspaceId string,
 ) error {
 	formulas := []*db.Formula{}
@@ -26,7 +27,7 @@ func CallTranspiler(
 
 	for _, formula := range formulas {
 		wg.Add(1)
-		go network.Transpile(
+		go network.Call_Transpiler(
 			Config.TranspilerUrl,
 			formula,
 			resultChan,

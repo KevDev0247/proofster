@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func Transpile(
+func Call_Transpiler(
 	transpilerUrl string,
 	formula *db.Formula,
 	resultChan chan<- map[string]interface{},

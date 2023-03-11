@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"net/http"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	models "proofster/algorithm/models"
 	services "proofster/algorithm/services"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func Normalize(c *gin.Context) {
@@ -18,7 +19,7 @@ func Normalize(c *gin.Context) {
 	_ = c.ShouldBindBodyWith(&requestBody, binding.JSON)
 
 	if requestBody.Stage == -1 {
-		err := services.CallTranspiler(requestBody.WorkspaceId)
+		err := services.Transpile(requestBody.WorkspaceId)
 		if err != nil {
 			response.Message = err.Error()
 			response.SendResponse(c)
