@@ -1,62 +1,14 @@
 package services
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"log"
-	"net/http"
-	db "proofster/algorithm/models/db"
-	"proofster/algorithm/utils"
 	"sync"
+	db "proofster/algorithm/models/db"
+	repositories "proofster/algorithm/repositories"
+	network "proofster/algorithm/network"
+	utils "proofster/algorithm/utils"
 )
-
-func executeAlgorithm(
-	stage int,
-	body map[string]interface{},
-	resultChan chan<- map[string]interface{},
-	errChan chan<- error,
-	wg *sync.WaitGroup,
-) {
-	defer wg.Done()
-
-	algorithmUrl := ""
-	switch stage {
-	case 0:
-		algorithmUrl = Config.NNFUrl
-	case 3:
-		algorithmUrl = Config.PNFUrl
-	case 6:
-		algorithmUrl = Config.CNFUrl
-	default:
-		algorithmUrl = ""
-	}
-
-	payload, err := json.Marshal(body)
-	if err != nil {
-		errChan <- err
-		return
-	}
-
-	resp, err := http.Post(
-		algorithmUrl,
-		"application/json",
-		bytes.NewBuffer(payload),
-	)
-	if err != nil {
-		errChan <- err
-		return
-	}
-	defer resp.Body.Close()
-
-	var result map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		errChan <- err
-		return
-	}
-
-	resultChan <- result
-}
 
 func Normalize(
 	stage int,
@@ -70,7 +22,23 @@ func Normalize(
 	stepTwoStringKey := utils.CreateStepTwoKey(stage, "string")
 	stepThreeStringKey := utils.CreateStepThreeKey(stage, "string")
 
-	startSteps, err := GetStepsByStageAndAlgorithm(workspaceId, stage, algorithm)
+	algorithmUrl := ""
+	switch stage {
+	case 0:
+		algorithmUrl = Config.NNFUrl
+	case 3:
+		algorithmUrl = Config.PNFUrl
+	case 6:
+		algorithmUrl = Config.CNFUrl
+	default:
+		algorithmUrl = ""
+	}
+
+	startSteps, err := repositories.GetStepsByStageAndAlgorithm(
+		workspaceId,
+		stage,
+		algorithm,
+	)
 	if err != nil {
 		return err
 	}
@@ -103,10 +71,17 @@ func Normalize(
 	var wg sync.WaitGroup
 	wg.Add(1)
 
-	go executeAlgorithm(stage, map[string]interface{}{
-		"is_proof":      isProof,
-		"argument_json": argumentJson,
-	}, resultChan, errChan, &wg)
+	go network.CallAlgorithm(
+		stage,
+		algorithmUrl,
+		map[string]interface{}{
+			"is_proof":      isProof,
+			"argument_json": argumentJson,
+		},
+		resultChan,
+		errChan,
+		&wg,
+	)
 
 	wg.Wait()
 	close(resultChan)
@@ -131,7 +106,7 @@ func Normalize(
 		stepOneJsons = utils.ConvertToMapSlice(result[stepOneJsonKey].([]interface{}))
 		stepOneStrings = utils.ConvertToStringSlice(result[stepOneStringKey].([]interface{}))
 	}
-	err = SaveBulkSteps(
+	err = repositories.SaveBulkSteps(
 		ids,
 		stepOneStrings,
 		stepOneJsons,
@@ -149,7 +124,7 @@ func Normalize(
 	stage++
 	stepTwoJsons := utils.ConvertToMapSlice(result[stepTwoJsonKey].([]interface{}))
 	stepTwoStrings := utils.ConvertToStringSlice(result[stepTwoStringKey].([]interface{}))
-	err = SaveBulkSteps(
+	err = repositories.SaveBulkSteps(
 		ids,
 		stepTwoStrings,
 		stepTwoJsons,
@@ -168,7 +143,7 @@ func Normalize(
 	if stage == 9 {
 		stepThreeJsons := result[stepThreeJsonKey].([]interface{})
 		stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
-		err = SaveBulkClauses(
+		err = repositories.SaveBulkClauses(
 			ids,
 			stepThreeStrings,
 			stepThreeJsons,
@@ -185,7 +160,7 @@ func Normalize(
 	} else {
 		stepThreeJsons := utils.ConvertToMapSlice(result[stepThreeJsonKey].([]interface{}))
 		stepThreeStrings := utils.ConvertToStringSlice(result[stepThreeStringKey].([]interface{}))
-		err = SaveBulkSteps(
+		err = repositories.SaveBulkSteps(
 			ids,
 			stepThreeStrings,
 			stepThreeJsons,

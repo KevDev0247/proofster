@@ -2,11 +2,11 @@ package controllers
 
 import (
 	"net/http"
-	"proofster/algorithm/models"
-	"proofster/algorithm/services"
-
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	models "proofster/algorithm/models"
+	services "proofster/algorithm/services"
+	repositories "proofster/algorithm/repositories"
 )
 
 func Normalize(c *gin.Context) {
@@ -19,7 +19,7 @@ func Normalize(c *gin.Context) {
 	_ = c.ShouldBindBodyWith(&requestBody, binding.JSON)
 
 	if requestBody.Stage == -1 {
-		err := services.Transpile(requestBody.WorkspaceId)
+		err := services.CallTranspiler(requestBody.WorkspaceId)
 		if err != nil {
 			response.Message = err.Error()
 			response.SendResponse(c)
@@ -59,7 +59,7 @@ func GetSteps(c *gin.Context) {
 		algorithm = 0
 	}
 
-	clauses, err := services.GetClauses(
+	clauses, err := repositories.GetClauses(
 		workspaceId, algorithm,
 	)
 	if err != nil {
@@ -69,7 +69,7 @@ func GetSteps(c *gin.Context) {
 	}
 
 	if algorithm == 0 {
-		procedure, err := services.GetNormalized(workspaceId)
+		procedure, err := repositories.GetNormalized(workspaceId)
 		if err != nil {
 			response.Message = err.Error()
 			response.SendResponse(c)
@@ -89,7 +89,7 @@ func GetSteps(c *gin.Context) {
 		response.Success = true
 		response.SendResponse(c)
 	} else {
-		procedure, err := services.GetPreprocessed(workspaceId)
+		procedure, err := repositories.GetPreprocessed(workspaceId)
 		if err != nil {
 			response.Message = err.Error()
 			response.SendResponse(c)

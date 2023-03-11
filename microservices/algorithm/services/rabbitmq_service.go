@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-
-	db "proofster/algorithm/models/db"
 	amqp "github.com/rabbitmq/amqp091-go"
+	db "proofster/algorithm/models/db"
+	repositories "proofster/algorithm/repositories"
 )
 
 func InitRabbitMQ(uri string) (*amqp.Connection, *amqp.Channel, error) {
@@ -95,7 +95,7 @@ func ListenForFormulas(
 			}
 			
 			if len(formulas) > 0 {
-				SaveBulkFormula(formulas[0].WorkspaceId, formulas)
+				repositories.SaveBulkFormula(formulas[0].WorkspaceId, formulas)
 			}
 		}
 	}()
