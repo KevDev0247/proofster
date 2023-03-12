@@ -38,9 +38,6 @@ export default function FormulaEditor() {
   const selected: IFormula = useSelector(
     (state: RootState) => state.formula.save.selected
   );
-  const inputMode: string = useSelector(
-    (state: RootState) => state.formula.save.inputMode
-  )
 
   const formulaInputRef = useRef<HTMLInputElement>(null);
 
@@ -69,13 +66,13 @@ export default function FormulaEditor() {
     }
 
     var formulaInput = selected.formula_input
-    if (inputMode === "Infix") {
+    if (selected.input_mode === "Infix") {
       formulaInput = infixToEncoded(selected.formula_input)
     }
     var formulaToSubmit: IFormula = {
       ...selected,
       formula_input: formulaInput,
-      input_mode: inputMode,
+      input_mode: selected.input_mode,
     }
 
     const action =

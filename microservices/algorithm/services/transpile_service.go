@@ -27,7 +27,7 @@ func Transpile(
 
 	for _, formula := range formulas {
 		wg.Add(1)
-		go network.Call_Transpiler(
+		go network.CallTranspiler(
 			Config.TranspilerUrl,
 			formula,
 			resultChan,

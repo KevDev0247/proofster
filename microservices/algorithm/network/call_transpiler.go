@@ -8,7 +8,7 @@ import (
 	"sync"
 )
 
-func Call_Transpiler(
+func CallTranspiler(
 	transpilerUrl string,
 	formula *db.Formula,
 	resultChan chan<- map[string]interface{},
@@ -18,7 +18,7 @@ func Call_Transpiler(
 
 	payload, err := json.Marshal(map[string]string{
 		"formula_input": formula.FormulaInput,
-		"input_mode": formula.InputMode,
+		"input_mode":    formula.InputMode,
 	})
 	if err != nil {
 		resultChan <- map[string]interface{}{

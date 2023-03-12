@@ -22,7 +22,6 @@ export const formulaSlice = createSlice({
       isSaving: false,
       isDeleting: false,
       isUpdated: false,
-      inputMode: "Infix",
       selected: {
         id: 0,
         name: "",
@@ -38,9 +37,6 @@ export const formulaSlice = createSlice({
     },
   },
   reducers: {
-    setInputMode: (state, action) => {
-      state.save.inputMode = action.payload;
-    },
     setSelected: (state, action) => {
       state.save.selected = action.payload;
     },
@@ -111,7 +107,6 @@ export const formulaSlice = createSlice({
 });
 
 export const {
-  setInputMode, 
   setSelected, 
   setShowValidation 
 } = formulaSlice.actions;

@@ -2,7 +2,7 @@ import { Grid, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { IFormula } from '../../models/formula';
-import { setInputMode, setSelected } from '../../slices/formulaSlice';
+import { setSelected } from '../../slices/formulaSlice';
 import { AppDispatch, RootState, useAppDispatch } from '../../store';
 
 
@@ -40,10 +40,7 @@ export default function FormulaKeyboard(
   const { formulaInfixRef, isSmDown } = props;
 
   const dispatch: AppDispatch = useAppDispatch();
-
-  const inputMode: string = useSelector(
-    (state: RootState) => state.formula.save.inputMode
-  );
+  
   const selected: IFormula = useSelector(
     (state: RootState) => state.formula.save.selected
   );
@@ -69,7 +66,10 @@ export default function FormulaKeyboard(
     e: React.MouseEvent<HTMLElement, MouseEvent>,
     value: string,
   ): void => {
-    dispatch(setInputMode(value));
+    dispatch(setSelected({
+      ...selected,
+      input_mode: value,
+    }));
   }
 
   const handleKeyboardClick = (
@@ -103,7 +103,7 @@ export default function FormulaKeyboard(
       <Grid item xs={12} md={3.5}>
         <ToggleButtonGroup
           size="small"
-          value={inputMode}
+          value={selected.input_mode}
           onChange={handleInputModeSelection}
           aria-label="special symbol group one"
           exclusive
@@ -116,7 +116,7 @@ export default function FormulaKeyboard(
         </ToggleButtonGroup>
       </Grid>
       {
-        inputMode === "Infix" && (
+        selected.input_mode === "Infix" && (
           <>
             <Grid item xs={12} md={4}>
               {isSmDown ? (
