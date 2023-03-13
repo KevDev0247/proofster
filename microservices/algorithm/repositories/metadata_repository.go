@@ -16,7 +16,9 @@ func GetMetadataByWorkspace(
 	metadata := &db.MetaData{}
 
 	err := mgm.Coll(metadata).First(
-		bson.M{metadata.WorkspaceId: workspaceId},
+		bson.M{
+			"workspace_id": workspaceId,
+		},
 		metadata,
 	)
 	if err != nil {

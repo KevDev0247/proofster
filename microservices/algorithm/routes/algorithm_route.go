@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NormalizeRoute(router *gin.RouterGroup, handlers ...gin.HandlerFunc) {
+func AlgorithmRoute(router *gin.RouterGroup, handlers ...gin.HandlerFunc) {
 	normalize := router.Group("/normalize", handlers...)
 	{
 		normalize.POST(
@@ -16,6 +16,10 @@ func NormalizeRoute(router *gin.RouterGroup, handlers ...gin.HandlerFunc) {
 		normalize.GET(
 			"",
 			controllers.GetSteps,
+		)
+		normalize.GET(
+			"metadata",
+			controllers.GetMetadata,
 		)
 	}
 }

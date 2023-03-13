@@ -1,13 +1,14 @@
 package routes
 
 import (
+	"net/http"
 	"proofster/algorithm/middlewares"
 	"proofster/algorithm/models"
 	"proofster/algorithm/services"
+
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"net/http"
 )
 
 func New() *gin.Engine {
@@ -21,7 +22,7 @@ func New() *gin.Engine {
 	v1 := r.Group("/v1")
 	{
 		PingRoute(v1)
-		NormalizeRoute(v1)
+		AlgorithmRoute(v1)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

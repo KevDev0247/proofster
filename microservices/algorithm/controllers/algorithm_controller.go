@@ -4,7 +4,6 @@ import (
 	"net/http"
 	models "proofster/algorithm/models"
 	services "proofster/algorithm/services"
-
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 )
@@ -43,7 +42,6 @@ func Normalize(c *gin.Context) {
 	response.SendResponse(c)
 }
 
-// refactor into steps controller
 func GetSteps(c *gin.Context) {
 	response := &models.Response{
 		StatusCode: http.StatusBadRequest,
@@ -109,4 +107,27 @@ func GetSteps(c *gin.Context) {
 		response.Success = true
 		response.SendResponse(c)
 	}
+}
+
+func GetMetadata(c *gin.Context) {
+	response := &models.Response{
+		StatusCode: http.StatusBadRequest,
+		Success:    false,
+	}
+
+	workspaceId := c.Query("workspace_id")
+
+	metadata, err := services.GetMetadata(workspaceId)
+	if err != nil {
+		response.Message = err.Error()
+		response.SendResponse(c)
+		return
+	}
+
+	response.Data = gin.H{
+		"results": *metadata,
+	}
+	response.StatusCode = http.StatusOK
+	response.Success = true
+	response.SendResponse(c)
 }

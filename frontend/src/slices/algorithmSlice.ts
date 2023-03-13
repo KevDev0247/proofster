@@ -108,8 +108,7 @@ export const algorithmSlice = createSlice({
     [getResults.fulfilled.type]: (state, action) => {
       state.normalize.status = "success";
       state.normalize.isLoading = false;
-
-      console.log(action.payload)
+      
       if (action.payload.algorithm === 0)
         state.normalize.normalizedCached = action.payload.results
       else

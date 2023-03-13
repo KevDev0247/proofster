@@ -62,6 +62,10 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
     const selectedAlgorithm = selectedStage === '9' ? 1 : 0
 
+    const fetchAction = getResults({
+      workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
+      algorithm: 0
+    });
     const transpileAction = normalize({
       stage: -1,
       workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
