@@ -15,6 +15,7 @@ interface IGetStepsRequest {
 }
 type NormalizeThunk = AsyncThunk<any, INormalizeRequest, {}>;
 type GetResultsThunk = AsyncThunk<any, IGetStepsRequest, {}>;
+type GetMetadataThunk = AsyncThunk<any, string, {}>;
 
 
 export const normalize: NormalizeThunk = createAsyncThunk(
@@ -41,7 +42,6 @@ export const getResults: GetResultsThunk = createAsyncThunk(
           algorithm: request.algorithm,
         },
       });
-      console.log(response)
       return {
         results: response.data.data.results,
         algorithm: request.algorithm
@@ -52,23 +52,18 @@ export const getResults: GetResultsThunk = createAsyncThunk(
   }
 );
 
-// export const getMetaData: GetResultsThunk = createAsyncThunk(
-//   "algorithm/metadata",
-//   async (request: IGetStepsRequest) => {
-//     try {
-//       const response = await NORMALIZER_API.get("", {
-//         params: {
-//           workspace_id: request.workspaceId,
-//           algorithm: request.algorithm,
-//         },
-//       });
-//       console.log(response)
-//       return {
-//         results: response.data.data.results,
-//         algorithm: request.algorithm
-//       };
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// );
+export const getMetaData: GetMetadataThunk = createAsyncThunk(
+  "algorithm/metadata",
+  async (workspaceId: string) => {
+    try {
+      const response = await NORMALIZER_API.get("/metadata", {
+        params: {
+          workspace_id: workspaceId,
+        },
+      });
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);

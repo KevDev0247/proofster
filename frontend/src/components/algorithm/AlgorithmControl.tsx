@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
@@ -6,14 +6,23 @@ import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Alert, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
-import { getResults, normalize } from '../../network/algorithmApi';
-import { setArgumentEdited, setShowCacheWarning, setShowError } from '../../slices/globalSlice';
-import { nextPreprocessStage, setPreprocessingCompleted, setShowValidation } from '../../slices/algorithmSlice';
-import { argumentEmptyError } from '../../constants';
+import { getResults, getMetaData as getMetadata, normalize } from '../../network/algorithmApi';
+import { 
+  setArgumentEdited, 
+  setShowCacheWarning, 
+  setShowError 
+} from '../../slices/globalSlice';
+import { 
+  nextPreprocessStage, 
+  setPreprocessingCompleted as setPreprocessingCompletedStage, 
+  setShowValidation 
+} from '../../slices/algorithmSlice';
 import {
   nextNormalizeStage, resetStage, clearCache, setError,
-  setNormalizationCompleted,
+  setNormalizationCompleted as setNormalizationCompletedStage,
 } from '../../slices/algorithmSlice';
+import { argumentEmptyError } from '../../constants';
+import { IMetadata } from './../../models/metadata';
 
 
 export default function AlgorithmControl(props: { isInitialStep: boolean }) {
@@ -53,7 +62,13 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   const stopStage: number = useSelector(
     (state: RootState) => state.algorithm.normalize.stopStage
   );
+  const metadata: IMetadata = useSelector(
+    (state: RootState) => state.algorithm.metadata.value
+  );
 
+  useEffect(() => {
+    dispatch(getMetadata("216da6d9-aead-4970-9465-69bfb55d4956"));
+  }, []);
 
   // todo: set flags to not normalize again
   // todo: workspace feature
@@ -62,9 +77,10 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
     const selectedAlgorithm = selectedStage === '9' ? 1 : 0
 
-    const fetchAction = getResults({
+    const getMetadataAction = getMetadata("216da6d9-aead-4970-9465-69bfb55d4956");
+    const getStepsAction = getResults({
       workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
-      algorithm: 0
+      algorithm: selectedAlgorithm
     });
     const transpileAction = normalize({
       stage: -1,
@@ -91,6 +107,19 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
+    if (metadata.all_normalized && selectedAlgorithm == 0) {
+      dispatch(getStepsAction).then(() => {
+        dispatch(nextNormalizeStage());
+      });
+      return;
+    }
+    if (metadata.is_preprocessed && selectedAlgorithm == 1) {
+      dispatch(getStepsAction).then(() => {
+        dispatch(nextPreprocessStage());
+      });
+      return;
+    }    
+
     if (argumentEdited) {
       dispatch(transpileAction)
         .unwrap()
@@ -108,13 +137,11 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
         .unwrap()
         .then((response: PayloadAction<string>) => {
           toast.success(response.payload);
-          dispatch(setNormalizationCompleted())
-          dispatch(getResults({
-            workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
-            algorithm: 0
-          })).then(() => {
+          dispatch(setNormalizationCompletedStage())
+          dispatch(getStepsAction).then(() => {
             dispatch(nextNormalizeStage());
           });
+          dispatch(getMetadataAction);
         })
         .catch((error: PayloadAction<string>) => {
           toast.error(error.payload);
@@ -124,13 +151,11 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
         .unwrap()
         .then((response: PayloadAction<string>) => {
           toast.success(response.payload);
-          dispatch(setPreprocessingCompleted())
-          dispatch(getResults({
-            workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
-            algorithm: 1
-          })).then(() => {
+          dispatch(setPreprocessingCompletedStage())
+          dispatch(getStepsAction).then(() => {
             dispatch(nextPreprocessStage());
           });
+          dispatch(getMetadataAction);
         })
         .catch((error: PayloadAction<string>) => {
           toast.error(error.payload);
