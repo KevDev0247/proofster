@@ -3,7 +3,6 @@ package repositories
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	db "proofster/algorithm/models/db"
 
@@ -12,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// error handling, specify errors
 func GetPreprocessed(
     workspaceId string,
 ) ([]db.StepReturnItem, error) {
@@ -67,7 +67,7 @@ func GetStepsByStageAndAlgorithm(
 	stage int,
 	algorithm int,
 ) ([]db.Normalized, error) {
-	var steps []db.Normalized
+	steps := []db.Normalized{}
 
 	if algorithm == 0 {
 		err := mgm.Coll(&db.Normalized{}).SimpleFind(
@@ -143,7 +143,6 @@ func SaveBulkSteps(
 
 		_, err = mgm.Coll(&db.Normalized{}).InsertMany(context.Background(), toInsert)
 		if err != nil {
-			fmt.Println("InsertMany error:", err)
 			return errors.New("cannot save formulas")
 		}
 	} else {
@@ -179,7 +178,6 @@ func SaveBulkSteps(
 
 		_, err = mgm.Coll(&db.Preprocessed{}).InsertMany(context.Background(), toInsert)
 		if err != nil {
-			fmt.Println("InsertMany error:", err)
 			return errors.New("cannot save formulas")
 		}
 	}

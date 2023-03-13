@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"proofster/algorithm/models"
 	db "proofster/algorithm/models/db"
 	network "proofster/algorithm/network"
 	repositories "proofster/algorithm/repositories"
@@ -52,7 +53,7 @@ func Transpile(
 		}
 	}
 
-	repositories.SaveBulkSteps(
+	err = repositories.SaveBulkSteps(
 		ids,
 		results,
 		jsons,
@@ -63,8 +64,10 @@ func Transpile(
 		"Initial Step",
 		"Initial",
 	)
-
-	repositories.SaveBulkSteps(
+	if err != nil {
+		return errors.New("error saving transpiled results for preprocessing")
+	}
+	err = repositories.SaveBulkSteps(
 		ids,
 		results,
 		jsons,
@@ -75,6 +78,18 @@ func Transpile(
 		"Initial Step",
 		"Initial",
 	)
+	if err != nil {
+		return errors.New("error saving transpiled results for normalizing")
+	}
+
+	isTranspiled := true
+	err = repositories.UpdateMetadata(&models.MetadataRequest{
+		WorkspaceId: workspaceId,
+		IsTranspiled: &isTranspiled,
+	})
+	if err != nil {
+		return errors.New(err.Error())
+	}	
 
 	return nil
 }

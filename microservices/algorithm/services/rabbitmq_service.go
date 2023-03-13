@@ -3,10 +3,11 @@ package services
 import (
 	"encoding/json"
 	"fmt"
-	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	db "proofster/algorithm/models/db"
 	repositories "proofster/algorithm/repositories"
+
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type Incoming struct {
@@ -109,6 +110,16 @@ func ListenForFormulas(
 				)
 				if err != nil {
 					log.Printf("error saving formulas for workspace %s\n", err)
+				}
+
+				err := repositories.SaveMetadata(
+					data.WorkspaceId,
+					false,
+					false,
+					false,
+				)
+				if err != nil {
+					log.Printf("error adding metadata %s\n", err)
 				}
 			}
 		}

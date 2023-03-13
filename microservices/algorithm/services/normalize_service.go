@@ -3,11 +3,12 @@ package services
 import (
 	"errors"
 	"log"
-	"sync"
+	"proofster/algorithm/models"
 	db "proofster/algorithm/models/db"
-	repositories "proofster/algorithm/repositories"
 	network "proofster/algorithm/network"
+	repositories "proofster/algorithm/repositories"
 	utils "proofster/algorithm/utils"
+	"sync"
 )
 
 func Normalize(
@@ -174,6 +175,29 @@ func Normalize(
 		if err != nil {
 			return errors.New("error occurred during step three saving")
 		}
+	}
+
+	if stage == 9 {
+		if algorithm == 0 {
+			allNormalized := true
+			err := repositories.UpdateMetadata(&models.MetadataRequest{
+				WorkspaceId: workspaceId,
+				AllNormalized: &allNormalized,
+			})
+			if err != nil {
+				return errors.New("error occurred while updating metadata")
+			}
+		}
+		if algorithm == 1 {
+			isPreprocessed := true
+			err := repositories.UpdateMetadata(&models.MetadataRequest{
+				WorkspaceId: workspaceId,
+				IsPreprocessed: &isPreprocessed,
+			})
+			if err != nil {
+				return errors.New("error occurred while updating metadata")
+			}
+		}		
 	}
 
 	return nil

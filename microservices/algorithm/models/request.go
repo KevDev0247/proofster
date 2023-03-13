@@ -1,8 +1,9 @@
 package models
 
 import (
-	validation "github.com/go-ozzo/ozzo-validation"
 	"regexp"
+
+	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type RefreshRequest struct {
@@ -38,9 +39,8 @@ type NormalizeRequest struct {
 }
 
 type MetadataRequest struct {
-	WorkspaceId        string `json:"workspace_id"`
-	ArgumentTranspiled *bool   `json:"argument_saved,omitempty"`
-	CompletedStage     *int    `json:"completed_stage,omitempty"`
-	AllNormalized      *bool   `json:"all_normalized,omitempty"`
-	IsPreprocessed     *bool   `json:"is_preprocessed,omitempty"`
+	WorkspaceId    string `json:"workspace_id"`
+	IsTranspiled   *bool  `json:"is_transpiled,omitempty"`
+	AllNormalized  *bool  `json:"all_normalized,omitempty"`
+	IsPreprocessed *bool  `json:"is_preprocessed,omitempty"`
 }

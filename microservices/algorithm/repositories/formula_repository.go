@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"log"
 	"context"
 	"errors"
 	"github.com/kamva/mgm/v3"
@@ -37,9 +36,6 @@ func SaveBulkFormulas(
 		return errors.New("cannot get formulas")
 	}
 
-	log.Printf("%v", workspaceId)
-	log.Printf("%v", len(existing))
-
 	if len(existing) != 0 {
 		_, err := mgm.Coll(&db.Formula{}).DeleteMany(
 			context.Background(),
@@ -50,14 +46,10 @@ func SaveBulkFormulas(
 		}
 	}
 
-	log.Printf("%v", formulas)
-
 	toInsert := make([]interface{}, len(formulas))
 	for i := range formulas {
 		toInsert[i] = &formulas[i]
 	}
-
-	log.Printf("%v", toInsert)
 
 	if len(toInsert) != 0 {
 		_, err = mgm.Coll(&db.Formula{}).InsertMany(context.Background(), toInsert)
