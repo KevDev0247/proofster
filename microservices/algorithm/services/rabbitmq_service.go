@@ -3,11 +3,18 @@ package services
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	amqp "github.com/rabbitmq/amqp091-go"
+	"log"
 	db "proofster/algorithm/models/db"
 	repositories "proofster/algorithm/repositories"
 )
+
+type Incoming struct {
+	Data []struct {
+		WorkspaceId string       `json:"workspace_id"`
+		Formulas    []db.Formula `json:"formulas"`
+	} `json:"data"`
+}
 
 func InitRabbitMQ(uri string) (*amqp.Connection, *amqp.Channel, error) {
 	conn, err := amqp.Dial(uri)
@@ -88,15 +95,21 @@ func ListenForFormulas(
 		for msg := range msgs {
 			log.Printf(" > Received message: %s\n", msg.Body)
 
-			formulas := []db.Formula{}
-			err := json.Unmarshal([]byte(msg.Body), &formulas)
+			incoming := Incoming{}
+			err := json.Unmarshal([]byte(msg.Body), &incoming)
 			if err != nil {
 				log.Printf("errors occurred while unpacking json %s\n", err)
+				continue
 			}
-			
-			// need to fix not deleting bug by refactor into a service
-			if len(formulas) > 0 {
-				repositories.SaveBulkFormula(formulas[0].WorkspaceId, formulas)
+
+			for _, data := range incoming.Data {
+				err = repositories.SaveBulkFormulas(
+					data.WorkspaceId,
+					data.Formulas,
+				)
+				if err != nil {
+					log.Printf("error saving formulas for workspace %s\n", err)
+				}
 			}
 		}
 	}()

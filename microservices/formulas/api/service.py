@@ -4,14 +4,13 @@ import json
 import os
 import uuid
 from api.serializers import FormulaSerializer
+from api.models import Formula
 
 from dotenv import load_dotenv
-
-from api.models import Formula
 load_dotenv()
 
     
-def sync_formulas(workspace_id: int):
+def sync_formulas(workspace_id):
     rabbitmq_uri = os.getenv('RABBITMQ_URI')
     params = pika.URLParameters(rabbitmq_uri)
     connection = pika.BlockingConnection(params)
@@ -21,9 +20,12 @@ def sync_formulas(workspace_id: int):
     channel.basic_publish(
         exchange='formulas', 
         routing_key='',
-        body=json.dumps(
-            FormulaSerializer.rabbitmq(formulas)
-        )
+        body=json.dumps({
+            "data": [{
+                "workspace_id": str(workspace_id),
+                "formulas": FormulaSerializer.rabbitmq(formulas)
+            }]
+        })
     )
 
 def get_formula(pk) -> Formula:
