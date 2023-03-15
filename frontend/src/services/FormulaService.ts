@@ -4,6 +4,7 @@ import { createFormula, deleteFormula, getFormulas, updateFormula } from "../net
 import { setSelected, setShowValidation } from "../slices/formulaSlice";
 import { setArgumentEdited } from "../slices/globalSlice";
 
+
 export const FormulaService = () => {
 
   const createOrUpdateFormula = createAsyncThunk(

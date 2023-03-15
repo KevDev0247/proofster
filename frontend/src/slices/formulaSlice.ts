@@ -1,14 +1,13 @@
 /* eslint-disable */
 import { createSlice } from "@reduxjs/toolkit";
-import { IFormula } from '../models/formula';
+import { IFormula } from "../models/formula";
 import {
-  getFormulas, 
+  getFormulas,
   createFormula,
   updateFormula,
-  deleteFormula 
+  deleteFormula,
 } from "../network/formulaApi";
-import { encodedToInfix } from "../utils/encodedToInfix";
-
+import { NotationService } from "../services/NotationService";
 
 export const formulaSlice = createSlice({
   name: "formula",
@@ -31,9 +30,9 @@ export const formulaSlice = createSlice({
         formula_result: "",
         is_conclusion: false,
         workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
-        stage: 0
+        stage: 0,
       },
-      showValidation: false
+      showValidation: false,
     },
   },
   reducers: {
@@ -53,13 +52,14 @@ export const formulaSlice = createSlice({
     [getFormulas.fulfilled.type]: (state, action) => {
       state.list.status = "success";
       state.list.isLoading = false;
-      
+
       state.list.values = action.payload
         ? action.payload.map((formula: IFormula) => ({
             ...formula,
-            formula_input: formula.input_mode === "Infix" 
-                            ? encodedToInfix(formula.formula_input) 
-                            : formula.formula_input
+            formula_input:
+              formula.input_mode === "Infix"
+                ? NotationService().encodedToInfix(formula.formula_input)
+                : formula.formula_input,
           }))
         : [];
     },
@@ -106,9 +106,6 @@ export const formulaSlice = createSlice({
   },
 });
 
-export const {
-  setSelected, 
-  setShowValidation 
-} = formulaSlice.actions;
+export const { setSelected, setShowValidation } = formulaSlice.actions;
 
 export default formulaSlice.reducer;

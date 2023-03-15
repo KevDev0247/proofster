@@ -12,8 +12,8 @@ import TextField from '@mui/material/TextField';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
 import { setDisableButton } from '../../slices/globalSlice';
 import FormulaKeyboard from './FormulaKeyboard';
-import { infixToEncoded } from '../../utils/infixToEncoded';
 import { FormulaService } from '../../services/FormulaService';
+import { NotationService } from '../../services/NotationService';
 
 
 export default function FormulaEditor() {
@@ -65,7 +65,7 @@ export default function FormulaEditor() {
 
     var formulaInput = selected.formula_input
     if (selected.input_mode === "Infix") {
-      formulaInput = infixToEncoded(selected.formula_input)
+      formulaInput = NotationService().infixToEncoded(selected.formula_input)
     }
     var formulaToSubmit: IFormula = {
       ...selected,
