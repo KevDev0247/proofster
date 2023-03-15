@@ -1,11 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { nextNormalizeStage, nextPreprocessStage } from "../slices/algorithmSlice";
+import { 
+  nextNormalizeStage, 
+  nextPreprocessStage 
+} from "../slices/algorithmSlice";
 import { getResults } from "../network/algorithmApi";
 
 export const StepsService = () => {
 
   const fetchStepsIfAvailable = createAsyncThunk(
-    "algorithm/service/fetch",
+    "algorithm/service/steps/fetch",
     async (selectedAlgorithm: number, thunkAPI) => {
       const { dispatch } = thunkAPI;
 

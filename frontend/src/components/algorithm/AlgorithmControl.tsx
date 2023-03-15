@@ -24,6 +24,7 @@ import {
 import { argumentEmptyError } from '../../constants';
 import { IMetadata } from './../../models/metadata';
 import { StepsService } from './../../services/StepsService';
+import { TranspilerService } from '../../services/TranspilerService';
 
 
 export default function AlgorithmControl(props: { isInitialStep: boolean }) {
@@ -71,7 +72,6 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
     dispatch(getMetadata("216da6d9-aead-4970-9465-69bfb55d4956"));
   }, []);
 
-  // todo: set flags to not normalize again
   // todo: workspace feature
   const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
@@ -82,11 +82,6 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
     const getStepsAction = getResults({
       workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
       algorithm: selectedAlgorithm
-    });
-    const transpileAction = normalize({
-      stage: -1,
-      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
-      algorithm: 0,
     });
     const normalizeAction = normalize({
       stage: normalizationCompleted,
@@ -108,23 +103,18 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
-    if (metadata.all_normalized || metadata.is_preprocessed) {
+    if ((metadata.all_normalized && selectedAlgorithm == 0) || 
+        (metadata.is_preprocessed && selectedAlgorithm == 1)) {
       dispatch(
         StepsService().fetchStepsIfAvailable(selectedAlgorithm)
-      )
+      );
       return;
     }
 
     if (argumentEdited) {
-      dispatch(transpileAction)
-        .unwrap()
-        .then((response: PayloadAction<string>) => {
-          toast.success(response.payload);
-          dispatch(setArgumentEdited(false));
-        })
-        .catch((error: PayloadAction<string>) => {
-          toast.error(error.payload);
-        });;
+      dispatch(
+        TranspilerService().transpile()
+      );
       return;
     }
     if (normalizeCurrent === normalizationCompleted && selectedAlgorithm === 0)
