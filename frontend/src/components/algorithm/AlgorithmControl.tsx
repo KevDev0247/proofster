@@ -23,6 +23,7 @@ import {
 } from '../../slices/algorithmSlice';
 import { argumentEmptyError } from '../../constants';
 import { IMetadata } from './../../models/metadata';
+import { StepsService } from './../../services/StepsService';
 
 
 export default function AlgorithmControl(props: { isInitialStep: boolean }) {
@@ -107,18 +108,12 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
-    if (metadata.all_normalized && selectedAlgorithm == 0) {
-      dispatch(getStepsAction).then(() => {
-        dispatch(nextNormalizeStage());
-      });
+    if (metadata.all_normalized || metadata.is_preprocessed) {
+      dispatch(
+        StepsService().fetchStepsIfAvailable(selectedAlgorithm)
+      )
       return;
     }
-    if (metadata.is_preprocessed && selectedAlgorithm == 1) {
-      dispatch(getStepsAction).then(() => {
-        dispatch(nextPreprocessStage());
-      });
-      return;
-    }    
 
     if (argumentEdited) {
       dispatch(transpileAction)
