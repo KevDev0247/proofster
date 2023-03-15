@@ -1,7 +1,7 @@
  /* eslint-disable */
 import { createSlice, current } from "@reduxjs/toolkit";
 import { getResults, normalize } from "../network/algorithmApi";
-import { getMetaData } from './../network/algorithmApi';
+import { getMetadata } from './../network/algorithmApi';
 
 
 // todo: fetch existing result
@@ -87,10 +87,10 @@ export const algorithmSlice = createSlice({
     setStopStage: (state, action) => {
       state.normalize.stopStage = action.payload;
     },
-    setNormalizationCompleted: (state) => {
+    setNormalizationFinishedStage: (state) => {
       state.normalize.normalizationCompleted += 3;
     },
-    setPreprocessingCompleted: (state) => {
+    setPreprocessingFinishedStage: (state) => {
       state.normalize.preprocessingCompleted += 3;
     },
   },
@@ -127,7 +127,7 @@ export const algorithmSlice = createSlice({
       state.normalize.status = "failed";
       state.normalize.isLoading = false;
     },
-    [getMetaData.fulfilled.type]: (state, action) => {
+    [getMetadata.fulfilled.type]: (state, action) => {
       state.metadata.value = action.payload.results;
     },
   },
@@ -142,8 +142,8 @@ export const {
   setError,
   setSelectedStage,
   setStopStage, 
-  setNormalizationCompleted,
-  setPreprocessingCompleted,
+  setNormalizationFinishedStage,
+  setPreprocessingFinishedStage,
 } = algorithmSlice.actions;
 
 export default algorithmSlice.reducer;

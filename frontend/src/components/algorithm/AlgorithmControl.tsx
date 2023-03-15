@@ -6,25 +6,25 @@ import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Alert, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
-import { getResults, getMetaData as getMetadata, normalize } from '../../network/algorithmApi';
+import { getResults, getMetadata, normalize } from '../../network/algorithmApi';
 import { 
-  setArgumentEdited, 
   setShowCacheWarning, 
   setShowError 
 } from '../../slices/globalSlice';
 import { 
   nextPreprocessStage, 
-  setPreprocessingCompleted as setPreprocessingCompletedStage, 
+  setPreprocessingFinishedStage, 
   setShowValidation 
 } from '../../slices/algorithmSlice';
 import {
   nextNormalizeStage, resetStage, clearCache, setError,
-  setNormalizationCompleted as setNormalizationCompletedStage,
+  setNormalizationFinishedStage,
 } from '../../slices/algorithmSlice';
 import { argumentEmptyError } from '../../constants';
 import { IMetadata } from './../../models/metadata';
 import { StepsService } from './../../services/StepsService';
 import { TranspilerService } from '../../services/TranspilerService';
+import { AlgorithmService } from './../../services/AlgorithmService';
 
 
 export default function AlgorithmControl(props: { isInitialStep: boolean }) {
@@ -78,22 +78,6 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
     const selectedAlgorithm = selectedStage === '9' ? 1 : 0
 
-    const getMetadataAction = getMetadata("216da6d9-aead-4970-9465-69bfb55d4956");
-    const getStepsAction = getResults({
-      workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
-      algorithm: selectedAlgorithm
-    });
-    const normalizeAction = normalize({
-      stage: normalizationCompleted,
-      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
-      algorithm: selectedAlgorithm,
-    });
-    const preprocessAction = normalize({
-      stage: preprocessingCompleted,
-      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
-      algorithm: selectedAlgorithm,
-    });
-
     if (isInitialStep && selectedStage === '' && !argumentEdited) {
       dispatch(setShowValidation(true));
       return;
@@ -118,33 +102,21 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
     if (normalizeCurrent === normalizationCompleted && selectedAlgorithm === 0)
-      dispatch(normalizeAction)
-        .unwrap()
-        .then((response: PayloadAction<string>) => {
-          toast.success(response.payload);
-          dispatch(setNormalizationCompletedStage())
-          dispatch(getStepsAction).then(() => {
-            dispatch(nextNormalizeStage());
-          });
-          dispatch(getMetadataAction);
+      dispatch(
+        AlgorithmService().execute({
+          stage: normalizationCompleted,
+          workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+          algorithm: selectedAlgorithm,
         })
-        .catch((error: PayloadAction<string>) => {
-          toast.error(error.payload);
-        });
+      );
     else if (preprocessCurrent === preprocessingCompleted && selectedAlgorithm === 1)
-      dispatch(preprocessAction)
-        .unwrap()
-        .then((response: PayloadAction<string>) => {
-          toast.success(response.payload);
-          dispatch(setPreprocessingCompletedStage())
-          dispatch(getStepsAction).then(() => {
-            dispatch(nextPreprocessStage());
-          });
-          dispatch(getMetadataAction);
+      dispatch(
+        AlgorithmService().execute({
+          stage: preprocessingCompleted,
+          workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+          algorithm: selectedAlgorithm,
         })
-        .catch((error: PayloadAction<string>) => {
-          toast.error(error.payload);
-        });
+      );
     else
       if (selectedAlgorithm === 0)
         dispatch(nextNormalizeStage());
