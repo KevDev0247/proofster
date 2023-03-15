@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import Edit from '@material-ui/icons/Edit';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import { toast } from 'react-toastify';
 import Typography from '@mui/material/Typography';
 import { Box, CircularProgress, Grid, Hidden, IconButton } from '@mui/material';
 import {
@@ -10,10 +9,11 @@ import {
   TableContainer, TableHead, TableRow
 } from '@mui/material';
 import { IFormula } from '../../models/formula';
-import { deleteFormula, getFormulas } from '../../network/formulaApi';
+import { getFormulas } from '../../network/formulaApi';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
-import { setShowCacheWarning, setArgumentEmpty, setArgumentEdited } from '../../slices/globalSlice';
+import { setShowCacheWarning, setArgumentEmpty } from '../../slices/globalSlice';
+import { FormulaService } from '../../services/FormulaService';
 
 
 export default function FormulaDisplay() {
@@ -37,7 +37,6 @@ export default function FormulaDisplay() {
     }));
   }, []);
 
-
   const isUpdated: boolean = useSelector(
     (state: RootState) => state.formula.save.isUpdated
   );  
@@ -45,7 +44,6 @@ export default function FormulaDisplay() {
     if (isUpdated)
       dispatch(setShowCacheWarning(true));
   }, [isUpdated]);
-  
 
   const formulaList: IFormula[] = useSelector(
     (state: RootState) => state.formula.list.values
@@ -75,19 +73,9 @@ export default function FormulaDisplay() {
 
   const removeFormula = (id: number): void => {
     if (id)
-      dispatch(deleteFormula(id))
-        .unwrap()
-        .then((response) => {
-          toast.success(response);
-          dispatch(getFormulas({
-            workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
-            stage: 0
-          }));
-          dispatch(setArgumentEdited(true));
-        })
-        .catch((error) => {
-          toast.error(error);
-        });
+      dispatch(
+        FormulaService().removeFormula(id)
+      );
   };
 
 
