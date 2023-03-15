@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
-import { PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch, RootState, useAppDispatch } from '../../store';
-import { toast } from 'react-toastify';
 import { IFormula } from '../../models/formula';
 import { Box, Card, CardContent, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
@@ -11,11 +9,11 @@ import { Button, CircularProgress } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
-import { createFormula, getFormulas, updateFormula } from '../../network/formulaApi';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
-import { setArgumentEdited, setDisableButton } from '../../slices/globalSlice';
+import { setDisableButton } from '../../slices/globalSlice';
 import FormulaKeyboard from './FormulaKeyboard';
 import { infixToEncoded } from '../../utils/infixToEncoded';
+import { FormulaService } from '../../services/FormulaService';
 
 
 export default function FormulaEditor() {
@@ -75,40 +73,15 @@ export default function FormulaEditor() {
       input_mode: selected.input_mode,
     }
 
-    const action =
-      formulaToSubmit.id === 0
-        ? createFormula(formulaToSubmit)
-        : updateFormula(formulaToSubmit)
-
-    dispatch(action)
-      .unwrap()
-      .then((response: PayloadAction<string>) => {
-        toast.success(response.payload);
-        resetForm();
-        dispatch(getFormulas({
-          workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
-          stage: 0
-        }));
-        dispatch(setArgumentEdited(true));
-      })
-      .catch((error: PayloadAction<string>) => {
-        toast.error(error.payload);
-      });
+    dispatch(
+      FormulaService().createOrUpdateFormula(formulaToSubmit)
+    );
   };
 
   const resetForm = (): void => {
-    dispatch(setSelected({
-      id: 0,
-      name: "",
-      formula_postfix: "",
-      formula_input: "",
-      input_mode: "Infix",
-      formula_result: "",
-      is_conclusion: false,
-      workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
-      stage: 0
-    }));
-    dispatch(setShowValidation(false));
+    dispatch(
+      FormulaService().resetCache()
+    );
   };
 
 

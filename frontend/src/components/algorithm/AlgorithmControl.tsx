@@ -1,24 +1,20 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { PayloadAction } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Alert, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
-import { getResults, getMetadata, normalize } from '../../network/algorithmApi';
+import { getMetadata } from '../../network/algorithmApi';
 import { 
   setShowCacheWarning, 
   setShowError 
 } from '../../slices/globalSlice';
 import { 
   nextPreprocessStage, 
-  setPreprocessingFinishedStage, 
   setShowValidation 
 } from '../../slices/algorithmSlice';
 import {
   nextNormalizeStage, resetStage, clearCache, setError,
-  setNormalizationFinishedStage,
 } from '../../slices/algorithmSlice';
 import { argumentEmptyError } from '../../constants';
 import { IMetadata } from './../../models/metadata';
@@ -87,6 +83,13 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
+    if (argumentEdited) {
+      dispatch(
+        TranspilerService().transpile()
+      );
+      return;
+    }
+
     if ((metadata.all_normalized && selectedAlgorithm == 0) || 
         (metadata.is_preprocessed && selectedAlgorithm == 1)) {
       dispatch(
@@ -95,12 +98,6 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
-    if (argumentEdited) {
-      dispatch(
-        TranspilerService().transpile()
-      );
-      return;
-    }
     if (normalizeCurrent === normalizationCompleted && selectedAlgorithm === 0)
       dispatch(
         AlgorithmService().execute({
