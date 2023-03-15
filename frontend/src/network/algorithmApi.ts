@@ -1,18 +1,8 @@
-import { FORMULA_API, NORMALIZER_API } from "../api";
+import { NORMALIZER_API } from "../api";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import { serverErrorAddOn } from "../constants";
-import { INormalized } from "../models/normalized";
+import { IGetStepsRequest, INormalizeRequest } from "../models/requests";
 
-
-interface INormalizeRequest {
-  stage: number;
-  workspace_id: string;
-  algorithm: number;
-}
-interface IGetStepsRequest {
-  workspaceId: string;
-  algorithm: number;
-}
 type NormalizeThunk = AsyncThunk<any, INormalizeRequest, {}>;
 type GetResultsThunk = AsyncThunk<any, IGetStepsRequest, {}>;
 type GetMetadataThunk = AsyncThunk<any, string, {}>;
@@ -52,7 +42,7 @@ export const getResults: GetResultsThunk = createAsyncThunk(
   }
 );
 
-export const getMetaData: GetMetadataThunk = createAsyncThunk(
+export const getMetadata: GetMetadataThunk = createAsyncThunk(
   "algorithm/metadata",
   async (workspaceId: string) => {
     try {
