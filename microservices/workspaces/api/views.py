@@ -1,84 +1,85 @@
-from rest_framework.response import Response
-from rest_framework import status, generics
-from api.models import Workspace
+import json
+from datetime import datetime
+from rest_framework import status
+from django.http import JsonResponse
+from django.views.generic import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from api.serializers import WorkspaceSerializer
+from api.service import get_workspace_by_user, get_workspace
 
 
-class Workspaces(generics.GenericAPIView):
-    serializer_class = WorkspaceSerializer
-    queryset = Workspace.objects.all()
-
-    def get(self, request):
-        workspace_id = request.GET.get("user_id")
-        workspaces = Workspace.objects.all()
-
-        if workspace_id:
-            workspaces = workspaces.filter(workspace_id=workspace_id)
-        serializer = self.serializer_class(workspaces, many=True)
-        return Response({
-            "status": "success",
-            "workspaces": serializer.data
-        })
+@method_decorator(csrf_exempt, name='dispatch')
+class Workspaces(View):
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-
+        data = json.loads(request.body.decode('utf-8'))
+        workspace = {
+            'name': data.get('name'),
+            'user_id': data.get('user_id')
+        }
+        
+        serializer = WorkspaceSerializer(data=workspace)
         if serializer.is_valid():
             serializer.save()
-            return Response(
-                {
-                    "status": "success", 
-                    "workspace": serializer.data
-                }, 
-                status=status.HTTP_201_CREATED
-            )
+
+            return JsonResponse({ 
+                "workspace": serializer.data
+            }, status=status.HTTP_200_OK)
         else:
-            return Response(
-                {
-                    "status": "fail", 
-                    "message": serializer.errors
-                }, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return JsonResponse({
+                "message": serializer.errors
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    def get(self, request):
+        user_id = request.GET.get('user_id')
+        workspaces = get_workspace_by_user(user_id)
+        
+        serializer = WorkspaceSerializer(
+            workspaces, 
+            many=True
+        )
+        return JsonResponse({
+            "workspaces": serializer.data
+        }, status=status.HTTP_200_OK)
 
 
-class WorkspaceDetail(generics.GenericAPIView):
-    queryset = Workspace.objects.all()
-    serializer_class = WorkspaceSerializer
-
-    def get_workspace(self, pk):
-        try:
-            return Workspace.objects.get(pk=pk)
-        except:
-            return None
+@method_decorator(csrf_exempt, name='dispatch')
+class WorkspaceDetail(View):
 
     def patch(self, request, pk):
-        workspace = self.get_workspace(pk=pk)
+        data = json.loads(request.body.decode('utf-8'))
+
+        workspace = get_workspace(pk)
         if workspace == None:
-            return Response(
-                {
-                    "status": "fail",
-                    "message": f"Workspace with Id: {pk} not found",
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
+            return JsonResponse({
+                'message': f"Workspace with Id: {pk} not found",
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        serializer = self.serializer_class(workspace)
-        return Response({
-            "status": "success",
-            "workspace": serializer.data
-        })
+        serializer = WorkspaceSerializer(
+            instance=workspace,
+            data=data,
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.validated_data['updated_at'] = datetime.now()
+            serializer.save()
+
+            return JsonResponse({
+                'workspace': serializer.data,
+            }, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({
+                'message': serializer.errors,
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, pk):
-        workspace = self.get_workspace(pk)
+        workspace = get_workspace(pk)
         if workspace == None:
-            return Response(
-                {
-                    "status": "fail",
-                    "message": f"Workspace with Id: {pk} not found",
-                },
-                status=status.HTTP_404_NOT_FOUND
-            )
+            return JsonResponse({
+                'message': f"Workspace with Id: {pk} not found",
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         workspace.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse({}, status=status.HTTP_200_OK)

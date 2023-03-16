@@ -1,12 +1,8 @@
-import pika
 import json
-import os
-import aiohttp
 from datetime import datetime
-from django.http import JsonResponse
 from rest_framework import status
+from django.http import JsonResponse
 from django.views.generic import View
-from asgiref.sync import sync_to_async
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
@@ -40,15 +36,13 @@ class Formulas(View):
         else:
             return JsonResponse({
                 'message': serializer.errors,
-                'status': status.HTTP_500_INTERNAL_SERVER_ERROR
-            })
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         sync_formulas(data.get('workspace_id'))
 
         return JsonResponse({
             'formula': serializer.data,
-            'status': status.HTTP_200_OK
-        })
+        }, status=status.HTTP_200_OK)
     
     def get(self, request):
         workspace_id = request.GET.get('workspace_id')
@@ -60,8 +54,7 @@ class Formulas(View):
         )
         return JsonResponse({
             'formulas': serializer.data,
-            'status': status.HTTP_200_OK
-        })    
+        }, status=status.HTTP_200_OK)    
 
 @method_decorator(csrf_exempt, name='dispatch')
 class FormulaDetail(View):
@@ -73,8 +66,7 @@ class FormulaDetail(View):
         if formula == None:
             return JsonResponse({
                 'message': f"Formula with Id: {pk} not found",
-                'status': status.HTTP_400_BAD_REQUEST
-            })
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         serializer = FormulaSerializer(
             instance=formula, 
@@ -89,26 +81,21 @@ class FormulaDetail(View):
 
             return JsonResponse({
                 'formula': serializer.data,
-                'status': status.HTTP_200_OK
-            })
+            }, status=status.HTTP_200_OK)
         else:
             return JsonResponse({
                 'message': serializer.errors,
-                'status': status.HTTP_400_BAD_REQUEST
-            })
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def delete(self, request, pk):
         formula = get_formula(pk)
         if formula == None:
             return JsonResponse({
                 'message': f"Formula with Id: {pk} not found",
-                'status': status.HTTP_400_BAD_REQUEST
-            })
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         workspace_id = formula.workspace_id
         
         formula.delete()
         sync_formulas(workspace_id)
 
-        return JsonResponse({
-            'status': status.HTTP_200_OK
-        })
+        return JsonResponse({}, status=status.HTTP_200_OK)
