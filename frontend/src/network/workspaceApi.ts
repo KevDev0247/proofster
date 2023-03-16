@@ -31,7 +31,7 @@ export const createWorkspaceCall: SaveWorkspaceThunk = createAsyncThunk(
   }
 );
 
-export const updateFormulaCall: SaveWorkspaceThunk = createAsyncThunk(
+export const updateWorkspaceCall: SaveWorkspaceThunk = createAsyncThunk(
   "formula/update",
   async (workspace: IWorkspace) => {
     try {
@@ -43,7 +43,7 @@ export const updateFormulaCall: SaveWorkspaceThunk = createAsyncThunk(
   }
 );
 
-export const deleteFormulaCall: DeleteWorkspaceThunk = createAsyncThunk(
+export const deleteWorkspaceCall: DeleteWorkspaceThunk = createAsyncThunk(
   "formula/delete",
   async (workspaceId: number) => {
     try {
