@@ -1,10 +1,9 @@
 import './App.css';
 import ControlPanel from './components/ControlPanel';
-import { AppBar, Toolbar, Typography, Container, Grid, Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Grid, Box, Drawer, List, ListItemButton, ListItemText } from '@mui/material';
 import FormulaEditor from './components/formula/FormulaEditor';
 import AlgorithmSteps from './components/algorithm/AlgorithmSteps';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import MuiListItem from "@material-ui/core/ListItem";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -55,11 +54,11 @@ function App() {
               <ListItem
                 button
                 selected={index === 2}
-                onClick={(event) => { }}
-                
+                onClick={() => {}}
               >
-                <Grid container spacing={1} alignItems="center"
-                  sx={{ padding: '10px' }}
+                <ListItemButton>
+                <Grid container spacing={2} alignItems="center"
+                  sx={{ padding: "5px" }}
                 >
                   <Grid item xs={12} md={3}>
                     <LibraryBooksOutlinedIcon />
@@ -67,14 +66,8 @@ function App() {
                   <Grid item xs={12} md={6}>
                     <ListItemText primary={text} />
                   </Grid>
-                  <Grid item xs={12} md={3}>
-                    <IconButton
-                      onClick={() => { }}
-                      disabled={false}>
-                      <DeleteOutlinedIcon />
-                    </IconButton>
-                  </Grid>
                 </Grid>
+                </ListItemButton>
               </ListItem>
             ))}
           </List>
