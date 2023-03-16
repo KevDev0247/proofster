@@ -1,4 +1,4 @@
 export interface IWorkspace {
-  id: number,
+  id: string,
   name: string,
 }

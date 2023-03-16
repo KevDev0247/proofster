@@ -8,6 +8,7 @@ const globalSlice = createSlice({
     showCacheWarning: false,
     argumentEmpty: true,
     argumentEdited: false,
+    selectedWorkspaceId: "",
   },
   reducers: {
     setDisableButton: (state, action: PayloadAction<boolean>) => {
@@ -25,6 +26,9 @@ const globalSlice = createSlice({
     setArgumentEdited: (state, action: PayloadAction<boolean>) => {
       state.argumentEdited = action.payload;
     },
+    setSelectedWorkspaceId: (state, action: PayloadAction<string>) => {
+      state.selectedWorkspaceId = action.payload;
+    },
   },
 });
 
@@ -33,7 +37,8 @@ export const {
   setShowError,
   setShowCacheWarning,
   setArgumentEmpty,
-  setArgumentEdited
+  setArgumentEdited,
+  setSelectedWorkspaceId
 } = globalSlice.actions;
 
 export default globalSlice.reducer;
