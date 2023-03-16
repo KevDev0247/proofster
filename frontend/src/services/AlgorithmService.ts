@@ -24,18 +24,18 @@ export const AlgorithmService = () => {
       const getMetadataAction = getMetadataCall(request.workspace_id);
 
       await dispatch(algorithmAction);
-      if (request.algorithm == 0) {
+      if (request.algorithm === 0) {
         dispatch(setNormalizationFinishedStage());
       }
-      if (request.algorithm == 1) {
+      if (request.algorithm === 1) {
         dispatch(setPreprocessingFinishedStage());
       }      
       
       await dispatch(getStepsAction);
-      if (request.algorithm == 0) {
+      if (request.algorithm === 0) {
         dispatch(nextNormalizeStage());
       }
-      if (request.algorithm == 1) {
+      if (request.algorithm === 1) {
         dispatch(nextPreprocessStage());
       }
 

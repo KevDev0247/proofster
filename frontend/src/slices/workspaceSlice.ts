@@ -18,7 +18,7 @@ export const workspaceSlice = createSlice({
       isDeleting: false,
       isUpdated: false,
       selected: {
-        id: 0,
+        id: "",
         name: "",
       },
       showValidation: false,

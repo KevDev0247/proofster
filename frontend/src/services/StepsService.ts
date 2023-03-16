@@ -19,10 +19,10 @@ export const StepsService = () => {
       });
 
       await dispatch(getStepsAction);
-      if (selectedAlgorithm == 0) {
+      if (selectedAlgorithm === 0) {
         dispatch(nextNormalizeStage());
       }
-      if (selectedAlgorithm == 1) {
+      if (selectedAlgorithm === 1) {
         dispatch(nextPreprocessStage());
       }
     }

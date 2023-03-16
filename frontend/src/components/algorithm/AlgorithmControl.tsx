@@ -90,8 +90,8 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
-    if ((metadata.all_normalized && selectedAlgorithm == 0) || 
-        (metadata.is_preprocessed && selectedAlgorithm == 1)) {
+    if ((metadata.all_normalized && selectedAlgorithm === 0) || 
+        (metadata.is_preprocessed && selectedAlgorithm === 1)) {
       dispatch(
         StepsService().fetchStepsIfAvailable(selectedAlgorithm)
       );
@@ -136,8 +136,8 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
   return (
     <>
-      {((normalizeCurrent === stopStage && normalizeCurrent != 0) ||
-        (preprocessCurrent === stopStage && preprocessCurrent != 0)) ? (
+      {((normalizeCurrent === stopStage && normalizeCurrent !== 0) ||
+        (preprocessCurrent === stopStage && preprocessCurrent !== 0)) ? (
         <Grid item xs={5.5} sm={6} md={6} container>
           <Alert severity="success">
             Algorithm Completed!
@@ -174,7 +174,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           </Button>
         </Grid>
       ) : (
-        <Grid item xs={4} sm={4.5} md={4.5} container justifyContent="flex-end">
+        <Grid item xs={4} sm={4.5} md={4.5} lg={5} container justifyContent="flex-end">
           <Button
             variant="outlined"
             color="primary"
@@ -185,7 +185,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
           </Button>
         </Grid>
       )}
-      <Grid item xs={2.5} sm={1.5} md={1.5} container justifyContent="flex-end">
+      <Grid item xs={2.5} sm={1.5} md={1.5} lg={1} container justifyContent="flex-end">
         <Button
           variant="outlined"
           color="primary"
