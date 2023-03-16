@@ -30,13 +30,16 @@ export default function AlgorithmSteps() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [renderResults]);
 
+  const selectedWorkspaceId: string = useSelector(
+    (state: RootState) => state.global.selectedWorkspaceId
+  ); 
   useEffect(() => {
     dispatch(getResultsCall({
-      workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
+      workspaceId: selectedWorkspaceId,
       algorithm: 0
     }));
     dispatch(getResultsCall({
-      workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
+      workspaceId: selectedWorkspaceId,
       algorithm: 1
     }));
   }, []);

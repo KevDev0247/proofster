@@ -64,11 +64,17 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
     (state: RootState) => state.algorithm.metadata.value
   );
 
-  useEffect(() => {
-    dispatch(getMetadataCall("216da6d9-aead-4970-9465-69bfb55d4956"));
-  }, []);
 
-  // todo: workspace feature
+  const selectedWorkspaceId: string = useSelector(
+    (state: RootState) => state.global.selectedWorkspaceId
+  ); 
+  useEffect(() => {
+    dispatch(
+      getMetadataCall(selectedWorkspaceId)
+    );
+  }, [selectedWorkspaceId]);
+  
+
   const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
@@ -85,7 +91,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
     if (argumentEdited) {
       dispatch(
-        TranspilerService().transpile()
+        TranspilerService().transpile(selectedWorkspaceId)
       );
       return;
     }
@@ -93,7 +99,10 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
     if ((metadata.all_normalized && selectedAlgorithm === 0) || 
         (metadata.is_preprocessed && selectedAlgorithm === 1)) {
       dispatch(
-        StepsService().fetchStepsIfAvailable(selectedAlgorithm)
+        StepsService().fetchStepsIfAvailable({
+          algorithm: selectedAlgorithm,
+          workspaceId: selectedWorkspaceId
+        })
       );
       return;
     }
@@ -102,7 +111,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       dispatch(
         AlgorithmService().execute({
           stage: normalizationCompleted,
-          workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+          workspace_id: selectedWorkspaceId,
           algorithm: selectedAlgorithm,
         })
       );
@@ -110,7 +119,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       dispatch(
         AlgorithmService().execute({
           stage: preprocessingCompleted,
-          workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+          workspace_id: selectedWorkspaceId,
           algorithm: selectedAlgorithm,
         })
       );

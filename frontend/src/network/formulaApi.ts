@@ -9,7 +9,7 @@ interface IGetFormulasParams {
 }
 type GetFormulasThunk = AsyncThunk<IFormula[], IGetFormulasParams, {}>;
 type SaveFormulaThunk = AsyncThunk<any, IFormula, {}>;
-type DeleteFormulaThunk = AsyncThunk<any, number, {}>;
+type DeleteFormulaThunk = AsyncThunk<any, string, {}>;
 
 
 export const getFormulasCall: GetFormulasThunk = createAsyncThunk(
@@ -50,7 +50,7 @@ export const updateFormulaCall: SaveFormulaThunk = createAsyncThunk(
 
 export const deleteFormulaCall: DeleteFormulaThunk = createAsyncThunk(
   "formula/delete",
-  async (formulaId: number) => {
+  async (formulaId: string) => {
     try {
       const response = await FORMULA_API.delete(`delete/${formulaId}`);
       return response.data;

@@ -49,6 +49,19 @@ export default function FormulaEditor() {
   );
 
   const formulaInputRef = useRef<HTMLInputElement>(null);
+  
+
+  const selectedWorkspaceId: string = useSelector(
+    (state: RootState) => state.global.selectedWorkspaceId
+  );
+  useEffect(() => {
+    dispatch(
+      setSelected({
+        ...selected,
+        workspace_id: selectedWorkspaceId,
+      })
+    );
+  }, [selectedWorkspaceId]);
 
   useEffect(() => {
     if (isSaving || isDeleting)
@@ -70,10 +83,12 @@ export default function FormulaEditor() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value, checked } = e.target;
-    dispatch(setSelected({
-      ...selected,
-      [name]: name === "is_conclusion" ? checked : value,
-    }));
+    dispatch(
+      setSelected({
+        ...selected,
+        [name]: name === "is_conclusion" ? checked : value,
+      })
+    );
   };
 
   const submit = (e: React.SyntheticEvent): void => {
@@ -240,7 +255,7 @@ export default function FormulaEditor() {
                 onClick={resetForm}
                 disabled={disableButton}
               >
-                {selected.id !== 0 ? "Cancel" : "Erase"}
+                {selected.id !== "" ? "Cancel" : "Erase"}
               </Button>
             </Grid>
           </Grid>

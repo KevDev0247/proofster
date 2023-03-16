@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import {
   Toolbar, Grid, Box, Drawer, List,
-  ListItemButton, ListItemText, ListItem, ButtonBase
+  ListItemButton, ListItemText, ButtonBase
 } from '@mui/material';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';

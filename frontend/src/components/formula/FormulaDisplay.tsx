@@ -30,16 +30,21 @@ export default function FormulaDisplay() {
   );
 
 
+  const selectedWorkspaceId: string = useSelector(
+    (state: RootState) => state.global.selectedWorkspaceId
+  );
   useEffect(() => {
-    dispatch(getFormulasCall({
-      workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
-      stage: 0
-    }));
-  }, []);
+    dispatch(
+      getFormulasCall({
+        workspaceId: selectedWorkspaceId,
+        stage: 0
+      })
+    );
+  }, [selectedWorkspaceId]);
 
   const isUpdated: boolean = useSelector(
     (state: RootState) => state.formula.save.isUpdated
-  );  
+  );
   useEffect(() => {
     if (isUpdated)
       dispatch(setShowCacheWarning(true));
@@ -47,9 +52,9 @@ export default function FormulaDisplay() {
 
   const formulaList: IFormula[] = useSelector(
     (state: RootState) => state.formula.list.values
-  );  
+  );
   useEffect(() => {
-    if (formulaList.length == 0)
+    if (formulaList.length === 0)
       dispatch(setArgumentEmpty(true));
     else
       dispatch(setArgumentEmpty(false));
@@ -71,10 +76,13 @@ export default function FormulaDisplay() {
     }));
   };
 
-  const removeFormula = (id: number): void => {
+  const removeFormula = (id: string): void => {
     if (id)
       dispatch(
-        FormulaService().deleteFormula(id)
+        FormulaService().deleteFormula({
+          workspaceId: selectedWorkspaceId,
+          formulaId: id
+        })
       );
   };
 
@@ -95,7 +103,7 @@ export default function FormulaDisplay() {
                   </TableCell>
                   <TableCell size='small'>
                     <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
-                  </TableCell>                  
+                  </TableCell>
                 </Hidden>
                 <TableCell size='small'>
                   <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
@@ -137,7 +145,7 @@ export default function FormulaDisplay() {
                       <Typography variant="body1" gutterBottom>
                         {d.is_conclusion ? "Conclusion" : "Premise"}
                       </Typography>
-                    </TableCell>                    
+                    </TableCell>
                   </Hidden>
                   <TableCell size='small'>
                     <Typography variant="body1" gutterBottom>

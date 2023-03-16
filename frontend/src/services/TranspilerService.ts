@@ -7,12 +7,12 @@ export const TranspilerService = () => {
 
   const transpile = createAsyncThunk(
     "algorithm/service/transpiler/transpile",
-    async (_, thunkAPI) => {
+    async (workspaceId: string, thunkAPI) => {
       const { dispatch } = thunkAPI;
 
       const transpileAction = normalizeCall({
         stage: -1,
-        workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+        workspace_id: workspaceId,
         algorithm: 0,
       });
 

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IFormula } from "../models/formula";
+import { IDeleteFormulaRequest } from "../models/requests";
 import { createFormulaCall, deleteFormulaCall, getFormulasCall, updateFormulaCall } from "../network/formulaApi";
 import { setSelected, setShowValidation } from "../slices/formulaSlice";
 import { setArgumentEdited } from "../slices/globalSlice";
@@ -13,12 +14,12 @@ export const FormulaService = () => {
       const { dispatch } = thunkAPI;
 
       const createOrUpdateAction =
-        formulaToSubmit.id === 0
+        formulaToSubmit.id === ""
           ? createFormulaCall(formulaToSubmit)
           : updateFormulaCall(formulaToSubmit);
 
       const getFormulasAction = getFormulasCall({
-        workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
+        workspaceId: formulaToSubmit.workspace_id,
         stage: 0
       })
           
@@ -34,12 +35,12 @@ export const FormulaService = () => {
 
   const deleteFormula = createAsyncThunk(
     "algorithm/service/formula/remove",
-    async (id: number, thunkAPI) => {
+    async (request: IDeleteFormulaRequest, thunkAPI) => {
       const { dispatch } = thunkAPI;
       
-      const deleteAction = deleteFormulaCall(id);
+      const deleteAction = deleteFormulaCall(request.formulaId);
       const getFormulasAction = getFormulasCall({
-        workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
+        workspaceId: request.workspaceId,
         stage: 0
       })
 
@@ -57,14 +58,14 @@ export const FormulaService = () => {
       console.log("reset")
 
       dispatch(setSelected({
-        id: 0,
+        id: "",
         name: "",
         formula_postfix: "",
         formula_input: "",
         input_mode: "Infix",
         formula_result: "",
         is_conclusion: false,
-        workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
+        workspace_id: "",
         stage: 0
       }));
       dispatch(setShowValidation(false));

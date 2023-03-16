@@ -1,5 +1,5 @@
 export interface IFormula {
-  id: number;
+  id: string;
   name: string;
   formula_postfix: string;
   formula_input: string;

@@ -4,25 +4,23 @@ import {
   nextPreprocessStage 
 } from "../slices/algorithmSlice";
 import { getResultsCall } from "../network/algorithmApi";
+import { IGetStepsRequest } from "../models/requests";
 
 
 export const StepsService = () => {
 
   const fetchStepsIfAvailable = createAsyncThunk(
     "algorithm/service/steps/fetch",
-    async (selectedAlgorithm: number, thunkAPI) => {
+    async (request: IGetStepsRequest, thunkAPI) => {
       const { dispatch } = thunkAPI;
 
-      const getStepsAction = getResultsCall({
-        workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
-        algorithm: selectedAlgorithm
-      });
+      const getStepsAction = getResultsCall(request);
 
       await dispatch(getStepsAction);
-      if (selectedAlgorithm === 0) {
+      if (request.algorithm === 0) {
         dispatch(nextNormalizeStage());
       }
-      if (selectedAlgorithm === 1) {
+      if (request.algorithm === 1) {
         dispatch(nextPreprocessStage());
       }
     }
