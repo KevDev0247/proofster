@@ -166,7 +166,24 @@ export default function FormulaEditor() {
                   isMdUp={isMdUp}
                 />
               </Grid>
-              <Grid item xs={12} md={1.5} container alignItems="center" justifyContent="flex-end">
+              {isSmDown && (
+                <Grid item xs={7.5} container justifyContent="center">
+                  <ToggleButtonGroup
+                    size="small"
+                    value={selected.input_mode}
+                    onChange={handleInputModeSelection}
+                    aria-label="special symbol group one"
+                    exclusive
+                  >
+                    {keyboardSetting.map(({ label, value }) => (
+                      <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+                        <Typography variant="body2"><strong>{label}</strong></Typography>
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
+                </Grid>
+              )}
+              <Grid item xs={4.5} sm={12} md={1.5} container alignItems="center" justifyContent="flex-end">
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -181,6 +198,7 @@ export default function FormulaEditor() {
                 />
               </Grid>
             </Grid>
+
             <Grid item xs={6} sm={4} md={4} lg={4}>
               <Button
                 variant="contained"
@@ -196,21 +214,23 @@ export default function FormulaEditor() {
                 Submit
               </Button>
             </Grid>
-            <Grid item xs={12} sm={4} md={4} lg={4} container justifyContent="center">
-              <ToggleButtonGroup
-                size="small"
-                value={selected.input_mode}
-                onChange={handleInputModeSelection}
-                aria-label="special symbol group one"
-                exclusive
-              >
-                {keyboardSetting.map(({ label, value }) => (
-                  <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
-                    <Typography variant="body2"><strong>{label}</strong></Typography>
-                  </ToggleButton>
-                ))}
-              </ToggleButtonGroup>
-            </Grid>
+            {!isSmDown && (
+              <Grid item xs={12} sm={4} md={4} lg={4} container justifyContent="center">
+                <ToggleButtonGroup
+                  size="small"
+                  value={selected.input_mode}
+                  onChange={handleInputModeSelection}
+                  aria-label="special symbol group one"
+                  exclusive
+                >
+                  {keyboardSetting.map(({ label, value }) => (
+                    <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+                      <Typography variant="body2"><strong>{label}</strong></Typography>
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              </Grid>
+            )}
             <Grid item xs={6} sm={4} md={4} lg={4} container justifyContent="flex-end">
               &nbsp;
               <Button
