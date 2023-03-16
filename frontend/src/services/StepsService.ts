@@ -3,7 +3,7 @@ import {
   nextNormalizeStage, 
   nextPreprocessStage 
 } from "../slices/algorithmSlice";
-import { getResults } from "../network/algorithmApi";
+import { getResultsCall } from "../network/algorithmApi";
 
 
 export const StepsService = () => {
@@ -13,7 +13,7 @@ export const StepsService = () => {
     async (selectedAlgorithm: number, thunkAPI) => {
       const { dispatch } = thunkAPI;
 
-      const getStepsAction = getResults({
+      const getStepsAction = getResultsCall({
         workspaceId: "216da6d9-aead-4970-9465-69bfb55d4956",
         algorithm: selectedAlgorithm
       });

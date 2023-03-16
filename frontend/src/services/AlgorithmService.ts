@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { INormalizeRequest } from "../models/requests";
-import { getMetadata, getResults, normalize } from "../network/algorithmApi";
+import { getMetadataCall, getResultsCall, normalizeCall } from "../network/algorithmApi";
 import { 
   nextNormalizeStage, 
   nextPreprocessStage, 
@@ -16,12 +16,12 @@ export const AlgorithmService = () => {
     async (request: INormalizeRequest, thunkAPI) => {
       const { dispatch } = thunkAPI;
 
-      const algorithmAction = normalize(request);
-      const getStepsAction = getResults({
+      const algorithmAction = normalizeCall(request);
+      const getStepsAction = getResultsCall({
         workspaceId: request.workspace_id,
         algorithm: request.algorithm
       });
-      const getMetadataAction = getMetadata(request.workspace_id);
+      const getMetadataAction = getMetadataCall(request.workspace_id);
 
       await dispatch(algorithmAction);
       if (request.algorithm == 0) {

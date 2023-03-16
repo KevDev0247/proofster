@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { normalize } from "../network/algorithmApi";
+import { normalizeCall } from "../network/algorithmApi";
 import { setArgumentEdited } from "../slices/globalSlice";
 
 
@@ -10,7 +10,7 @@ export const TranspilerService = () => {
     async (_, thunkAPI) => {
       const { dispatch } = thunkAPI;
 
-      const transpileAction = normalize({
+      const transpileAction = normalizeCall({
         stage: -1,
         workspace_id: "216da6d9-aead-4970-9465-69bfb55d4956",
         algorithm: 0,

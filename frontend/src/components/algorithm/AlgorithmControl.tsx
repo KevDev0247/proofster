@@ -4,7 +4,7 @@ import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Alert, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
-import { getMetadata } from '../../network/algorithmApi';
+import { getMetadataCall } from '../../network/algorithmApi';
 import { 
   setShowCacheWarning, 
   setShowError 
@@ -65,7 +65,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   );
 
   useEffect(() => {
-    dispatch(getMetadata("216da6d9-aead-4970-9465-69bfb55d4956"));
+    dispatch(getMetadataCall("216da6d9-aead-4970-9465-69bfb55d4956"));
   }, []);
 
   // todo: workspace feature

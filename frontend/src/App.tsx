@@ -2,7 +2,7 @@ import './App.css';
 import ControlPanel from './components/ControlPanel';
 import { AppBar, Toolbar, Typography, Container, Grid } from '@mui/material';
 import FormulaEditor from './components/formula/FormulaEditor';
-import NormalizationResult from './components/algorithm/NormalizationResult';
+import AlgorithmSteps from './components/algorithm/AlgorithmSteps';
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
               <Grid item xs={12} md={12}>
                 <ControlPanel />
               </Grid>
-              <NormalizationResult />
+              <AlgorithmSteps />
             </Grid>
           </Container>
         </Grid>

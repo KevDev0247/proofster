@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IFormula } from "../models/formula";
-import { createFormula, deleteFormula, getFormulas, updateFormula } from "../network/formulaApi";
+import { createFormulaCall, deleteFormulaCall, getFormulasCall, updateFormulaCall } from "../network/formulaApi";
 import { setSelected, setShowValidation } from "../slices/formulaSlice";
 import { setArgumentEdited } from "../slices/globalSlice";
 
@@ -14,10 +14,10 @@ export const FormulaService = () => {
 
       const createOrUpdateAction =
         formulaToSubmit.id === 0
-          ? createFormula(formulaToSubmit)
-          : updateFormula(formulaToSubmit);
+          ? createFormulaCall(formulaToSubmit)
+          : updateFormulaCall(formulaToSubmit);
 
-      const getFormulasAction = getFormulas({
+      const getFormulasAction = getFormulasCall({
         workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
         stage: 0
       })
@@ -32,13 +32,13 @@ export const FormulaService = () => {
     }
   );
 
-  const removeFormula = createAsyncThunk(
+  const deleteFormula = createAsyncThunk(
     "algorithm/service/formula/remove",
     async (id: number, thunkAPI) => {
       const { dispatch } = thunkAPI;
       
-      const deleteAction = deleteFormula(id);
-      const getFormulasAction = getFormulas({
+      const deleteAction = deleteFormulaCall(id);
+      const getFormulasAction = getFormulasCall({
         workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
         stage: 0
       })
@@ -73,7 +73,7 @@ export const FormulaService = () => {
 
   return {
     createOrUpdateFormula,
-    removeFormula,
+    deleteFormula,
     resetCache
   }
 };

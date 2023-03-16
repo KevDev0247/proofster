@@ -1,7 +1,7 @@
  /* eslint-disable */
 import { createSlice, current } from "@reduxjs/toolkit";
-import { getResults, normalize } from "../network/algorithmApi";
-import { getMetadata } from './../network/algorithmApi';
+import { getResultsCall, normalizeCall } from "../network/algorithmApi";
+import { getMetadataCall } from './../network/algorithmApi';
 
 
 // todo: fetch existing result
@@ -96,25 +96,25 @@ export const algorithmSlice = createSlice({
   },
   extraReducers: {
     // Async reducers, mostly calling backend api endpoints
-    [normalize.pending.type]: (state, action) => {
+    [normalizeCall.pending.type]: (state, action) => {
       state.normalize.status = "pending";
       state.normalize.isLoading = true;
       state.normalize.error = "";
     },
-    [normalize.fulfilled.type]: (state, action) => {
+    [normalizeCall.fulfilled.type]: (state, action) => {
       state.normalize.status = "success";
       state.normalize.isLoading = false;
     },
-    [normalize.rejected.type]: (state, action) => {
+    [normalizeCall.rejected.type]: (state, action) => {
       state.normalize.status = "failed";
       state.normalize.isLoading = false;
       state.normalize.error = action.payload;
     },
-    [getResults.pending.type]: (state, action) => {
+    [getResultsCall.pending.type]: (state, action) => {
       state.normalize.status = "pending";
       state.normalize.isLoading = true;
     },
-    [getResults.fulfilled.type]: (state, action) => {
+    [getResultsCall.fulfilled.type]: (state, action) => {
       state.normalize.status = "success";
       state.normalize.isLoading = false;
       
@@ -123,11 +123,11 @@ export const algorithmSlice = createSlice({
       else
         state.normalize.preprocessedCached = action.payload.results
     },
-    [getResults.rejected.type]: (state, action) => {
+    [getResultsCall.rejected.type]: (state, action) => {
       state.normalize.status = "failed";
       state.normalize.isLoading = false;
     },
-    [getMetadata.fulfilled.type]: (state, action) => {
+    [getMetadataCall.fulfilled.type]: (state, action) => {
       state.metadata.value = action.payload.results;
     },
   },

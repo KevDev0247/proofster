@@ -2,10 +2,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IFormula } from "../models/formula";
 import {
-  getFormulas,
-  createFormula,
-  updateFormula,
-  deleteFormula,
+  getFormulasCall,
+  createFormulaCall,
+  updateFormulaCall,
+  deleteFormulaCall,
 } from "../network/formulaApi";
 import { NotationService } from "../services/NotationService";
 
@@ -45,11 +45,11 @@ export const formulaSlice = createSlice({
   },
   extraReducers: {
     // Async reducers, mostly calling backend api endpoints
-    [getFormulas.pending.type]: (state, action) => {
+    [getFormulasCall.pending.type]: (state, action) => {
       state.list.status = "pending";
       state.list.isLoading = true;
     },
-    [getFormulas.fulfilled.type]: (state, action) => {
+    [getFormulasCall.fulfilled.type]: (state, action) => {
       state.list.status = "success";
       state.list.isLoading = false;
 
@@ -63,43 +63,43 @@ export const formulaSlice = createSlice({
           }))
         : [];
     },
-    [getFormulas.rejected.type]: (state, action) => {
+    [getFormulasCall.rejected.type]: (state, action) => {
       state.list.status = "failed";
       state.list.isLoading = false;
     },
-    [createFormula.fulfilled.type]: (state, action) => {
+    [createFormulaCall.fulfilled.type]: (state, action) => {
       state.save.isSaving = false;
       state.save.isUpdated = true;
     },
-    [createFormula.rejected.type]: (state, action) => {
+    [createFormulaCall.rejected.type]: (state, action) => {
       state.save.isSaving = false;
       state.save.isUpdated = false;
     },
-    [createFormula.pending.type]: (state, action) => {
+    [createFormulaCall.pending.type]: (state, action) => {
       state.save.isSaving = true;
       state.save.isUpdated = false;
     },
-    [updateFormula.fulfilled.type]: (state, action) => {
+    [updateFormulaCall.fulfilled.type]: (state, action) => {
       state.save.isSaving = false;
       state.save.isUpdated = true;
     },
-    [updateFormula.rejected.type]: (state, action) => {
+    [updateFormulaCall.rejected.type]: (state, action) => {
       state.save.isSaving = false;
       state.save.isUpdated = false;
     },
-    [updateFormula.pending.type]: (state, action) => {
+    [updateFormulaCall.pending.type]: (state, action) => {
       state.save.isSaving = true;
       state.save.isUpdated = false;
     },
-    [deleteFormula.fulfilled.type]: (state, action) => {
+    [deleteFormulaCall.fulfilled.type]: (state, action) => {
       state.save.isDeleting = false;
       state.save.isUpdated = true;
     },
-    [deleteFormula.rejected.type]: (state, action) => {
+    [deleteFormulaCall.rejected.type]: (state, action) => {
       state.save.isDeleting = false;
       state.save.isUpdated = false;
     },
-    [deleteFormula.pending.type]: (state, action) => {
+    [deleteFormulaCall.pending.type]: (state, action) => {
       state.save.isDeleting = true;
       state.save.isUpdated = false;
     },

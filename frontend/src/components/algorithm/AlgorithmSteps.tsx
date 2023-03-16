@@ -8,12 +8,13 @@ import {
 } from '@mui/material';
 import AlgorithmControl from './AlgorithmControl';
 import { IFormulaResult, INormalized } from '../../models/normalized';
-import { getResults } from '../../network/algorithmApi';
+import { getResultsCall } from '../../network/algorithmApi';
 import { cnfName, nnfName } from '../../constants';
 import { pnfName, preprocessName, defaultName } from '../../constants';
+import AlgorithmSelector from './AlgorithmSelector';
 
 
-export default function NormalizationResult() {
+export default function AlgorithmSteps() {
   const dispatch: AppDispatch = useAppDispatch();
 
   const renderResults: INormalized[] = useSelector(
@@ -30,11 +31,11 @@ export default function NormalizationResult() {
   }, [renderResults]);
 
   useEffect(() => {
-    dispatch(getResults({
+    dispatch(getResultsCall({
       workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
       algorithm: 0
     }));
-    dispatch(getResults({
+    dispatch(getResultsCall({
       workspaceId: "'216da6d9-aead-4970-9465-69bfb55d4956'",
       algorithm: 1
     }));
@@ -131,7 +132,10 @@ export default function NormalizationResult() {
                   </Grid>
 
                   {resultIndex === renderResults.length - 1 && (
-                    <AlgorithmControl isInitialStep={false} />
+                    <>
+                      <AlgorithmSelector />
+                      <AlgorithmControl isInitialStep={false} />
+                    </>
                   )}
                 </Grid>
               </CardContent>

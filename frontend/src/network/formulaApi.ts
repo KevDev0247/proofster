@@ -12,7 +12,7 @@ type SaveFormulaThunk = AsyncThunk<any, IFormula, {}>;
 type DeleteFormulaThunk = AsyncThunk<any, number, {}>;
 
 
-export const getFormulas: GetFormulasThunk = createAsyncThunk(
+export const getFormulasCall: GetFormulasThunk = createAsyncThunk(
   "formulas/get", 
   async (params: IGetFormulasParams) => {
     try {
@@ -24,7 +24,7 @@ export const getFormulas: GetFormulasThunk = createAsyncThunk(
   }
 );
 
-export const createFormula: SaveFormulaThunk = createAsyncThunk(
+export const createFormulaCall: SaveFormulaThunk = createAsyncThunk(
   "formula/create",
   async (formula: IFormula) => {
     try {
@@ -36,7 +36,7 @@ export const createFormula: SaveFormulaThunk = createAsyncThunk(
   }
 );
 
-export const updateFormula: SaveFormulaThunk = createAsyncThunk(
+export const updateFormulaCall: SaveFormulaThunk = createAsyncThunk(
   "formula/update",
   async (formula: IFormula) => {
     try {
@@ -48,7 +48,7 @@ export const updateFormula: SaveFormulaThunk = createAsyncThunk(
   }
 );
 
-export const deleteFormula: DeleteFormulaThunk = createAsyncThunk(
+export const deleteFormulaCall: DeleteFormulaThunk = createAsyncThunk(
   "formula/delete",
   async (formulaId: number) => {
     try {

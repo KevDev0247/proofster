@@ -9,7 +9,7 @@ import {
   TableContainer, TableHead, TableRow
 } from '@mui/material';
 import { IFormula } from '../../models/formula';
-import { getFormulas } from '../../network/formulaApi';
+import { getFormulasCall } from '../../network/formulaApi';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
 import { setShowCacheWarning, setArgumentEmpty } from '../../slices/globalSlice';
@@ -31,7 +31,7 @@ export default function FormulaDisplay() {
 
 
   useEffect(() => {
-    dispatch(getFormulas({
+    dispatch(getFormulasCall({
       workspaceId: '216da6d9-aead-4970-9465-69bfb55d4956',
       stage: 0
     }));
@@ -74,7 +74,7 @@ export default function FormulaDisplay() {
   const removeFormula = (id: number): void => {
     if (id)
       dispatch(
-        FormulaService().removeFormula(id)
+        FormulaService().deleteFormula(id)
       );
   };
 

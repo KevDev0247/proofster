@@ -8,7 +8,7 @@ type GetResultsThunk = AsyncThunk<any, IGetStepsRequest, {}>;
 type GetMetadataThunk = AsyncThunk<any, string, {}>;
 
 
-export const normalize: NormalizeThunk = createAsyncThunk(
+export const normalizeCall: NormalizeThunk = createAsyncThunk(
   "algorithm/nnf",
   async (request: INormalizeRequest, { rejectWithValue }) => {
     try {
@@ -22,7 +22,7 @@ export const normalize: NormalizeThunk = createAsyncThunk(
   }
 );
 
-export const getResults: GetResultsThunk = createAsyncThunk(
+export const getResultsCall: GetResultsThunk = createAsyncThunk(
   "algorithm/fetch",
   async (request: IGetStepsRequest) => {
     try {
@@ -42,7 +42,7 @@ export const getResults: GetResultsThunk = createAsyncThunk(
   }
 );
 
-export const getMetadata: GetMetadataThunk = createAsyncThunk(
+export const getMetadataCall: GetMetadataThunk = createAsyncThunk(
   "algorithm/metadata",
   async (workspaceId: string) => {
     try {
