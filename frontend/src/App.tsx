@@ -34,6 +34,7 @@ const ListItem = withStyles({
 function App() {
 
   const workspaces: string[] = new Array(20).fill("workspace");
+  const drawerWidth = 180;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -45,7 +46,9 @@ function App() {
         </Toolbar>
       </AppBar>
       <Drawer
-        variant="permanent"
+        variant="persistent"
+        open={true}
+        sx={{ width: drawerWidth }}
       >
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
@@ -54,36 +57,40 @@ function App() {
               <ListItem
                 button
                 selected={index === 2}
-                onClick={() => {}}
+                onClick={() => { }}
               >
                 <ListItemButton>
-                <Grid container spacing={2} alignItems="center"
-                  sx={{ padding: "5px" }}
-                >
-                  <Grid item xs={12} md={3}>
-                    <LibraryBooksOutlinedIcon />
+                  <Grid container spacing={2} alignItems="center"
+                    sx={{ padding: "5px" }}
+                  >
+                    <Grid item xs={12} md={3}>
+                      <LibraryBooksOutlinedIcon />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <ListItemText primary={text} />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <ListItemText primary={text} />
-                  </Grid>
-                </Grid>
                 </ListItemButton>
               </ListItem>
             ))}
           </List>
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ p: 3 }}>
         <Toolbar />
-        <Container maxWidth="md">
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <FormulaEditor />
+        <Container>
+          <Grid container spacing={3} md={12}>
+            <Grid item container spacing={3} lg={10}>
+              <Grid item xs={12} md={12}>
+                <FormulaEditor />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <ControlPanel />
+              </Grid>
+              <AlgorithmSteps />
             </Grid>
-            <Grid item xs={12} md={12}>
-              <ControlPanel />
+            <Grid item lg={2}>
             </Grid>
-            <AlgorithmSteps />
           </Grid>
         </Container>
       </Box>

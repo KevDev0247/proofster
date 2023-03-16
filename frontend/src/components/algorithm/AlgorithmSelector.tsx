@@ -56,7 +56,7 @@ export default function AlgorithmSelector() {
     <>
       {!argumentEdited && (
         <>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={5} container alignItems="center">
             <FormControl fullWidth error={showValidation}>
               <InputLabel id="algorithm-select">Algorithm</InputLabel>
               <Select
