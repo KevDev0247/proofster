@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState, useAppDispatch } from '../../store';
 import { IFormula } from '../../models/formula';
-import { Box, Card, CardContent, Grid } from '@mui/material';
+import { Box, Card, CardContent, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Button, CircularProgress } from '@mui/material';
@@ -16,10 +16,21 @@ import { FormulaService } from '../../services/FormulaService';
 import { NotationService } from '../../services/NotationService';
 
 
+interface IKeyboardButton {
+  label: string;
+  value: string;
+}
+const keyboardSetting: IKeyboardButton[] = [
+  { label: 'Infix', value: 'Infix' },
+  { label: 'Postfix', value: 'Postfix' },
+  { label: 'Natural', value: 'Natural' },
+];
+
 export default function FormulaEditor() {
   const dispatch: AppDispatch = useAppDispatch();
   const theme: Theme = useTheme();
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMdUp: boolean = useMediaQuery(theme.breakpoints.up('md'));
 
   const disableButton: boolean = useSelector(
     (state: RootState) => state.global.disableButton
@@ -46,6 +57,16 @@ export default function FormulaEditor() {
       dispatch(setDisableButton(false));
   }, [isSaving, isDeleting]);
 
+
+  const handleInputModeSelection = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    value: string,
+  ): void => {
+    dispatch(setSelected({
+      ...selected,
+      input_mode: value,
+    }));
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value, checked } = e.target;
@@ -138,13 +159,14 @@ export default function FormulaEditor() {
                   helperText={showValidation && 'Formula is required'}
                 />
               </Grid>
-              <Grid item xs={12} md={10} container spacing={2} alignItems="center">
+              <Grid item xs={12} md={10.5} container spacing={1} alignItems="center">
                 <FormulaKeyboard
                   formulaInfixRef={formulaInputRef}
                   isSmDown={isSmDown}
+                  isMdUp={isMdUp}
                 />
               </Grid>
-              <Grid item xs={12} md={2} container alignItems="center" justifyContent="flex-end">
+              <Grid item xs={12} md={1.5} container alignItems="center" justifyContent="flex-end">
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -159,7 +181,7 @@ export default function FormulaEditor() {
                 />
               </Grid>
             </Grid>
-            <Grid item xs={6} md={6}>
+            <Grid item xs={6} sm={4} md={4} lg={4}>
               <Button
                 variant="contained"
                 style={{ height: isSmDown ? '64px' : undefined }}
@@ -174,7 +196,22 @@ export default function FormulaEditor() {
                 Submit
               </Button>
             </Grid>
-            <Grid item xs={6} md={6} container justifyContent="flex-end">
+            <Grid item xs={12} sm={4} md={4} lg={4} container justifyContent="center">
+              <ToggleButtonGroup
+                size="small"
+                value={selected.input_mode}
+                onChange={handleInputModeSelection}
+                aria-label="special symbol group one"
+                exclusive
+              >
+                {keyboardSetting.map(({ label, value }) => (
+                  <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
+                    <Typography variant="body2"><strong>{label}</strong></Typography>
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </Grid>
+            <Grid item xs={6} sm={4} md={4} lg={4} container justifyContent="flex-end">
               &nbsp;
               <Button
                 variant="outlined"

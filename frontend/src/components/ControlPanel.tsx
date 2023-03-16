@@ -1,4 +1,3 @@
-import { AppDispatch, useAppDispatch } from '../store';
 import { Grid, Card, Box, CardContent, Typography } from '@mui/material';
 import { Theme, useTheme } from '@mui/material';
 import FormulaDisplay from './formula/FormulaDisplay';
