@@ -10,7 +10,7 @@ import { IGetStepsRequest } from "../models/requests";
 export const StepsService = () => {
 
   const fetchStepsIfAvailable = createAsyncThunk(
-    "algorithm/service/steps/fetch",
+    "service/step/fetch",
     async (request: IGetStepsRequest, thunkAPI) => {
       const { dispatch } = thunkAPI;
 

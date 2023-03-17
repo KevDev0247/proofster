@@ -9,20 +9,20 @@ import { setSelected, setShowValidation } from "../slices/formulaSlice";
 export const FormulaService = () => {
 
   const createOrUpdateFormula = createAsyncThunk(
-    "algorithm/service/formula/save",
-    async (formulaToSubmit: IFormula, thunkAPI) => {
+    "service/formula/save",
+    async (toSubmit: IFormula, thunkAPI) => {
       const { dispatch } = thunkAPI;
 
       const createOrUpdateAction =
-        formulaToSubmit.id === ""
-          ? createFormulaCall(formulaToSubmit)
-          : updateFormulaCall(formulaToSubmit);
+        toSubmit.id === ""
+          ? createFormulaCall(toSubmit)
+          : updateFormulaCall(toSubmit);
 
       const getFormulasAction = getFormulasCall({
-        workspaceId: formulaToSubmit.workspace_id,
+        workspaceId: toSubmit.workspace_id,
         stage: 0
-      })
-      const getMetadataAction = getMetadataCall(formulaToSubmit.workspace_id);
+      });
+      const getMetadataAction = getMetadataCall(toSubmit.workspace_id);
           
       await dispatch(createOrUpdateAction);
       await dispatch(getFormulasAction);
@@ -30,12 +30,11 @@ export const FormulaService = () => {
       await dispatch(
         FormulaService().resetCache()
       );
-
     }
   );
 
   const deleteFormula = createAsyncThunk(
-    "algorithm/service/formula/remove",
+    "service/formula/delete",
     async (request: IDeleteFormulaRequest, thunkAPI) => {
       const { dispatch } = thunkAPI;
       
@@ -53,11 +52,9 @@ export const FormulaService = () => {
   );
 
   const resetCache = createAsyncThunk(
-    "algorithm/service/formula/reset",
+    "service/formula/reset",
     async (_, thunkAPI) => {
       const { dispatch } = thunkAPI;
-
-      console.log("reset")
 
       dispatch(setSelected({
         id: "",

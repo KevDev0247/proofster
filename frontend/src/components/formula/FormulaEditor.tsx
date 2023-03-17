@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux';
-import { AppDispatch, RootState, useAppDispatch } from '../../store';
+import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { IFormula } from '../../models/formula';
 import { Box, Card, CardContent, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
@@ -81,7 +81,9 @@ export default function FormulaEditor() {
     }));
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     const { name, value, checked } = e.target;
     dispatch(
       setSelected({
@@ -157,7 +159,10 @@ export default function FormulaEditor() {
                 helperText={showValidation && 'Name is required'}
               />
             </Grid>
-            <Grid item xs={12} md={12} container spacing={1}>
+            <Grid item xs={12} md={12} 
+              container 
+              spacing={1}
+            >
               <Grid item xs={12} md={12}>
                 <TextField
                   id="formula_input"
@@ -174,7 +179,11 @@ export default function FormulaEditor() {
                   helperText={showValidation && 'Formula is required'}
                 />
               </Grid>
-              <Grid item xs={12} md={10.5} container spacing={1} alignItems="center">
+              <Grid item xs={12} md={10.5} 
+                container 
+                spacing={1} 
+                alignItems="center"
+              >
                 <FormulaKeyboard
                   formulaInfixRef={formulaInputRef}
                   isSmDown={isSmDown}
@@ -182,7 +191,10 @@ export default function FormulaEditor() {
                 />
               </Grid>
               {isSmDown && (
-                <Grid item xs={7.5} container justifyContent="center">
+                <Grid item xs={7.5} 
+                  container 
+                  justifyContent="center"
+                >
                   <ToggleButtonGroup
                     size="small"
                     value={selected.input_mode}
@@ -191,14 +203,24 @@ export default function FormulaEditor() {
                     exclusive
                   >
                     {keyboardSetting.map(({ label, value }) => (
-                      <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
-                        <Typography variant="body2"><strong>{label}</strong></Typography>
+                      <ToggleButton 
+                        key={label} 
+                        value={value} 
+                        sx={{ width: 66, textTransform: 'none' }}
+                      >
+                        <Typography variant="body2">
+                          <strong>{label}</strong>
+                        </Typography>
                       </ToggleButton>
                     ))}
                   </ToggleButtonGroup>
                 </Grid>
               )}
-              <Grid item xs={4.5} sm={12} md={1.5} container alignItems="center" justifyContent="flex-end">
+              <Grid item xs={4.5} sm={12} md={1.5} 
+                container 
+                alignItems="center" 
+                justifyContent="flex-end"
+              >
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -230,7 +252,10 @@ export default function FormulaEditor() {
               </Button>
             </Grid>
             {!isSmDown && (
-              <Grid item xs={12} sm={4} md={4} lg={4} container justifyContent="center">
+              <Grid item xs={12} sm={4} md={4} lg={4} 
+                container 
+                justifyContent="center"
+              >
                 <ToggleButtonGroup
                   size="small"
                   value={selected.input_mode}
@@ -239,14 +264,23 @@ export default function FormulaEditor() {
                   exclusive
                 >
                   {keyboardSetting.map(({ label, value }) => (
-                    <ToggleButton key={label} value={value} sx={{ width: 66, textTransform: 'none' }}>
-                      <Typography variant="body2"><strong>{label}</strong></Typography>
+                    <ToggleButton 
+                      key={label} 
+                      value={value} 
+                      sx={{ width: 66, textTransform: 'none' }}
+                    >
+                      <Typography variant="body2">
+                        <strong>{label}</strong>
+                      </Typography>
                     </ToggleButton>
                   ))}
                 </ToggleButtonGroup>
               </Grid>
             )}
-            <Grid item xs={6} sm={4} md={4} lg={4} container justifyContent="flex-end">
+            <Grid item xs={6} sm={4} md={4} lg={4} 
+              container 
+              justifyContent="flex-end"
+            >
               &nbsp;
               <Button
                 variant="outlined"

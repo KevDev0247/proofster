@@ -12,7 +12,7 @@ import {
 export const AlgorithmService = () => {
 
   const execute = createAsyncThunk(
-    "algorithm/service/algorithm/execute",
+    "service/algorithm/execute",
     async (request: INormalizeRequest, thunkAPI) => {
       const { dispatch } = thunkAPI;
 

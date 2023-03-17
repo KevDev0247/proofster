@@ -13,7 +13,7 @@ type DeleteFormulaThunk = AsyncThunk<any, string, {}>;
 
 
 export const getFormulasCall: GetFormulasThunk = createAsyncThunk(
-  "formulas/get", 
+  "network/formula/get", 
   async (params: IGetFormulasParams) => {
     try {
       const response = await FORMULA_API.get(`get/?workspace_id=${params.workspaceId}&stage=${params.stage}`)
@@ -25,7 +25,7 @@ export const getFormulasCall: GetFormulasThunk = createAsyncThunk(
 );
 
 export const createFormulaCall: SaveFormulaThunk = createAsyncThunk(
-  "formula/create",
+  "network/formula/create",
   async (formula: IFormula) => {
     try {
       const response = await FORMULA_API.post("create/", formula);
@@ -37,7 +37,7 @@ export const createFormulaCall: SaveFormulaThunk = createAsyncThunk(
 );
 
 export const updateFormulaCall: SaveFormulaThunk = createAsyncThunk(
-  "formula/update",
+  "network/formula/update",
   async (formula: IFormula) => {
     try {
       const response = await FORMULA_API.patch(`update/${formula.id}`, formula);
@@ -49,7 +49,7 @@ export const updateFormulaCall: SaveFormulaThunk = createAsyncThunk(
 );
 
 export const deleteFormulaCall: DeleteFormulaThunk = createAsyncThunk(
-  "formula/delete",
+  "network/formula/delete",
   async (formulaId: string) => {
     try {
       const response = await FORMULA_API.delete(`delete/${formulaId}`);

@@ -5,7 +5,7 @@ import { getMetadataCall, normalizeCall } from "../network/algorithmApi";
 export const TranspilerService = () => {
 
   const transpile = createAsyncThunk(
-    "algorithm/service/transpiler/transpile",
+    "service/transpiler/transpile",
     async (workspaceId: string, thunkAPI) => {
       const { dispatch } = thunkAPI;
 

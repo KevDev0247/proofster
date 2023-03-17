@@ -9,7 +9,7 @@ type GetMetadataThunk = AsyncThunk<any, string, {}>;
 
 
 export const normalizeCall: NormalizeThunk = createAsyncThunk(
-  "algorithm/nnf",
+  "network/algorithm/nnf",
   async (request: INormalizeRequest, { rejectWithValue }) => {
     try {
       const response = await NORMALIZER_API.post("", request);
@@ -23,7 +23,7 @@ export const normalizeCall: NormalizeThunk = createAsyncThunk(
 );
 
 export const getResultsCall: GetResultsThunk = createAsyncThunk(
-  "algorithm/fetch",
+  "network/algorithm/fetch",
   async (request: IGetStepsRequest) => {
     try {
       const response = await NORMALIZER_API.get("", {
@@ -43,7 +43,7 @@ export const getResultsCall: GetResultsThunk = createAsyncThunk(
 );
 
 export const getMetadataCall: GetMetadataThunk = createAsyncThunk(
-  "algorithm/metadata",
+  "network/algorithm/metadata",
   async (workspaceId: string) => {
     try {
       const response = await NORMALIZER_API.get("/metadata", {
