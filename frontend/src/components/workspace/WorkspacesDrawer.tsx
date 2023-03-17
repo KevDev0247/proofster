@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import {
   Toolbar, Grid, Box, Drawer, List,
-  ListItemButton, ListItemText, ButtonBase
+  ListItemButton, ListItemText, ButtonBase, Typography, Button, TextField
 } from '@mui/material';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { getWorkspacesCall } from '../../network/workspaceApi';
 import { IWorkspace } from '../../models/workspace';
@@ -35,14 +36,43 @@ export default function WorkspacesDrawer() {
     <Drawer
       variant="persistent"
       open={true}
-      sx={{ width: 150 }}
+      sx={{ width: 180 }}
     >
       <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
+      <Box>
         <List>
+          <Box sx={{ paddingLeft: 2, paddingRight: 1, paddingTop: 1, paddingBottom: 1, width: 50 }}>
+            <TextField
+              id="id"
+              name="name"
+              label="Workspace"
+              variant="outlined"
+              type="text"
+              value={""}
+              onChange={() => { }}
+              placeholder="Enter Name"
+              fullWidth
+              error={false}
+              helperText={false && 'Formula is required'}
+              sx={{ width: '305%' }}
+            />
+          </Box>
+          <Box sx={{ paddingLeft: 2, paddingRight: 1, paddingTop: 1, paddingBottom: 1 }}>
+            <Button variant="outlined">
+              <Grid container spacing={5} alignItems="center">
+                <Grid item xs={8} md={8} container>
+                  <AddIcon />
+                </Grid>
+                <Grid item xs={4} md={4} container justifyContent="flex-end">
+                  <Typography variant="body2">Create</Typography>
+                </Grid>
+              </Grid>
+            </Button>
+          </Box>
+
           {workspaceList.map((d: IWorkspace, index: number) => (
-            <ListItemButton 
-              selected={d.id === selectedWorkspaceId} 
+            <ListItemButton
+              selected={d.id === selectedWorkspaceId}
               sx={{ padding: 0 }}
             >
               <ButtonBase onClick={() => handleWorkspaceSelection(d.id)}>
