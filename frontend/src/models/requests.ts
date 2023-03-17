@@ -13,3 +13,8 @@ export interface IDeleteFormulaRequest {
   workspaceId: string;
   formulaId: string;
 }
+
+export interface IDeleteWorkspaceRequest {
+  workspaceId: string;
+  userId: number;
+}

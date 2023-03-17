@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { 
+import {
   createWorkspaceCall, 
   deleteWorkspaceCall, 
   getWorkspacesCall, 
@@ -20,11 +20,23 @@ export const workspaceSlice = createSlice({
       selected: {
         id: "",
         name: "",
+        user_id: 0,
       },
       showValidation: false,
+      formOpened: false,
     },
   },
-  reducers: {},
+  reducers: {
+    setSelected: (state, action) => {
+      state.save.selected = action.payload;
+    },
+    setShowValidation: (state, action) => {
+      state.save.showValidation = action.payload;
+    },
+    setFormOpened: (state, action) => {
+      state.save.formOpened = action.payload;
+    }
+  },
   extraReducers: {
     // Async reducers, mostly calling backend api endpoints
     [getWorkspacesCall.pending.type]: (state, action) => {
@@ -75,5 +87,11 @@ export const workspaceSlice = createSlice({
     },
   }
 });
+
+export const { 
+  setSelected, 
+  setShowValidation,
+  setFormOpened
+} = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

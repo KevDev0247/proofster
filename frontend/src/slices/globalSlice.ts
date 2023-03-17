@@ -9,6 +9,7 @@ const globalSlice = createSlice({
     argumentEmpty: true,
     argumentEdited: false,
     selectedWorkspaceId: "",
+    currentUserId: 1,
   },
   reducers: {
     setDisableButton: (state, action: PayloadAction<boolean>) => {

@@ -4,7 +4,7 @@ import { IWorkspace } from './../models/workspace';
 
 type GetWorkspacesThunk = AsyncThunk<IWorkspace[], number, {}>;
 type SaveWorkspaceThunk = AsyncThunk<any, IWorkspace, {}>;
-type DeleteWorkspaceThunk = AsyncThunk<any, number, {}>;
+type DeleteWorkspaceThunk = AsyncThunk<any, string, {}>;
 
 
 export const getWorkspacesCall: GetWorkspacesThunk = createAsyncThunk(
@@ -45,7 +45,7 @@ export const updateWorkspaceCall: SaveWorkspaceThunk = createAsyncThunk(
 
 export const deleteWorkspaceCall: DeleteWorkspaceThunk = createAsyncThunk(
   "formula/delete",
-  async (workspaceId: number) => {
+  async (workspaceId: string) => {
     try {
       const response = await WORKSPACE_API.delete(`delete/${workspaceId}`);
       return response.data;
