@@ -12,8 +12,8 @@ import (
 
 func GetMetadataByWorkspace(
 	workspaceId string,
-) (*db.MetaData, error) {
-	metadata := &db.MetaData{}
+) (*db.Metadata, error) {
+	metadata := &db.Metadata{}
 
 	err := mgm.Coll(metadata).First(
 		bson.M{
@@ -33,7 +33,7 @@ func SaveMetadata(
 	allNormalized bool,
 	isPreprocessed bool,
 ) error {
-	metadata := &db.MetaData{}
+	metadata := &db.Metadata{}
 	_, err := mgm.Coll(metadata).DeleteMany(
 		context.Background(),
 		bson.M{
@@ -44,13 +44,13 @@ func SaveMetadata(
 		return errors.New("cannot delete existing metadata")
 	}
 
-	metadata = db.NewMetaData(
+	metadata = db.NewMetadata(
 		workspaceId,
 		transpiled,
 		allNormalized,
 		isPreprocessed,
 	)
-	err = mgm.Coll(metadata).Create(metadata)
+	err = mgm.Coll(&db.Metadata{}).Create(metadata)
 	if err != nil {
 		return errors.New("cannot create new metadata")
 	}
@@ -59,7 +59,7 @@ func SaveMetadata(
 }
 
 func UpdateMetadata(request *models.MetadataRequest) error {
-	metadata := &db.MetaData{}
+	metadata := &db.Metadata{}
 	err := mgm.Coll(metadata).First(
 		bson.M{"workspace_id": request.WorkspaceId},
 		metadata,

@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from api.service import (
     get_formula, 
     get_formula_by_workspace,
-    sync_formulas
+    sync_formulas_across_service
 )
 from api.serializers import FormulaSerializer
 
@@ -38,7 +38,9 @@ class Formulas(View):
                 'message': serializer.errors,
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        sync_formulas(data.get('workspace_id'))
+        sync_formulas_across_service(
+            data.get('workspace_id')
+        )
 
         return JsonResponse({
             'formula': serializer.data,
@@ -67,6 +69,8 @@ class FormulaDetail(View):
             return JsonResponse({
                 'message': f"Formula with Id: {pk} not found",
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        input_edited = data['formula_input'] != formula.formula_input
+        type_edited = data['is_conclusion'] != formula.is_conclusion
         
         serializer = FormulaSerializer(
             instance=formula, 
@@ -77,7 +81,11 @@ class FormulaDetail(View):
             serializer.validated_data['updated_at'] = datetime.now()
             serializer.save()
 
-            sync_formulas(data.get('workspace_id'))
+            print(input_edited, type_edited)
+            if input_edited or type_edited:
+                sync_formulas_across_service(
+                    data.get('workspace_id')
+                )
 
             return JsonResponse({
                 'formula': serializer.data,
@@ -96,6 +104,6 @@ class FormulaDetail(View):
         workspace_id = formula.workspace_id
         
         formula.delete()
-        sync_formulas(workspace_id)
+        sync_formulas_across_service(workspace_id)
 
         return JsonResponse({}, status=status.HTTP_200_OK)

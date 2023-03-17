@@ -36,9 +36,6 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
   const argumentEmpty: boolean = useSelector(
     (state: RootState) => state.global.argumentEmpty
   );
-  const argumentEdited: boolean = useSelector(
-    (state: RootState) => state.global.argumentEdited
-  );
   const isLoading: boolean = useSelector(
     (state: RootState) => state.algorithm.normalize.isLoading
   );
@@ -80,7 +77,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
 
     const selectedAlgorithm = selectedStage === '9' ? 1 : 0
 
-    if (isInitialStep && selectedStage === '' && !argumentEdited) {
+    if (isInitialStep && selectedStage === '' && metadata.is_transpiled) {
       dispatch(setShowValidation(true));
       return;
     }
@@ -89,7 +86,7 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
       return;
     }
 
-    if (argumentEdited) {
+    if (!metadata.is_transpiled) {
       dispatch(
         TranspilerService().transpile(selectedWorkspaceId)
       );
@@ -135,6 +132,9 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
     dispatch(setShowCacheWarning(false));
     dispatch(setShowError(false));
     dispatch(setShowValidation(false));
+    dispatch(
+      getMetadataCall(selectedWorkspaceId)
+    );
   }
 
   const reset = (): void => {
@@ -164,8 +164,8 @@ export default function AlgorithmControl(props: { isInitialStep: boolean }) {
               <CircularProgress color="secondary" size={20} />
             }
           >
-            {argumentEdited ?
-              'Transpile'
+            {!metadata.is_transpiled 
+              ? 'Transpile'
               : isInitialStep ? 'Execute' : 'Next'
             }
           </Button>

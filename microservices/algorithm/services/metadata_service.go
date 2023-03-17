@@ -8,7 +8,7 @@ import (
 
 func GetMetadata(
 	workspaceId string,
-) (*db.MetaData, error) {
+) (*db.Metadata, error) {
 	metadata, err := repositories.GetMetadataByWorkspace(workspaceId)
 	if err != nil {
 		return nil, errors.New(err.Error())

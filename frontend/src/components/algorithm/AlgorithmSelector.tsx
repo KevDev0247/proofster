@@ -15,6 +15,7 @@ import {
   prompt, nnfSubtitle, pnfSubtitle,
   cnfSubtitle, preprocessSubtitle
 } from '../../constants';
+import { IMetadata } from '../../models/metadata';
 
 
 interface Option {
@@ -37,8 +38,8 @@ export default function AlgorithmSelector() {
   const selectedStage: string = useSelector(
     (state: RootState) => state.algorithm.normalize.selectedStage
   );
-  const argumentEdited: boolean = useSelector(
-    (state: RootState) => state.global.argumentEdited
+  const metadata: IMetadata = useSelector(
+    (state: RootState) => state.algorithm.metadata.value
   );
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export default function AlgorithmSelector() {
 
   return (
     <>
-      {!argumentEdited && (
+      {metadata.is_transpiled && (
         <>
           <Grid item xs={12} md={5} container alignItems="center">
             <FormControl fullWidth error={showValidation}>

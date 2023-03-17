@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { normalizeCall } from "../network/algorithmApi";
-import { setArgumentEdited } from "../slices/globalSlice";
+import { getMetadataCall, normalizeCall } from "../network/algorithmApi";
 
 
 export const TranspilerService = () => {
@@ -15,9 +14,10 @@ export const TranspilerService = () => {
         workspace_id: workspaceId,
         algorithm: 0,
       });
+      const getMetadataAction = getMetadataCall(workspaceId);
 
       await dispatch(transpileAction);
-      dispatch(setArgumentEdited(false));
+      await dispatch(getMetadataAction);
     }
   );
 

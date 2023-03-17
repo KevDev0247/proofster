@@ -4,7 +4,7 @@ import (
 	"github.com/kamva/mgm/v3"
 )
 
-type MetaData struct {
+type Metadata struct {
 	mgm.DefaultModel `bson:",inline"`
 	WorkspaceId      string `bson:"workspace_id" json:"workspace_id"`
 	IsTranspiled     bool   `bson:"is_transpiled" json:"is_transpiled"`
@@ -12,13 +12,13 @@ type MetaData struct {
 	IsPreprocessed   bool   `bson:"is_preprocessed" json:"is_preprocessed"`
 }
 
-func NewMetaData(
+func NewMetadata(
 	workspaceId string,
 	isTranspiled bool,
 	allNormalized bool,
 	isPreprocessed bool,
-) *MetaData {
-	return &MetaData{
+) *Metadata {
+	return &Metadata{
 		WorkspaceId:    workspaceId,
 		IsTranspiled:   isTranspiled,
 		AllNormalized:  allNormalized,

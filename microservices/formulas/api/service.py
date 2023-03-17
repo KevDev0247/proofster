@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
     
-def sync_formulas(workspace_id):
+def sync_formulas_across_service(workspace_id):
     rabbitmq_uri = os.getenv('RABBITMQ_URI')
     params = pika.URLParameters(rabbitmq_uri)
     connection = pika.BlockingConnection(params)

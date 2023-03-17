@@ -4,7 +4,6 @@ import { getResultsCall, normalizeCall } from "../network/algorithmApi";
 import { getMetadataCall } from './../network/algorithmApi';
 
 
-// todo: fetch existing result
 export const algorithmSlice = createSlice({
   name: "algorithm",
   initialState: {
