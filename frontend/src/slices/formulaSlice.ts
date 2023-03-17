@@ -26,7 +26,7 @@ export const formulaSlice = createSlice({
         name: "",
         formula_postfix: "",
         formula_input: "",
-        input_mode: "",
+        input_mode: "Infix",
         formula_result: "",
         is_conclusion: false,
         workspace_id: "",

@@ -8,6 +8,7 @@ const globalSlice = createSlice({
     showCacheWarning: false,
     argumentEmpty: true,
     argumentEdited: false,
+    drawerOpened: false,
     selectedWorkspaceId: "",
     currentUserId: 1,
   },
@@ -27,6 +28,9 @@ const globalSlice = createSlice({
     setArgumentEdited: (state, action: PayloadAction<boolean>) => {
       state.argumentEdited = action.payload;
     },
+    setDrawerOpened: (state, action: PayloadAction<boolean>) => {
+      state.drawerOpened = action.payload;
+    },
     setSelectedWorkspaceId: (state, action: PayloadAction<string>) => {
       state.selectedWorkspaceId = action.payload;
     },
@@ -39,6 +43,7 @@ export const {
   setShowCacheWarning,
   setArgumentEmpty,
   setArgumentEdited,
+  setDrawerOpened,
   setSelectedWorkspaceId
 } = globalSlice.actions;
 
