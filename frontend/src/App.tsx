@@ -12,7 +12,6 @@ import { RootState, AppDispatch, useAppDispatch } from './store';
 import FormulaEditor from './components/formula/FormulaEditor';
 import AlgorithmSteps from './components/algorithm/AlgorithmSteps';
 import WorkspacesDrawer from './components/workspace/WorkspacesDrawer';
-import { useState } from 'react';
 import { setDrawerOpened } from './slices/globalSlice';
 
 
@@ -46,9 +45,9 @@ function App() {
         </Toolbar>
       </AppBar>
       <WorkspacesDrawer />
-      <Box component="main" sx={{ p: 3 }}>
+      <Box sx={{ p: 3, paddingTop: 3, paddingLeft: 0 }}>
         <Toolbar />
-        <Container sx={{ maxWidth:'100%'  }} maxWidth={false} >
+        <Container sx={{ maxWidth:'100%' }} maxWidth={false} >
           <Grid container spacing={3}>
             <Grid item container spacing={3} md={12} lg={8}>
               <Grid item xs={12} md={12}>
@@ -67,7 +66,7 @@ function App() {
                   bgcolor: theme.palette.primary.main,
                   color: 'white',
                   py: 2,
-                  pl: 2
+                  pl: 2,
                 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
