@@ -16,7 +16,6 @@ export const workspaceSlice = createSlice({
     save: {
       isSaving: false,
       isDeleting: false,
-      isUpdated: false,
       selected: {
         id: "",
         name: "",
@@ -51,39 +50,30 @@ export const workspaceSlice = createSlice({
     },
     [createWorkspaceCall.fulfilled.type]: (state, action) => {
       state.save.isSaving = false;
-      state.save.isUpdated = true;
     },
     [createWorkspaceCall.rejected.type]: (state, action) => {
       state.save.isSaving = false;
-      state.save.isUpdated = false;
     },
     [createWorkspaceCall.pending.type]: (state, action) => {
       state.save.isSaving = true;
-      state.save.isUpdated = false;
     },
     [updateWorkspaceCall.fulfilled.type]: (state, action) => {
       state.save.isSaving = false;
-      state.save.isUpdated = true;
     },
     [updateWorkspaceCall.rejected.type]: (state, action) => {
       state.save.isSaving = false;
-      state.save.isUpdated = false;
     },
     [updateWorkspaceCall.pending.type]: (state, action) => {
       state.save.isSaving = true;
-      state.save.isUpdated = false;
     },
     [deleteWorkspaceCall.fulfilled.type]: (state, action) => {
       state.save.isDeleting = false;
-      state.save.isUpdated = true;
     },
     [deleteWorkspaceCall.rejected.type]: (state, action) => {
       state.save.isDeleting = false;
-      state.save.isUpdated = false;
     },
     [deleteWorkspaceCall.pending.type]: (state, action) => {
       state.save.isDeleting = true;
-      state.save.isUpdated = false;
     },
   }
 });

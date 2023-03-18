@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase, useMediaQuery, Theme, useTheme,
 } from '@mui/material';
@@ -26,15 +26,21 @@ export default function WorkspacesDrawer(
   );
   const drawerOpened: boolean = useSelector(
     (state: RootState) => state.global.drawerOpened
-  );  
-  const workspaceList: IWorkspace[] = useSelector(
-    (state: RootState) => state.workspace.list.values
   );
-  
 
   useEffect(() => {
     dispatch(getWorkspacesCall(1));
   }, []);
+
+  const workspaceList: IWorkspace[] = useSelector(
+    (state: RootState) => state.workspace.list.values
+  );  
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  useEffect(() => {
+    dispatch(
+      setCurrentWorkspace(workspaceList[selectedIndex])
+    );
+  }, [selectedIndex, workspaceList]);
 
   useEffect(() => {
     if (isSmDown)
@@ -43,12 +49,6 @@ export default function WorkspacesDrawer(
       dispatch(setDrawerOpened(true));
   }, [isSmDown]);
 
-
-  const handleWorkspaceSelection = (workspace: IWorkspace) => {
-    dispatch(
-      setCurrentWorkspace(workspace)
-    );
-  }
 
   const toggleDrawer = (e: React.SyntheticEvent) => {
     dispatch(setDrawerOpened(!drawerOpened));
@@ -72,7 +72,7 @@ export default function WorkspacesDrawer(
               selected={d.id === currentWorkspace.id}
               sx={{ padding: 0 }}
             >
-              <ButtonBase onClick={() => handleWorkspaceSelection(d)}>
+              <ButtonBase onClick={() => setSelectedIndex(index)}>
                 <Grid container spacing={2} alignItems="center"
                   sx={{ paddingY: 1, paddingX: 3 }}
                 >
