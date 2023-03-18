@@ -14,6 +14,7 @@ import { setDisableButton } from '../../slices/globalSlice';
 import FormulaKeyboard from './FormulaKeyboard';
 import { FormulaService } from '../../services/FormulaService';
 import { NotationService } from '../../services/NotationService';
+import { IWorkspace } from '../../models/workspace';
 
 
 interface IKeyboardButton {
@@ -53,17 +54,17 @@ export default function FormulaEditor(
   const formulaInputRef = useRef<HTMLInputElement>(null);
   
 
-  const selectedWorkspaceId: string = useSelector(
-    (state: RootState) => state.global.selectedWorkspaceId
+  const currentWorkspace: IWorkspace = useSelector(
+    (state: RootState) => state.global.currentWorkspace
   );
   useEffect(() => {
     dispatch(
       setSelected({
         ...selected,
-        workspace_id: selectedWorkspaceId,
+        workspace_id: currentWorkspace.id,
       })
     );
-  }, [selectedWorkspaceId]);
+  }, [currentWorkspace]);
 
   useEffect(() => {
     if (isSaving || isDeleting)

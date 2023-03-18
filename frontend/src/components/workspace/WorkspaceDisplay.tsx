@@ -1,9 +1,40 @@
+import { useSelector } from 'react-redux';
 import { IconButton } from '@mui/material';
 import { Typography, Grid } from '@mui/material';
 import Edit from '@material-ui/icons/Edit';
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import { RootState, AppDispatch, useAppDispatch } from '../../store';
+import { IWorkspace } from '../../models/workspace';
+import { setFormOpened, setSelected, setShowValidation } from '../../slices/workspaceSlice';
+import { WorkspaceService } from '../../services/WorkspaceService';
+
 
 export default function WorkspaceDisplay() {
+  const dispatch: AppDispatch = useAppDispatch();
+  
+  const currentWorkspace: IWorkspace = useSelector(
+    (state: RootState) => state.global.currentWorkspace
+  );
+
+  const selectWorkspace = (d: IWorkspace): void => {
+    dispatch(setShowValidation(false));
+    dispatch(setSelected({
+      id: d.id,
+      name: d.name,
+      user_id: d.user_id
+    }));
+    dispatch(setFormOpened(true));
+  }
+
+  const removeWorkspace = (d: IWorkspace): void => {
+    if (d.id)
+      dispatch(
+        WorkspaceService().deleteWorkspace({
+          userId: d.user_id,
+          workspaceId: d.id,
+        })
+      )
+  }
 
   return (
     <Grid item xs={6} lg={4}
@@ -16,17 +47,17 @@ export default function WorkspaceDisplay() {
       <Typography variant="h6"
         sx={{ marginRight: 2 }}
       >
-        Workspace
+        {currentWorkspace.name}
       </Typography>
       <IconButton
-        onClick={() => { }}
+        onClick={() => selectWorkspace(currentWorkspace)}
         disabled={false}
         sx={{ color: 'white' }}
       >
         <Edit />
       </IconButton>
       <IconButton
-        onClick={() => { }}
+        onClick={() => removeWorkspace(currentWorkspace)}
         disabled={false}
         sx={{ color: 'white' }}
       >

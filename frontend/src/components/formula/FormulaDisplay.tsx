@@ -14,6 +14,7 @@ import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { setShowValidation, setSelected } from '../../slices/formulaSlice';
 import { setShowCacheWarning, setArgumentEmpty } from '../../slices/globalSlice';
 import { FormulaService } from '../../services/FormulaService';
+import { IWorkspace } from '../../models/workspace';
 
 
 export default function FormulaDisplay() {
@@ -30,17 +31,17 @@ export default function FormulaDisplay() {
   );
 
 
-  const selectedWorkspaceId: string = useSelector(
-    (state: RootState) => state.global.selectedWorkspaceId
-  );
+  const currentWorkspace: IWorkspace = useSelector(
+    (state: RootState) => state.global.currentWorkspace
+  ); 
   useEffect(() => {
     dispatch(
       getFormulasCall({
-        workspaceId: selectedWorkspaceId,
+        workspaceId: currentWorkspace.id,
         stage: 0
       })
     );
-  }, [selectedWorkspaceId]);
+  }, [currentWorkspace]);
 
   const isUpdated: boolean = useSelector(
     (state: RootState) => state.formula.save.isUpdated
@@ -80,7 +81,7 @@ export default function FormulaDisplay() {
     if (id)
       dispatch(
         FormulaService().deleteFormula({
-          workspaceId: selectedWorkspaceId,
+          workspaceId: currentWorkspace.id,
           formulaId: id
         })
       );

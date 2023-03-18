@@ -9,7 +9,7 @@ import { IWorkspace } from '../../models/workspace';
 import { useSelector } from 'react-redux';
 import { 
   setDrawerOpened, 
-  setSelectedWorkspaceId 
+  setCurrentWorkspace
 } from '../../slices/globalSlice';
 import WorkspaceEditor from './WorkspaceEditor';
 
@@ -21,8 +21,8 @@ export default function WorkspacesDrawer(
 
   const dispatch: AppDispatch = useAppDispatch();
 
-  const selectedWorkspaceId: string = useSelector(
-    (state: RootState) => state.global.selectedWorkspaceId
+  const currentWorkspace: IWorkspace = useSelector(
+    (state: RootState) => state.global.currentWorkspace
   );
   const drawerOpened: boolean = useSelector(
     (state: RootState) => state.global.drawerOpened
@@ -44,9 +44,9 @@ export default function WorkspacesDrawer(
   }, [isSmDown]);
 
 
-  const handleWorkspaceSelection = (workspaceId: string) => {
+  const handleWorkspaceSelection = (workspace: IWorkspace) => {
     dispatch(
-      setSelectedWorkspaceId(workspaceId)
+      setCurrentWorkspace(workspace)
     );
   }
 
@@ -69,10 +69,10 @@ export default function WorkspacesDrawer(
 
           {workspaceList.map((d: IWorkspace, index: number) => (
             <ListItemButton
-              selected={d.id === selectedWorkspaceId}
+              selected={d.id === currentWorkspace.id}
               sx={{ padding: 0 }}
             >
-              <ButtonBase onClick={() => handleWorkspaceSelection(d.id)}>
+              <ButtonBase onClick={() => handleWorkspaceSelection(d)}>
                 <Grid container spacing={2} alignItems="center"
                   sx={{ paddingY: 1, paddingX: 3 }}
                 >

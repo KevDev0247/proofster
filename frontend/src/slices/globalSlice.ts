@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IWorkspace } from './../models/workspace';
 
 const globalSlice = createSlice({
   name: 'global',
@@ -9,7 +10,11 @@ const globalSlice = createSlice({
     argumentEmpty: true,
     argumentEdited: false,
     drawerOpened: true,
-    selectedWorkspaceId: "",
+    currentWorkspace: {
+      id: "",
+      name: "",
+      user_id: 0,
+    },
     currentUserId: 1,
   },
   reducers: {
@@ -31,8 +36,8 @@ const globalSlice = createSlice({
     setDrawerOpened: (state, action: PayloadAction<boolean>) => {
       state.drawerOpened = action.payload;
     },
-    setSelectedWorkspaceId: (state, action: PayloadAction<string>) => {
-      state.selectedWorkspaceId = action.payload;
+    setCurrentWorkspace: (state, action: PayloadAction<IWorkspace>) => {
+      state.currentWorkspace = action.payload;
     },
   },
 });
@@ -44,7 +49,7 @@ export const {
   setArgumentEmpty,
   setArgumentEdited,
   setDrawerOpened,
-  setSelectedWorkspaceId
+  setCurrentWorkspace
 } = globalSlice.actions;
 
 export default globalSlice.reducer;

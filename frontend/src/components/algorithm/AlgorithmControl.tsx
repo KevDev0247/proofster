@@ -21,6 +21,7 @@ import { IMetadata } from './../../models/metadata';
 import { StepsService } from './../../services/StepsService';
 import { TranspilerService } from '../../services/TranspilerService';
 import { AlgorithmService } from './../../services/AlgorithmService';
+import { IWorkspace } from '../../models/workspace';
 
 
 export default function AlgorithmControl(
@@ -65,14 +66,14 @@ export default function AlgorithmControl(
   );
 
 
-  const selectedWorkspaceId: string = useSelector(
-    (state: RootState) => state.global.selectedWorkspaceId
+  const currentWorkspace: IWorkspace = useSelector(
+    (state: RootState) => state.global.currentWorkspace
   ); 
   useEffect(() => {
     dispatch(
-      getMetadataCall(selectedWorkspaceId)
+      getMetadataCall(currentWorkspace.id)
     );
-  }, [selectedWorkspaceId]);
+  }, [currentWorkspace]);
   
 
   const execute = (e: React.SyntheticEvent): void => {
@@ -91,7 +92,7 @@ export default function AlgorithmControl(
 
     if (!metadata.is_transpiled) {
       dispatch(
-        TranspilerService().transpile(selectedWorkspaceId)
+        TranspilerService().transpile(currentWorkspace.id)
       );
       return;
     }
@@ -101,7 +102,7 @@ export default function AlgorithmControl(
       dispatch(
         StepsService().fetchStepsIfAvailable({
           algorithm: selectedAlgorithm,
-          workspaceId: selectedWorkspaceId
+          workspaceId: currentWorkspace.id
         })
       );
       return;
@@ -111,7 +112,7 @@ export default function AlgorithmControl(
       dispatch(
         AlgorithmService().execute({
           stage: normalizationCompleted,
-          workspace_id: selectedWorkspaceId,
+          workspace_id: currentWorkspace.id,
           algorithm: selectedAlgorithm,
         })
       );
@@ -119,7 +120,7 @@ export default function AlgorithmControl(
       dispatch(
         AlgorithmService().execute({
           stage: preprocessingCompleted,
-          workspace_id: selectedWorkspaceId,
+          workspace_id: currentWorkspace.id,
           algorithm: selectedAlgorithm,
         })
       );
@@ -136,7 +137,7 @@ export default function AlgorithmControl(
     dispatch(setShowError(false));
     dispatch(setShowValidation(false));
     dispatch(
-      getMetadataCall(selectedWorkspaceId)
+      getMetadataCall(currentWorkspace.id)
     );
   }
 

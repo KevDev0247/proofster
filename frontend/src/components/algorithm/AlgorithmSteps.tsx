@@ -12,6 +12,7 @@ import { getResultsCall } from '../../network/algorithmApi';
 import { cnfName, nnfName } from '../../constants';
 import { pnfName, preprocessName, defaultName } from '../../constants';
 import AlgorithmSelector from './AlgorithmSelector';
+import { IWorkspace } from '../../models/workspace';
 
 
 export default function AlgorithmSteps(
@@ -34,16 +35,16 @@ export default function AlgorithmSteps(
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [renderResults]);
 
-  const selectedWorkspaceId: string = useSelector(
-    (state: RootState) => state.global.selectedWorkspaceId
+  const currentWorkspace: IWorkspace = useSelector(
+    (state: RootState) => state.global.currentWorkspace
   ); 
   useEffect(() => {
     dispatch(getResultsCall({
-      workspaceId: selectedWorkspaceId,
+      workspaceId: currentWorkspace.id,
       algorithm: 0
     }));
     dispatch(getResultsCall({
-      workspaceId: selectedWorkspaceId,
+      workspaceId: currentWorkspace.id,
       algorithm: 1
     }));
   }, []);
