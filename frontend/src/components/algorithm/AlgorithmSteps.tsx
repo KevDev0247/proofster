@@ -14,7 +14,11 @@ import { pnfName, preprocessName, defaultName } from '../../constants';
 import AlgorithmSelector from './AlgorithmSelector';
 
 
-export default function AlgorithmSteps() {
+export default function AlgorithmSteps(
+  props: { isSmDown: boolean }
+) {
+  const { isSmDown } = props;
+
   const dispatch: AppDispatch = useAppDispatch();
 
   const renderResults: INormalized[] = useSelector(
@@ -137,7 +141,10 @@ export default function AlgorithmSteps() {
                   {resultIndex === renderResults.length - 1 && (
                     <>
                       <AlgorithmSelector />
-                      <AlgorithmControl isInitialStep={false} />
+                      <AlgorithmControl 
+                        isInitialStep={false} 
+                        isSmDown={isSmDown}
+                      />
                     </>
                   )}
                 </Grid>

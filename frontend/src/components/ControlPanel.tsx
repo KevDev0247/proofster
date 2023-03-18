@@ -6,7 +6,11 @@ import AlgorithmAlerts from './algorithm/AlgorithmAlerts';
 import AlgorithmSelector from './algorithm/AlgorithmSelector';
 
 
-export default function ControlPanel() {
+export default function ControlPanel(
+  props: { isSmDown: boolean }
+) {
+  const { isSmDown } = props;
+
   const theme: Theme = useTheme();
 
   return (
@@ -32,7 +36,10 @@ export default function ControlPanel() {
           <FormulaDisplay />
           <AlgorithmAlerts />
           <AlgorithmSelector />
-          <AlgorithmControl isInitialStep={true} />
+          <AlgorithmControl 
+            isInitialStep={true} 
+            isSmDown={isSmDown} 
+          />
         </Grid>
       </CardContent>
     </Card>

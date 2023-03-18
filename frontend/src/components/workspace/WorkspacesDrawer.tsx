@@ -14,10 +14,12 @@ import {
 import WorkspaceEditor from './WorkspaceEditor';
 
 
-export default function WorkspacesDrawer() {
+export default function WorkspacesDrawer(
+  props: { isSmDown: boolean }
+) {
+  const { isSmDown } = props;  
+
   const dispatch: AppDispatch = useAppDispatch();
-  const theme: Theme = useTheme();
-  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
   const selectedWorkspaceId: string = useSelector(
     (state: RootState) => state.global.selectedWorkspaceId

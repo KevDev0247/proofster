@@ -26,10 +26,13 @@ const keyboardSetting: IKeyboardButton[] = [
   { label: 'Natural', value: 'Natural' },
 ];
 
-export default function FormulaEditor() {
+export default function FormulaEditor(
+  props: { isSmDown: boolean }
+) {
+  const { isSmDown } = props;  
+
   const dispatch: AppDispatch = useAppDispatch();
   const theme: Theme = useTheme();
-  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
   const disableButton: boolean = useSelector(
     (state: RootState) => state.global.disableButton

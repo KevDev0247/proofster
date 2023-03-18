@@ -23,12 +23,15 @@ import { TranspilerService } from '../../services/TranspilerService';
 import { AlgorithmService } from './../../services/AlgorithmService';
 
 
-export default function AlgorithmControl(props: { isInitialStep: boolean }) {
-  const { isInitialStep } = props;
+export default function AlgorithmControl(
+  props: { 
+    isInitialStep: boolean,
+    isSmDown: boolean
+  }
+) {
+  const { isInitialStep, isSmDown } = props;
 
   const dispatch: AppDispatch = useAppDispatch();
-  const theme: Theme = useTheme();
-  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
   const disableButton: boolean = useSelector(
     (state: RootState) => state.global.disableButton
