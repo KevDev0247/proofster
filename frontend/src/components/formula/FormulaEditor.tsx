@@ -30,7 +30,6 @@ export default function FormulaEditor() {
   const dispatch: AppDispatch = useAppDispatch();
   const theme: Theme = useTheme();
   const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
-  const isMdUp: boolean = useMediaQuery(theme.breakpoints.up('md'));
 
   const disableButton: boolean = useSelector(
     (state: RootState) => state.global.disableButton
@@ -187,7 +186,6 @@ export default function FormulaEditor() {
                 <FormulaKeyboard
                   formulaInfixRef={formulaInputRef}
                   isSmDown={isSmDown}
-                  isMdUp={isMdUp}
                 />
               </Grid>
               {isSmDown && (

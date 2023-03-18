@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import {
-  Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase, useMediaQuery,
+  Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase, useMediaQuery, Theme, useTheme,
 } from '@mui/material';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
@@ -16,7 +16,8 @@ import WorkspaceEditor from './WorkspaceEditor';
 
 export default function WorkspacesDrawer() {
   const dispatch: AppDispatch = useAppDispatch();
-  const isMobileView = useMediaQuery('(max-width:600px)');
+  const theme: Theme = useTheme();
+  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
 
   const selectedWorkspaceId: string = useSelector(
     (state: RootState) => state.global.selectedWorkspaceId
@@ -28,6 +29,18 @@ export default function WorkspacesDrawer() {
     (state: RootState) => state.workspace.list.values
   );
 
+  useEffect(() => {
+    dispatch(getWorkspacesCall(1));
+  }, []);
+
+  useEffect(() => {
+    if (isSmDown)
+      dispatch(setDrawerOpened(false));
+    else
+      dispatch(setDrawerOpened(true));
+  }, [isSmDown]);
+
+
   const handleWorkspaceSelection = (workspaceId: string) => {
     dispatch(
       setSelectedWorkspaceId(workspaceId)
@@ -38,14 +51,11 @@ export default function WorkspacesDrawer() {
     dispatch(setDrawerOpened(!drawerOpened));
   }
 
-  useEffect(() => {
-    dispatch(getWorkspacesCall(1));
-  }, []);
 
   return (
     <Drawer
       variant="persistent"
-      sx={{ width: isMobileView ? '0%' : 180, }}
+      sx={{ width: isSmDown ? '0%' : 180, }}
       open={drawerOpened}
       onClose={toggleDrawer}
     >

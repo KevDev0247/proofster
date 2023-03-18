@@ -8,7 +8,7 @@ const globalSlice = createSlice({
     showCacheWarning: false,
     argumentEmpty: true,
     argumentEdited: false,
-    drawerOpened: false,
+    drawerOpened: true,
     selectedWorkspaceId: "",
     currentUserId: 1,
   },

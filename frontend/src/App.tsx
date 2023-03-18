@@ -45,7 +45,7 @@ function App() {
         </Toolbar>
       </AppBar>
       <WorkspacesDrawer />
-      <Box sx={{ p: 3, paddingTop: 3, paddingLeft: 0 }}>
+      <Box sx={{ paddingTop: 3, paddingBottom: 3, paddingLeft: 0, paddingRight: 0 }}>
         <Toolbar />
         <Container sx={{ maxWidth:'100%' }} maxWidth={false} >
           <Grid container spacing={3}>
