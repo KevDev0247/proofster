@@ -58,7 +58,7 @@ export default function WorkspacesDrawer(
   return (
     <Drawer
       variant="persistent"
-      sx={{ width: isSmDown ? '0%' : 180, }}
+      sx={{ width: isSmDown ? '0%' : 190, }}
       open={drawerOpened}
       onClose={toggleDrawer}
     >

@@ -74,9 +74,13 @@ export default function WorkspaceEditor(
       dispatch(setShowValidation(true));
       return;
     }
+    var workspaceToSubmit: IWorkspace = {
+      ...selected,
+      user_id: currentUserId,
+    }
 
     dispatch(
-      WorkspaceService().createOrUpdateWorkspace(selected)
+      WorkspaceService().createOrUpdateWorkspace(workspaceToSubmit)
     )
   }
 

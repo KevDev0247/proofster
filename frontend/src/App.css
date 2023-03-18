@@ -11,6 +11,6 @@
 
 /* style the scrollbar thumb */
 ::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #c1c1c1;
   border-radius: 5px;
 }

@@ -2,8 +2,7 @@ import './App.css';
 import { IconButton, Theme, useMediaQuery, useTheme } from '@mui/material';
 import ControlPanel from './components/ControlPanel';
 import {
-  AppBar, Toolbar, Typography, Container,
-  Grid, Box, CardContent, Card
+  AppBar, Toolbar, Typography, Container, Grid, Box
 } from '@mui/material';
 import MenuIcon from "@material-ui/icons/Menu";
 import { useSelector } from 'react-redux';
@@ -12,9 +11,9 @@ import { RootState, AppDispatch, useAppDispatch } from './store';
 import FormulaEditor from './components/formula/FormulaEditor';
 import AlgorithmSteps from './components/algorithm/AlgorithmSteps';
 import WorkspacesDrawer from './components/workspace/WorkspacesDrawer';
+import WorkspaceDisplay from './components/workspace/WorkspaceDisplay';
 import { setDrawerOpened } from './slices/globalSlice';
-import Edit from '@material-ui/icons/Edit';
-import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import WorkspaceDashboard from './components/workspace/WorkspaceDashboard';
 
 
 function App() {
@@ -52,35 +51,10 @@ function App() {
                   Proofster
                 </Typography>
               )}
-              
             </Grid>
-            <Grid item xs={6} lg={4}
-              container
-              spacing={3}
-              justifyContent="center"
-              alignItems="center"
-              sx={{ marginTop: 0 }}
-            >
-              <Typography variant="h6"
-                sx={{ marginRight: 2 }}
-              >
-                Workspace
-              </Typography>
-              <IconButton
-                onClick={() => { }}
-                disabled={false}
-                sx={{ color: 'white' }}
-              >
-                <Edit />
-              </IconButton>
-              <IconButton
-                onClick={() => { }}
-                disabled={false}
-                sx={{ color: 'white' }}
-              >
-                <DeleteOutlinedIcon />
-              </IconButton>
-            </Grid>
+
+            <WorkspaceDisplay />
+
             <Grid xs={4} lg={4}></Grid>
           </Grid>
         </Toolbar>
@@ -104,31 +78,11 @@ function App() {
               <Grid item xs={12} md={12}>
                 <ControlPanel isSmDown={isSmDown} />
               </Grid>
+              
               <AlgorithmSteps isSmDown={isSmDown} />
             </Grid>
-            <Grid item md={0} lg={4}>
-              <Card
-                sx={{ boxShadow: 3 }}
-              >
-                <Box sx={{
-                  bgcolor: theme.palette.primary.main,
-                  color: 'white',
-                  py: 2,
-                  pl: 2,
-                }}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={12}>
-                      <Typography variant="h6" component="h1">
-                        Dashboard
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Box>
-                <CardContent>
-                  <Grid container spacing={2}>
-                  </Grid>
-                </CardContent>
-              </Card>
+            <Grid item lg={4}>
+              <WorkspaceDashboard />
             </Grid>
           </Grid>
         </Container>
