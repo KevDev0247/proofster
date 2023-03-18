@@ -191,7 +191,7 @@ export default function FormulaEditor() {
               {isSmDown && (
                 <Grid item xs={7.5} 
                   container 
-                  justifyContent="center"
+                  justifyContent="flex-start"
                 >
                   <ToggleButtonGroup
                     size="small"

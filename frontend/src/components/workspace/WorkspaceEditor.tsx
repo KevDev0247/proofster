@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Grid, Box, Typography, Button, TextField } from '@mui/material';
@@ -12,7 +12,12 @@ import {
 } from '../../slices/workspaceSlice';
 import { WorkspaceService } from './../../services/WorkspaceService';
 
-export default function WorkspaceEditor() {
+
+export default function WorkspaceEditor(
+  props: { isSmDown: boolean }
+) {
+  const { isSmDown } = props;
+
   const dispatch: AppDispatch = useAppDispatch();
 
   const selected: IWorkspace = useSelector(
@@ -56,6 +61,7 @@ export default function WorkspaceEditor() {
   }
 
   const closeForm = (): void => {
+    dispatch(setShowValidation(false));
     dispatch(setFormOpened(false));
   }
 
@@ -108,6 +114,7 @@ export default function WorkspaceEditor() {
         <Button
           variant="outlined"
           onClick={formOpened ? submit : openForm}
+          sx={{ height: isSmDown? 66 : 46, width: 153 }}
         >
           <Grid container spacing={5} alignItems="center">
             <Grid item xs={8} md={8} container>
@@ -133,6 +140,7 @@ export default function WorkspaceEditor() {
           <Button 
             variant="outlined"
             onClick={closeForm}
+            sx={{ height: isSmDown? 66 : 46, width: 153 }}
           >
             <Grid container spacing={5} alignItems="center">
               <Grid item xs={8} md={8}

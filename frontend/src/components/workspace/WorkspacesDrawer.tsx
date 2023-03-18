@@ -28,6 +28,7 @@ export default function WorkspacesDrawer() {
   const workspaceList: IWorkspace[] = useSelector(
     (state: RootState) => state.workspace.list.values
   );
+  
 
   useEffect(() => {
     dispatch(getWorkspacesCall(1));
@@ -62,7 +63,7 @@ export default function WorkspacesDrawer() {
       <Toolbar />
       <Box>
         <List>
-          <WorkspaceEditor />
+          <WorkspaceEditor isSmDown={isSmDown} />
 
           {workspaceList.map((d: IWorkspace, index: number) => (
             <ListItemButton
