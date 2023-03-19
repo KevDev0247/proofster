@@ -72,15 +72,10 @@ function App() {
         <Toolbar />
         <Container sx={{ maxWidth: '100%' }} maxWidth={false} >
           <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={8}>
-              <FormulaEditor isSmDown={isSmDown} />
-            </Grid>
-            {!isSmDown && (
-              <Grid item md={4} lg={4}>
-                <Instructions />
-              </Grid>
-            )}
             <Grid item container spacing={3} md={8} lg={8}>
+              <Grid item xs={12} md={12} lg={12}>
+                <FormulaEditor isSmDown={isSmDown} />
+              </Grid>
               <Grid item xs={12} md={12}>
                 <ControlPanel isSmDown={isSmDown} />
               </Grid>

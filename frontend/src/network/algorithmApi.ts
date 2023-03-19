@@ -1,4 +1,4 @@
-import { NORMALIZER_API } from "../api";
+import { NORMALIZER_API as ALGORITHM_API } from "../api";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import { serverErrorAddOn } from "../constants";
 import { IGetStepsRequest, INormalizeRequest } from "../models/requests";
@@ -6,13 +6,14 @@ import { IGetStepsRequest, INormalizeRequest } from "../models/requests";
 type NormalizeThunk = AsyncThunk<any, INormalizeRequest, {}>;
 type GetResultsThunk = AsyncThunk<any, IGetStepsRequest, {}>;
 type GetMetadataThunk = AsyncThunk<any, string, {}>;
+type GetMetadataListThunk = AsyncThunk<any, any, {}>;
 
 
 export const normalizeCall: NormalizeThunk = createAsyncThunk(
   "network/algorithm/nnf",
   async (request: INormalizeRequest, { rejectWithValue }) => {
     try {
-      const response = await NORMALIZER_API.post("", request);
+      const response = await ALGORITHM_API.post("", request);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -26,7 +27,7 @@ export const getResultsCall: GetResultsThunk = createAsyncThunk(
   "network/algorithm/fetch",
   async (request: IGetStepsRequest) => {
     try {
-      const response = await NORMALIZER_API.get("", {
+      const response = await ALGORITHM_API.get("", {
         params: {
           workspace_id: request.workspaceId,
           algorithm: request.algorithm,
@@ -46,7 +47,7 @@ export const getMetadataCall: GetMetadataThunk = createAsyncThunk(
   "network/algorithm/metadata",
   async (workspaceId: string) => {
     try {
-      const response = await NORMALIZER_API.get("/metadata", {
+      const response = await ALGORITHM_API.get("/metadata", {
         params: {
           workspace_id: workspaceId,
         },
@@ -57,3 +58,15 @@ export const getMetadataCall: GetMetadataThunk = createAsyncThunk(
     }
   }
 );
+
+export const getMetadataListCall: GetMetadataListThunk = createAsyncThunk(
+  "network/algorithm/metadata/fetch",
+  async () => {
+    try {
+      const response = await ALGORITHM_API.get("/metadata/list");
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+)

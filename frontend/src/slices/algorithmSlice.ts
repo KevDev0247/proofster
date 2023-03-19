@@ -1,6 +1,6 @@
  /* eslint-disable */
 import { createSlice, current } from "@reduxjs/toolkit";
-import { getResultsCall, normalizeCall } from "../network/algorithmApi";
+import { getMetadataListCall, getResultsCall, normalizeCall } from "../network/algorithmApi";
 import { getMetadataCall } from './../network/algorithmApi';
 
 
@@ -25,11 +25,14 @@ export const algorithmSlice = createSlice({
     metadata: {
       value: {
         workspace_id: "",
+        workspace_name: "",
+        is_empty: false,
         is_transpiled: false,
         all_normalized: false,
         is_preprocessed: false,
       },
-    }
+      list: []
+    },
   },
   reducers: {
     nextNormalizeStage: (state) => {
@@ -130,6 +133,9 @@ export const algorithmSlice = createSlice({
       if (action.payload.results)
         state.metadata.value = action.payload.results;
     },
+    [getMetadataListCall.fulfilled.type]: (state, action) => {
+      state.metadata.list = action.payload.results;
+    }
   },
 });
 
