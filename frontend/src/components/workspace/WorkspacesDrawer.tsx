@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase, useMediaQuery, Theme, useTheme,
+  Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase
 } from '@mui/material';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
@@ -35,11 +35,12 @@ export default function WorkspacesDrawer(
   const workspaceList: IWorkspace[] = useSelector(
     (state: RootState) => state.workspace.list.values
   );  
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   useEffect(() => {
-    dispatch(
-      setCurrentWorkspace(workspaceList[selectedIndex])
-    );
+    if (selectedIndex !== -1) 
+      dispatch(
+        setCurrentWorkspace(workspaceList[selectedIndex])
+      );
   }, [selectedIndex, workspaceList]);
 
   useEffect(() => {

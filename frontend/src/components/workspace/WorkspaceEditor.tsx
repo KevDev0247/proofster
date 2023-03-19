@@ -61,8 +61,10 @@ export default function WorkspaceEditor(
   }
 
   const closeForm = (): void => {
-    dispatch(setShowValidation(false));
     dispatch(setFormOpened(false));
+    dispatch(
+      WorkspaceService().resetCache()
+    );
   }
 
   const submit = (
@@ -70,7 +72,7 @@ export default function WorkspaceEditor(
   ): void => {
     e.preventDefault();
 
-    if (selected.name == "") {
+    if (selected.name === "") {
       dispatch(setShowValidation(true));
       return;
     }

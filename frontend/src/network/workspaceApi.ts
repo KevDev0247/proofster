@@ -32,7 +32,7 @@ export const createWorkspaceCall: SaveWorkspaceThunk = createAsyncThunk(
 );
 
 export const updateWorkspaceCall: SaveWorkspaceThunk = createAsyncThunk(
-  "network/formula/update",
+  "network/workspace/update",
   async (workspace: IWorkspace) => {
     try {
       const response = await WORKSPACE_API.patch(`update/${workspace.id}`, workspace);
@@ -44,7 +44,7 @@ export const updateWorkspaceCall: SaveWorkspaceThunk = createAsyncThunk(
 );
 
 export const deleteWorkspaceCall: DeleteWorkspaceThunk = createAsyncThunk(
-  "formula/delete",
+  "network/workspace/delete",
   async (workspaceId: string) => {
     try {
       const response = await WORKSPACE_API.delete(`delete/${workspaceId}`);
