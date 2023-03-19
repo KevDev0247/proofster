@@ -112,6 +112,7 @@ export default function FormulaEditor(
       ...selected,
       formula_input: formulaInput,
       input_mode: selected.input_mode,
+      workspace_id: currentWorkspace.id
     }
 
     dispatch(

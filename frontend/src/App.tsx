@@ -14,6 +14,7 @@ import WorkspacesDrawer from './components/workspace/WorkspacesDrawer';
 import WorkspaceDisplay from './components/workspace/WorkspaceDisplay';
 import { setDrawerOpened } from './slices/globalSlice';
 import WorkspaceDashboard from './components/workspace/WorkspaceDashboard';
+import Instructions from './components/Instructions';
 
 
 function App() {
@@ -62,26 +63,28 @@ function App() {
 
       <WorkspacesDrawer isSmDown={isSmDown} />
 
-      <Box sx={{ 
-        paddingTop: 3, 
-        paddingBottom: 3, 
-        paddingLeft: 0, 
-        paddingRight: 0 
+      <Box sx={{
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 0,
+        paddingRight: 0
       }}>
         <Toolbar />
         <Container sx={{ maxWidth: '100%' }} maxWidth={false} >
           <Grid container spacing={3}>
-            <Grid item container spacing={3} md={12} lg={8}>
-              <Grid item xs={12} md={12}>
-                <FormulaEditor isSmDown={isSmDown} />
-              </Grid>
+            <Grid item xs={12} md={8} lg={8}>
+              <FormulaEditor isSmDown={isSmDown} />
+            </Grid>
+            <Grid item md={4} lg={4}>
+              <Instructions />
+            </Grid>
+            <Grid item container spacing={3} md={8} lg={8}>
               <Grid item xs={12} md={12}>
                 <ControlPanel isSmDown={isSmDown} />
               </Grid>
-              
               <AlgorithmSteps isSmDown={isSmDown} />
             </Grid>
-            <Grid item lg={4}>
+            <Grid item md={4} lg={4}>
               <WorkspaceDashboard />
             </Grid>
           </Grid>

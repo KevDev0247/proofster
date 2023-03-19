@@ -88,7 +88,7 @@ export default function AlgorithmSteps(
                     </Grid>
                     <Grid item xs={12} md={12} container spacing={1}>
                       <Grid item xs={12} md={12}>
-                        <Alert severity="info">
+                        <Alert severity="info"  icon={false}>
                           {result.description}
                         </Alert>
                       </Grid>
