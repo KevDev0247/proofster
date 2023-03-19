@@ -16,9 +16,12 @@ import { resetStage } from '../../slices/algorithmSlice';
 
 
 export default function WorkspacesDrawer(
-  props: { isSmDown: boolean }
+  props: { 
+    isSmDown: boolean,
+    isMdDown: boolean
+  }
 ) {
-  const { isSmDown } = props;  
+  const { isSmDown, isMdDown } = props;  
 
   const dispatch: AppDispatch = useAppDispatch();
 
@@ -73,7 +76,11 @@ export default function WorkspacesDrawer(
       <Toolbar />
       <Box>
         <List>
-          <WorkspaceEditor key={0} isSmDown={isSmDown} />
+          <WorkspaceEditor 
+            key={0} 
+            isSmDown={isSmDown}
+            isMdDown={isMdDown} 
+          />
 
           {workspaceList.map((d: IWorkspace, index: number) => (
             <ListItemButton

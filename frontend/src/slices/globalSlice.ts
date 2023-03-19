@@ -10,6 +10,7 @@ const globalSlice = createSlice({
     argumentEmpty: true,
     argumentEdited: false,
     drawerOpened: true,
+    isDashboardPage: false,
     currentWorkspace: {
       id: "",
       name: "",
@@ -36,6 +37,9 @@ const globalSlice = createSlice({
     setDrawerOpened: (state, action: PayloadAction<boolean>) => {
       state.drawerOpened = action.payload;
     },
+    setIsDashboardPage: (state, action: PayloadAction<boolean>) => {
+      state.isDashboardPage = action.payload;
+    },
     setCurrentWorkspace: (state, action: PayloadAction<IWorkspace>) => {
       state.currentWorkspace = action.payload;
     },
@@ -49,6 +53,7 @@ export const {
   setArgumentEmpty,
   setArgumentEdited,
   setDrawerOpened,
+  setIsDashboardPage,
   setCurrentWorkspace
 } = globalSlice.actions;
 

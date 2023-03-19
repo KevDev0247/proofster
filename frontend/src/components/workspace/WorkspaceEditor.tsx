@@ -4,19 +4,25 @@ import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Grid, Box, Typography, Button, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IWorkspace } from '../../models/workspace';
-import { 
-  setSelected, 
-  setShowValidation, 
-  setFormOpened 
+import {
+  setSelected,
+  setShowValidation,
+  setFormOpened
 } from '../../slices/workspaceSlice';
 import { WorkspaceService } from './../../services/WorkspaceService';
+import { setIsDashboardPage } from '../../slices/globalSlice';
 
 
 export default function WorkspaceEditor(
-  props: { isSmDown: boolean }
+  props: {
+    isSmDown: boolean,
+    isMdDown: boolean
+  }
 ) {
-  const { isSmDown } = props;
+  const { isSmDown, isMdDown } = props;
 
   const dispatch: AppDispatch = useAppDispatch();
 
@@ -30,7 +36,9 @@ export default function WorkspaceEditor(
     (state: RootState) => state.workspace.save.formOpened
   );
 
-
+  const isDashboardPage: boolean = useSelector(
+    (state: RootState) => state.global.isDashboardPage
+  );
   const currentUserId: number = useSelector(
     (state: RootState) => state.global.currentUserId
   );
@@ -54,6 +62,10 @@ export default function WorkspaceEditor(
         [name]: value,
       })
     );
+  }
+
+  const switchPage = (): void => {
+    dispatch(setIsDashboardPage(!isDashboardPage));
   }
 
   const openForm = (): void => {
@@ -88,6 +100,36 @@ export default function WorkspaceEditor(
 
   return (
     <Box sx={{ paddingTop: 1 }}>
+      <Box sx={{
+        paddingLeft: 2,
+        paddingRight: 1,
+        paddingTop: 0,
+        paddingBottom: 2,
+      }}>
+        <Button
+          variant="outlined"
+          onClick={switchPage}
+          sx={{ height: isSmDown ? 66 : 46, width: 153 }}
+        >
+          <Grid container spacing={5} alignItems="center">
+            <Grid item xs={8} md={8} container>
+              {isDashboardPage ? (
+                <ArrowBackIcon />
+              ) : (
+                <BarChartIcon />
+              )}
+            </Grid>
+            <Grid item xs={4} md={4}
+              container
+              justifyContent="flex-end"
+            >
+              <Typography variant="body2">
+                {isDashboardPage ? "Back" : "Stats"}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Button>
+      </Box>
       {formOpened && (
         <Box sx={{
           paddingLeft: 2,
@@ -110,7 +152,7 @@ export default function WorkspaceEditor(
             helperText={showValidation && 'Name is required'}
             sx={{ width: '305%' }}
           />
-        </Box>        
+        </Box>
       )}
       <Box sx={{
         paddingLeft: 2,
@@ -120,7 +162,7 @@ export default function WorkspaceEditor(
         <Button
           variant="outlined"
           onClick={formOpened ? submit : openForm}
-          sx={{ height: isSmDown? 66 : 46, width: 153 }}
+          sx={{ height: isSmDown ? 66 : 46, width: 153 }}
         >
           <Grid container spacing={5} alignItems="center">
             <Grid item xs={8} md={8} container>
@@ -143,10 +185,10 @@ export default function WorkspaceEditor(
           paddingRight: 1,
           paddingBottom: 2
         }}>
-          <Button 
+          <Button
             variant="outlined"
             onClick={closeForm}
-            sx={{ height: isSmDown? 66 : 46, width: 153 }}
+            sx={{ height: isSmDown ? 66 : 46, width: 153 }}
           >
             <Grid container spacing={5} alignItems="center">
               <Grid item xs={8} md={8}
