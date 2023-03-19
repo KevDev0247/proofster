@@ -124,8 +124,14 @@ func GetMetadata(c *gin.Context) {
 		return
 	}
 
-	response.Data = gin.H{
-		"results": *metadata,
+	if metadata != nil {
+		response.Data = gin.H{
+			"results": *metadata,
+		}		
+	} else {
+		response.Data = gin.H{
+			"results": nil,
+		}
 	}
 	response.StatusCode = http.StatusOK
 	response.Success = true

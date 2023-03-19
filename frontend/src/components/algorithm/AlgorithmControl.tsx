@@ -70,9 +70,10 @@ export default function AlgorithmControl(
     (state: RootState) => state.global.currentWorkspace
   ); 
   useEffect(() => {
-    dispatch(
-      getMetadataCall(currentWorkspace.id)
-    );
+    if (currentWorkspace.id != "")
+      dispatch(
+        getMetadataCall(currentWorkspace.id)
+      );
   }, [currentWorkspace]);
   
 

@@ -41,6 +41,11 @@ export default function WorkspacesDrawer(
       dispatch(
         setCurrentWorkspace(workspaceList[selectedIndex])
       );
+    else
+      if (workspaceList.length !== 0)
+        dispatch(
+          setCurrentWorkspace(workspaceList[0])
+        );
   }, [selectedIndex, workspaceList]);
 
   useEffect(() => {
@@ -66,10 +71,11 @@ export default function WorkspacesDrawer(
       <Toolbar />
       <Box>
         <List>
-          <WorkspaceEditor isSmDown={isSmDown} />
+          <WorkspaceEditor key={0} isSmDown={isSmDown} />
 
           {workspaceList.map((d: IWorkspace, index: number) => (
             <ListItemButton
+              key={d.id}
               selected={d.id === currentWorkspace.id}
               sx={{ padding: 0 }}
             >

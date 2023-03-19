@@ -13,18 +13,21 @@ import (
 func GetMetadataByWorkspace(
 	workspaceId string,
 ) (*db.Metadata, error) {
-	metadata := &db.Metadata{}
+	metadatas := []db.Metadata{}
 
-	err := mgm.Coll(metadata).First(
-		bson.M{
-			"workspace_id": workspaceId,
-		},
-		metadata,
+	err := mgm.Coll(&db.Formula{}).SimpleFind(
+		&metadatas,
+		bson.M{"workspace_id": workspaceId},
 	)
 	if err != nil {
 		return nil, errors.New("cannot find metadata")
 	}
-	return metadata, nil
+
+	if len(metadatas) == 0 {
+		return nil, nil
+	} else {
+		return &metadatas[0], nil
+	}
 }
 
 func SaveMetadata(

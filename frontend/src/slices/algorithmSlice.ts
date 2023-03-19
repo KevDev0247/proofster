@@ -127,7 +127,8 @@ export const algorithmSlice = createSlice({
       state.normalize.isLoading = false;
     },
     [getMetadataCall.fulfilled.type]: (state, action) => {
-      state.metadata.value = action.payload.results;
+      if (action.payload.results)
+        state.metadata.value = action.payload.results;
     },
   },
 });

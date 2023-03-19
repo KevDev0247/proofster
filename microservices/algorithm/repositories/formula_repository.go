@@ -9,14 +9,14 @@ import (
 )
 
 func GetFormulaByWorkspace(workspaceId string) ([]db.Formula, error) {
-	var formulas []db.Formula
+	formulas := []db.Formula{}
 
 	err := mgm.Coll(&db.Formula{}).SimpleFind(
 		&formulas,
 		bson.M{"workspace_id": workspaceId},
 	)
 	if err != nil {
-		return nil, errors.New("cannot find notes")
+		return nil, errors.New("cannot find formulas")
 	}
 
 	return formulas, nil

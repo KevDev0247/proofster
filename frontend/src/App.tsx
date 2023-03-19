@@ -55,7 +55,7 @@ function App() {
 
             <WorkspaceDisplay />
 
-            <Grid xs={4} lg={4}></Grid>
+            <Grid item xs={4} lg={4}></Grid>
           </Grid>
         </Toolbar>
       </AppBar>

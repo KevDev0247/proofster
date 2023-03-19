@@ -35,12 +35,13 @@ export default function FormulaDisplay() {
     (state: RootState) => state.global.currentWorkspace
   ); 
   useEffect(() => {
-    dispatch(
-      getFormulasCall({
-        workspaceId: currentWorkspace.id,
-        stage: 0
-      })
-    );
+    if (currentWorkspace.id != "")
+      dispatch(
+        getFormulasCall({
+          workspaceId: currentWorkspace.id,
+          stage: 0
+        })
+      );
   }, [currentWorkspace]);
 
   const isUpdated: boolean = useSelector(
