@@ -4,6 +4,7 @@ import (
 	"net/http"
 	models "proofster/algorithm/models"
 	services "proofster/algorithm/services"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 )
@@ -109,7 +110,7 @@ func GetSteps(c *gin.Context) {
 	}
 }
 
-func GetMetadata(c *gin.Context) {
+func GetMetadataByWorkspace(c *gin.Context) {
 	response := &models.Response{
 		StatusCode: http.StatusBadRequest,
 		Success:    false,
@@ -117,7 +118,7 @@ func GetMetadata(c *gin.Context) {
 
 	workspaceId := c.Query("workspace_id")
 
-	metadata, err := services.GetMetadata(workspaceId)
+	metadata, err := services.GetMetadataByWorkspace(workspaceId)
 	if err != nil {
 		response.Message = err.Error()
 		response.SendResponse(c)
@@ -127,11 +128,32 @@ func GetMetadata(c *gin.Context) {
 	if metadata != nil {
 		response.Data = gin.H{
 			"results": *metadata,
-		}		
+		}
 	} else {
 		response.Data = gin.H{
 			"results": nil,
 		}
+	}
+	response.StatusCode = http.StatusOK
+	response.Success = true
+	response.SendResponse(c)
+}
+
+func GetMetadata(c *gin.Context) {
+	response := &models.Response{
+		StatusCode: http.StatusBadRequest,
+		Success:    false,
+	}
+
+	metadatas, err := services.GetMetadata()
+	if err != nil {
+		response.Message = err.Error()
+		response.SendResponse(c)
+		return
+	}
+	
+	response.Data = gin.H{
+		"results": metadatas,
 	}
 	response.StatusCode = http.StatusOK
 	response.Success = true

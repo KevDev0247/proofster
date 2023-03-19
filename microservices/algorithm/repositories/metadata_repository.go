@@ -10,6 +10,21 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+func GetMetadata() ([]db.Metadata, error) {
+    metadatas := []db.Metadata{}
+    cursor, err := mgm.Coll(&db.Metadata{}).Find(mgm.Ctx(), bson.M{})
+    if err != nil {
+        return nil, err
+    }
+    defer cursor.Close(mgm.Ctx())
+
+    if err := cursor.All(mgm.Ctx(), &metadatas); err != nil {
+        return nil, err
+    }
+
+    return metadatas, nil
+}
+
 func GetMetadataByWorkspace(
 	workspaceId string,
 ) (*db.Metadata, error) {

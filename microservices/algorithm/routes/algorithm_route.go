@@ -19,6 +19,10 @@ func AlgorithmRoute(router *gin.RouterGroup, handlers ...gin.HandlerFunc) {
 		)
 		normalize.GET(
 			"metadata",
+			controllers.GetMetadataByWorkspace,
+		)
+		normalize.GET(
+			"metadata/list",
 			controllers.GetMetadata,
 		)
 	}

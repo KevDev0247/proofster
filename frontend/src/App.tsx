@@ -75,9 +75,11 @@ function App() {
             <Grid item xs={12} md={8} lg={8}>
               <FormulaEditor isSmDown={isSmDown} />
             </Grid>
-            <Grid item md={4} lg={4}>
-              <Instructions />
-            </Grid>
+            {!isSmDown && (
+              <Grid item md={4} lg={4}>
+                <Instructions />
+              </Grid>
+            )}
             <Grid item container spacing={3} md={8} lg={8}>
               <Grid item xs={12} md={12}>
                 <ControlPanel isSmDown={isSmDown} />

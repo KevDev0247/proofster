@@ -6,7 +6,16 @@ import (
 	repositories "proofster/algorithm/repositories"
 )
 
-func GetMetadata(
+func GetMetadata() ([]db.Metadata, error) {
+	metadatas, err := repositories.GetMetadata()
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	return metadatas, nil
+}
+
+func GetMetadataByWorkspace(
 	workspaceId string,
 ) (*db.Metadata, error) {
 	metadata, err := repositories.GetMetadataByWorkspace(workspaceId)
