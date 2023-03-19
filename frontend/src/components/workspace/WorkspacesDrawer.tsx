@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase
+  Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase, Typography
 } from '@mui/material';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
@@ -12,6 +12,7 @@ import {
   setCurrentWorkspace
 } from '../../slices/globalSlice';
 import WorkspaceEditor from './WorkspaceEditor';
+import { resetStage } from '../../slices/algorithmSlice';
 
 
 export default function WorkspacesDrawer(
@@ -37,6 +38,7 @@ export default function WorkspacesDrawer(
   );  
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   useEffect(() => {
+    dispatch(resetStage());
     if (selectedIndex !== -1) 
       dispatch(
         setCurrentWorkspace(workspaceList[selectedIndex])
@@ -64,7 +66,7 @@ export default function WorkspacesDrawer(
   return (
     <Drawer
       variant="persistent"
-      sx={{ width: isSmDown ? '0%' : 190, }}
+      sx={{ width: isSmDown ? '0%' : 200, }}
       open={drawerOpened}
       onClose={toggleDrawer}
     >
@@ -79,15 +81,23 @@ export default function WorkspacesDrawer(
               selected={d.id === currentWorkspace.id}
               sx={{ padding: 0 }}
             >
-              <ButtonBase onClick={() => setSelectedIndex(index)}>
-                <Grid container spacing={2} alignItems="center"
+              <ButtonBase 
+                onClick={() => setSelectedIndex(index)}
+                sx={{height: isSmDown ? 66 : '0%', width: "100%" }}
+              >
+                <Grid container spacing={2}
                   sx={{ paddingY: 1, paddingX: 3 }}
                 >
-                  <Grid item xs={12} md={3}>
+                  <Grid item xs={3} md={3}>
                     <LibraryBooksOutlinedIcon />
                   </Grid>
-                  <Grid item xs={12} md={9}>
-                    <ListItemText primary={d.name} />
+                  <Grid item xs={9} md={9}>
+                    <Typography 
+                      variant="body1" 
+                      sx={{ textAlign: 'left' }}
+                    >
+                      {d.name}
+                    </Typography>
                   </Grid>
                 </Grid>
               </ButtonBase>

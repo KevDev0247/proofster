@@ -37,7 +37,7 @@ export default function WorkspaceDisplay() {
   }
 
   return (
-    <Grid item xs={6} lg={4}
+    <Grid item xs={10} lg={4}
       container
       spacing={3}
       justifyContent="center"
