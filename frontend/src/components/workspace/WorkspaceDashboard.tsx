@@ -13,9 +13,8 @@ import { IWorkspace } from '../../models/workspace';
 
 
 export default function WorkspaceDashboard() {
-  const theme: Theme = useTheme();
-
   const dispatch: AppDispatch = useAppDispatch();
+  const theme: Theme = useTheme();
 
   const workspaceList: IWorkspace[] = useSelector(
     (state: RootState) => state.workspace.list.values
@@ -24,8 +23,22 @@ export default function WorkspaceDashboard() {
     (state: RootState) => state.algorithm.metadata.list
   );
 
+  const [showFourItems, setShowFourItems] = useState(window.innerHeight < 850);
+  const [showTwoItems, setShowTwoItems] = useState(window.innerHeight < 590);
+
   useEffect(() => {
     dispatch(getMetadataListCall({}));
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setShowFourItems(window.innerHeight < 850);
+      setShowTwoItems(window.innerHeight < 590);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const [metadataDisplay, setMetadataDisplay] = useState<IMetadata[]>([]);
@@ -64,7 +77,9 @@ export default function WorkspaceDashboard() {
   }, [workspaceList, metadataList]);
 
 
-  const itemsPerPage = 7;
+  const itemsPerPage =
+    showTwoItems ? 2 :
+      showFourItems ? 4 : 7;
   const [page, setPage] = useState(1);
 
   const nextPage = (e: ChangeEvent<unknown>, value: number): void => {

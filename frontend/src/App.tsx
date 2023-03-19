@@ -17,7 +17,9 @@ import ControlPanel from './components/ControlPanel';
 function App() {
   const dispatch: AppDispatch = useAppDispatch();
   const theme: Theme = useTheme();
-  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));
+  
+  const isMdDown: boolean = useMediaQuery(theme.breakpoints.down('md'));
+  const isSmDown: boolean = useMediaQuery(theme.breakpoints.down('sm'));  
 
   const drawerOpened: boolean = useSelector(
     (state: RootState) => state.global.drawerOpened
@@ -69,18 +71,23 @@ function App() {
         <Toolbar />
         <Container sx={{ maxWidth: '100%' }} maxWidth={false} >
           <Grid container spacing={3}>
-            <Grid item container spacing={3} md={8} lg={8}>
-              <Grid item xs={12} md={12} lg={12}>
+            <Grid item container spacing={3} sm={12} md={8} lg={8}>
+              <Grid item container spacing={4}>
+              <Grid item xs={12} sm={12} md={12} lg={12}>
                 <FormulaEditor isSmDown={isSmDown} />
               </Grid>
               <Grid item xs={12} md={12}>
                 <ControlPanel isSmDown={isSmDown} />
+              </Grid>                
               </Grid>
+
               <AlgorithmSteps isSmDown={isSmDown} />
             </Grid>
-            <Grid item md={4} lg={4}>
-              <WorkspaceDashboard />
-            </Grid>
+            {!isMdDown && (
+              <Grid item md={3.3} lg={3.4} className="workspace-dashboard">
+                <WorkspaceDashboard />
+              </Grid>
+            )}
           </Grid>
         </Container>
       </Box>

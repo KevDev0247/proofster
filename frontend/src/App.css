@@ -14,3 +14,17 @@
   background-color: #c1c1c1;
   border-radius: 5px;
 }
+
+@media (min-width: 900px) {
+  .workspace-dashboard {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 899px) {
+  .workspace-dashboard {
+    position: relative;
+  }
+}
