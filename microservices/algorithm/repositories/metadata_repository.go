@@ -102,3 +102,20 @@ func UpdateMetadata(request *models.MetadataRequest) error {
 
 	return nil
 }
+
+func DeleteMetadata(
+	workspaceId string,
+) error {
+	metadata := &db.Metadata{}
+	_, err := mgm.Coll(metadata).DeleteMany(
+		context.Background(),
+		bson.M{
+			"workspace_id": workspaceId,
+		},
+	)
+	if err != nil {
+		return errors.New("cannot delete existing metadata")
+	}
+
+	return nil
+}

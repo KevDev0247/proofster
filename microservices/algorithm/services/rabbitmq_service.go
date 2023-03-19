@@ -112,14 +112,23 @@ func ListenForFormulas(
 					log.Printf("error saving formulas for workspace %s\n", err)
 				}
 
-				err := repositories.SaveMetadata(
-					data.WorkspaceId,
-					false,
-					false,
-					false,
-				)
-				if err != nil {
-					log.Printf("error adding metadata %s\n", err)
+				if len(data.Formulas) == 0 {
+					err := repositories.DeleteMetadata(
+						data.WorkspaceId,
+					)
+					if err != nil {
+						log.Printf("error delete metadata %s\n", err)
+					}
+				} else {
+					err := repositories.SaveMetadata(
+						data.WorkspaceId,
+						false,
+						false,
+						false,
+					)
+					if err != nil {
+						log.Printf("error adding metadata %s\n", err)
+					}
 				}
 			}
 		}

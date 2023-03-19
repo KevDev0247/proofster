@@ -1,20 +1,17 @@
 import './App.css';
 import { IconButton, Theme, useMediaQuery, useTheme } from '@mui/material';
-import ControlPanel from './components/ControlPanel';
-import {
-  AppBar, Toolbar, Typography, Container, Grid, Box
-} from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Grid, Box } from '@mui/material';
 import MenuIcon from "@material-ui/icons/Menu";
 import { useSelector } from 'react-redux';
 import { RootState, AppDispatch, useAppDispatch } from './store';
 
+import { setDrawerOpened } from './slices/globalSlice';
 import FormulaEditor from './components/formula/FormulaEditor';
 import AlgorithmSteps from './components/algorithm/AlgorithmSteps';
 import WorkspacesDrawer from './components/workspace/WorkspacesDrawer';
 import WorkspaceDisplay from './components/workspace/WorkspaceDisplay';
-import { setDrawerOpened } from './slices/globalSlice';
 import WorkspaceDashboard from './components/workspace/WorkspaceDashboard';
-import Instructions from './components/Instructions';
+import ControlPanel from './components/ControlPanel';
 
 
 function App() {
