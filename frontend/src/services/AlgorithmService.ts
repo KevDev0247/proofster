@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { INormalizeRequest } from "../models/requests";
-import { getMetadataCall, getResultsCall, normalizeCall } from "../network/algorithmApi";
+import { getMetadataCall, getMetadataListCall, getResultsCall, normalizeCall } from "../network/algorithmApi";
 import { 
   nextNormalizeStage, 
   nextPreprocessStage, 
@@ -22,6 +22,7 @@ export const AlgorithmService = () => {
         algorithm: request.algorithm
       });
       const getMetadataAction = getMetadataCall(request.workspace_id);
+      const fetchMetadataListAction = getMetadataListCall({});
 
       await dispatch(algorithmAction);
       if (request.algorithm === 0) {
@@ -39,7 +40,8 @@ export const AlgorithmService = () => {
         dispatch(nextPreprocessStage());
       }
 
-      dispatch(getMetadataAction);
+      await dispatch(getMetadataAction);
+      await dispatch(fetchMetadataListAction);
     }
   );
 

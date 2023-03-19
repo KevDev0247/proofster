@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMetadataCall, normalizeCall } from "../network/algorithmApi";
+import { getMetadataCall, getMetadataListCall, normalizeCall } from "../network/algorithmApi";
 
 
 export const TranspilerService = () => {
@@ -15,9 +15,11 @@ export const TranspilerService = () => {
         algorithm: 0,
       });
       const getMetadataAction = getMetadataCall(workspaceId);
+      const fetchMetadataListAction = getMetadataListCall({});
 
       await dispatch(transpileAction);
       await dispatch(getMetadataAction);
+      await dispatch(fetchMetadataListAction);
     }
   );
 

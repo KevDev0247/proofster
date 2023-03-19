@@ -1,10 +1,11 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Stack, Theme, useTheme } from '@mui/material';
+import { Stack, Theme, useTheme, IconButton } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
 import { Typography, Grid, Box, CardContent, Card } from '@mui/material';
+import CachedIcon from '@mui/icons-material/Cached';
 import { Pagination } from '@mui/material';
 import { getMetadataListCall } from '../../network/algorithmApi';
 import { IMetadata } from '../../models/metadata';
@@ -65,8 +66,13 @@ export default function WorkspaceDashboard() {
 
   const itemsPerPage = 7;
   const [page, setPage] = useState(1);
-  const handleNextPage = (e: ChangeEvent<unknown>, value: number): void => {
+
+  const nextPage = (e: ChangeEvent<unknown>, value: number): void => {
     setPage(value)
+  }
+
+  const refresh = (): void => {
+    dispatch(getMetadataListCall({}));
   }
 
   return (
@@ -80,10 +86,19 @@ export default function WorkspaceDashboard() {
         pl: 2,
       }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
+          <Grid item xs={4} md={4}>
             <Typography variant="h6" component="h1">
               Dashboard
             </Typography>
+          </Grid>
+          <Grid item xs={8} md={8} container justifyContent="flex-end">
+            <IconButton
+              onClick={refresh}
+              disabled={false}
+              sx={{ color: 'white', marginRight: 2 }}
+            >
+              <CachedIcon />
+            </IconButton>
           </Grid>
         </Grid>
       </Box>
@@ -122,7 +137,7 @@ export default function WorkspaceDashboard() {
           <Pagination
             count={Math.ceil(metadataDisplay.length / itemsPerPage)}
             page={page}
-            onChange={(event, value) => handleNextPage(event, value)}
+            onChange={(event, value) => nextPage(event, value)}
             variant="outlined"
             color="primary"
           />

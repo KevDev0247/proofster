@@ -96,7 +96,7 @@ export default function FormulaEditor(
     );
   };
 
-  const submit = (e: React.SyntheticEvent): void => {
+  const submitFormula = (e: React.SyntheticEvent): void => {
     e.preventDefault();
 
     if (selected.name === "" || selected.formula_input === "") {
@@ -244,7 +244,7 @@ export default function FormulaEditor(
                 variant="contained"
                 style={{ height: isSmDown ? '64px' : undefined }}
                 color="primary"
-                onClick={submit}
+                onClick={submitFormula}
                 disabled={disableButton}
                 startIcon={
                   isSaving &&

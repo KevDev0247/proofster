@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IFormula } from "../models/formula";
 import { IDeleteFormulaRequest } from "../models/requests";
-import { getMetadataCall } from "../network/algorithmApi";
+import { getMetadataCall, getMetadataListCall } from "../network/algorithmApi";
 import { createFormulaCall, deleteFormulaCall, getFormulasCall, updateFormulaCall } from "../network/formulaApi";
 import { setSelected, setShowValidation } from "../slices/formulaSlice";
 
@@ -23,10 +23,12 @@ export const FormulaService = () => {
         stage: 0
       });
       const getMetadataAction = getMetadataCall(toSubmit.workspace_id);
+      const fetchMetadataListAction = getMetadataListCall({});
           
       await dispatch(createOrUpdateAction);
       await dispatch(getFormulasAction);
       await dispatch(getMetadataAction);
+      await dispatch(fetchMetadataListAction);
       await dispatch(
         FormulaService().resetCache()
       );
@@ -44,10 +46,12 @@ export const FormulaService = () => {
         stage: 0
       })
       const getMetadataAction = getMetadataCall(request.workspaceId);
+      const fetchMetadataListAction = getMetadataListCall({});
 
       await dispatch(deleteAction);
       await dispatch(getFormulasAction);
       await dispatch(getMetadataAction);
+      await dispatch(fetchMetadataListAction);
     }
   );
 
