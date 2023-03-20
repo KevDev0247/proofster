@@ -12,6 +12,7 @@ import WorkspacesDrawer from './components/workspace/WorkspacesDrawer';
 import WorkspaceDisplay from './components/workspace/WorkspaceDisplay';
 import WorkspaceDashboard from './components/workspace/WorkspaceDashboard';
 import ControlPanel from './components/ControlPanel';
+import WorkspaceStats from './components/workspace/WorkspaceChart';
 
 function App() {
   const dispatch: AppDispatch = useAppDispatch();
@@ -54,8 +55,22 @@ function App() {
               )}
             </Grid>
 
-            {!isDashboardPage && (
+            {!isDashboardPage ? (
               <WorkspaceDisplay />
+            ) : (
+              <Grid item xs={10} lg={4}
+                container
+                spacing={3}
+                justifyContent="center"
+                alignItems="center"
+                sx={{ marginTop: 0 }}
+              >
+                <Typography variant="h6"
+                  sx={{ marginRight: 2 }}
+                >
+                  Statistics
+                </Typography>
+              </Grid>
             )}
 
             <Grid item xs={4} lg={4}></Grid>
@@ -77,7 +92,14 @@ function App() {
         <Toolbar />
         <Container sx={{ maxWidth: '100%' }} maxWidth={false} >
           {isDashboardPage ? (
-            <WorkspaceDashboard />
+            <Grid container spacing={3}>
+              <Grid item lg={6}>
+                <WorkspaceDashboard />
+              </Grid>
+              <Grid item lg={6}>
+                <WorkspaceStats />
+              </Grid>
+            </Grid>
           ) : (
             <Grid container spacing={3}>
               <Grid item container spacing={3} sm={12} md={8} lg={8}>
