@@ -19,6 +19,21 @@ function WorkspaceChart() {
   const chartInstanceRef = React.useRef<Chart | null>(null);
 
 
+  const [heightIsMdDown, setHeightIsMdDown] = useState(window.innerHeight < 850);
+  const [heightIsSmDown, setHeightIsSmDown] = useState(window.innerHeight < 590);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setHeightIsMdDown(window.innerHeight < 850);
+      setHeightIsSmDown(window.innerHeight < 590);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+
   const workspaceList: IWorkspace[] = useSelector(
     (state: RootState) => state.workspace.list.values
   );
@@ -119,12 +134,15 @@ function WorkspaceChart() {
         pl: 2,
       }}>
         <Grid container spacing={2}>
-          <Grid item xs={4} md={4}>
+          <Grid item xs={6} sm={6} md={6}>
             <Typography variant="h6" component="h1">
               Status Chart
             </Typography>
           </Grid>
-          <Grid item xs={8} md={8} container justifyContent="flex-end">
+          <Grid item xs={6} sm={6} md={6}
+            container
+            justifyContent="flex-end"
+          >
             <IconButton
               onClick={refresh}
               disabled={false}
@@ -136,14 +154,18 @@ function WorkspaceChart() {
         </Grid>
       </Box>
       <CardContent>
-        <canvas
-          ref={chartRef}
-          style={{
-            position: "relative",
-            height: "26vh",
-            width: "920vw"
-          }}
-        />
+        <Grid container spacing={1} justifyContent="center">
+          <canvas
+            ref={chartRef}
+            style={{
+              position: "relative",
+              height:
+                heightIsMdDown ? "37vh" :
+                  heightIsSmDown ? "110vh" : "26vh",
+              width: "930vw"
+            }}
+          />
+        </Grid>
       </CardContent>
     </Card>
   );

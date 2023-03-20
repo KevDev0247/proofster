@@ -93,10 +93,10 @@ function App() {
         <Container sx={{ maxWidth: '100%' }} maxWidth={false} >
           {isDashboardPage ? (
             <Grid container spacing={3}>
-              <Grid item lg={6}>
+              <Grid item xs={11.8} sm={11.8} lg={6}>
                 <WorkspaceDashboard />
               </Grid>
-              <Grid item lg={6}>
+              <Grid item xs={11.8} sm={11.8} lg={6}>
                 <WorkspaceStats />
               </Grid>
             </Grid>
