@@ -11,6 +11,8 @@ import { getMetadataListCall } from '../../network/algorithmApi';
 import { IMetadata } from '../../models/metadata';
 import { IWorkspace } from '../../models/workspace';
 import { MetadataService } from './../../services/MetadataService';
+import { setCurrentWorkspace, setIsDashboardPage } from '../../slices/globalSlice';
+import { resetStage } from '../../slices/algorithmSlice';
 
 
 export default function WorkspaceDashboard() {
@@ -19,6 +21,7 @@ export default function WorkspaceDashboard() {
 
   const [showFourItems, setShowFourItems] = useState(window.innerHeight < 850);
   const [showTwoItems, setShowTwoItems] = useState(window.innerHeight < 590);
+
 
   useEffect(() => {
     dispatch(getMetadataListCall({}));
@@ -35,13 +38,12 @@ export default function WorkspaceDashboard() {
     };
   }, []);
 
-
   const workspaceList: IWorkspace[] = useSelector(
     (state: RootState) => state.workspace.list.values
   );
   const metadataList: IMetadata[] = useSelector(
     (state: RootState) => state.algorithm.metadata.list
-  );  
+  );
   const [aggregatedMetadata, setAggregatedMetadata] = useState<IMetadata[]>([]);
   useEffect(() => {
     setAggregatedMetadata(
@@ -51,6 +53,18 @@ export default function WorkspaceDashboard() {
     );
   }, [workspaceList, metadataList]);
 
+
+  const goToWorkspace = (workspaceId: string): void => {
+    dispatch(resetStage());
+    dispatch(setIsDashboardPage(false));
+    dispatch(
+      setCurrentWorkspace(
+        workspaceList.find(
+          workspace => workspace.id === workspaceId
+        ) || workspaceList[0]
+      )
+    );
+  }
 
   const itemsPerPage =
     showTwoItems ? 2 :
@@ -98,14 +112,17 @@ export default function WorkspaceDashboard() {
             .slice((page - 1) * itemsPerPage, page * itemsPerPage)
             .map((d: IMetadata, index: number) => (
               <Grid item xs={12} md={12} lg={12} key={index}>
-                <Alert severity={
-                  (d.all_normalized && d.is_preprocessed) ? "success" :
-                    (d.all_normalized) ? "warning" :
-                      (d.is_preprocessed) ? "warning" :
-                        (d.is_transpiled) ? "warning" :
-                          (!d.is_transpiled && !d.is_empty) ? "error" :
-                            "info"
-                }>
+                <Alert
+                  severity={
+                    (d.all_normalized && d.is_preprocessed) ? "success" :
+                      (d.all_normalized) ? "warning" :
+                        (d.is_preprocessed) ? "warning" :
+                          (d.is_transpiled) ? "warning" :
+                            (!d.is_transpiled && !d.is_empty) ? "error" :
+                              "info"
+                  }
+                  onClick={() => goToWorkspace(d.workspace_id)}
+                >
                   <AlertTitle><strong>{d.workspace_name}</strong></AlertTitle>
                   {(d.all_normalized && d.is_preprocessed) ?
                     "Fully preprocessed and normalized" :
