@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  Toolbar, Grid, Box, Drawer, List, ListItemButton, ListItemText, ButtonBase, Typography
+  Toolbar, Grid, Box, Drawer, List, ListItemButton, ButtonBase, Typography
 } from '@mui/material';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import { RootState, AppDispatch, useAppDispatch } from '../../store';
@@ -9,7 +9,8 @@ import { IWorkspace } from '../../models/workspace';
 import { useSelector } from 'react-redux';
 import { 
   setDrawerOpened, 
-  setCurrentWorkspace
+  setCurrentWorkspace,
+  setIsDashboardPage
 } from '../../slices/globalSlice';
 import WorkspaceEditor from './WorkspaceEditor';
 import { resetStage } from '../../slices/algorithmSlice';
@@ -39,19 +40,29 @@ export default function WorkspacesDrawer(
   const workspaceList: IWorkspace[] = useSelector(
     (state: RootState) => state.workspace.list.values
   );  
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   useEffect(() => {
-    dispatch(resetStage());
-    if (selectedIndex !== -1) 
+    if (workspaceList.length !== 0) {
       dispatch(
-        setCurrentWorkspace(workspaceList[selectedIndex])
+        setCurrentWorkspace(workspaceList.find(
+          workspace => workspace.id === selected
+        ) || workspaceList[0])
       );
-    else
-      if (workspaceList.length !== 0)
-        dispatch(
-          setCurrentWorkspace(workspaceList[0])
-        );
-  }, [selectedIndex, workspaceList]);
+    }
+  }, [workspaceList]);
+
+  const [selected, setSelected] = useState<string>("");
+  const handleWorkspaceSelection = (id: string): void => {
+    setSelected(id);
+    dispatch(resetStage());
+    dispatch(setIsDashboardPage(false));
+    dispatch(
+      setCurrentWorkspace(
+        workspaceList.find(
+          workspace => workspace.id === id
+        ) || workspaceList[0]
+      )
+    );
+  }
 
   useEffect(() => {
     if (isSmDown)
@@ -89,7 +100,7 @@ export default function WorkspacesDrawer(
               sx={{ padding: 0 }}
             >
               <ButtonBase 
-                onClick={() => setSelectedIndex(index)}
+                onClick={() => handleWorkspaceSelection(d.id)}
                 sx={{height: isSmDown ? 66 : '0%', width: "100%" }}
               >
                 <Grid container spacing={2}
