@@ -10,18 +10,12 @@ import { Pagination } from '@mui/material';
 import { getMetadataListCall } from '../../network/algorithmApi';
 import { IMetadata } from '../../models/metadata';
 import { IWorkspace } from '../../models/workspace';
+import { MetadataService } from './../../services/MetadataService';
 
 
 export default function WorkspaceDashboard() {
   const dispatch: AppDispatch = useAppDispatch();
   const theme: Theme = useTheme();
-
-  const workspaceList: IWorkspace[] = useSelector(
-    (state: RootState) => state.workspace.list.values
-  );
-  const metadataList: IMetadata[] = useSelector(
-    (state: RootState) => state.algorithm.metadata.list
-  );
 
   const [showFourItems, setShowFourItems] = useState(window.innerHeight < 850);
   const [showTwoItems, setShowTwoItems] = useState(window.innerHeight < 590);
@@ -41,39 +35,20 @@ export default function WorkspaceDashboard() {
     };
   }, []);
 
-  const [metadataDisplay, setMetadataDisplay] = useState<IMetadata[]>([]);
-  useEffect(() => {
-    const metadataDisplay = metadataList.map((m) => {
-      const matchingRecord = workspaceList.find((w) => w.id === m.workspace_id);
-      return {
-        ...m,
-        workspace_name: matchingRecord?.name || "",
-      }
-    });
 
-    workspaceList.forEach((w) => {
-      const matchingRecord = metadataList.find((m) => m.workspace_id === w.id);
-      if (!matchingRecord) {
-        metadataDisplay.push({
-          workspace_id: w.id,
-          workspace_name: w.name,
-          is_empty: true,
-          is_transpiled: false,
-          all_normalized: false,
-          is_preprocessed: false
-        })
-      }
-    });
-    metadataDisplay.sort((a, b) => {
-      if (!a.is_transpiled && !a.is_empty) {
-        return -1;
-      } else if (a.all_normalized && a.is_preprocessed) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    setMetadataDisplay(metadataDisplay);
+  const workspaceList: IWorkspace[] = useSelector(
+    (state: RootState) => state.workspace.list.values
+  );
+  const metadataList: IMetadata[] = useSelector(
+    (state: RootState) => state.algorithm.metadata.list
+  );  
+  const [aggregatedMetadata, setAggregatedMetadata] = useState<IMetadata[]>([]);
+  useEffect(() => {
+    setAggregatedMetadata(
+      MetadataService().aggregateData(
+        metadataList, workspaceList
+      )
+    );
   }, [workspaceList, metadataList]);
 
 
@@ -119,7 +94,7 @@ export default function WorkspaceDashboard() {
       </Box>
       <CardContent>
         <Grid container spacing={1}>
-          {metadataDisplay
+          {aggregatedMetadata
             .slice((page - 1) * itemsPerPage, page * itemsPerPage)
             .map((d: IMetadata, index: number) => (
               <Grid item xs={12} md={12} lg={12} key={index}>
@@ -150,7 +125,7 @@ export default function WorkspaceDashboard() {
         </Grid>
         <Stack spacing={2} sx={{ marginTop: '1rem' }}>
           <Pagination
-            count={Math.ceil(metadataDisplay.length / itemsPerPage)}
+            count={Math.ceil(aggregatedMetadata.length / itemsPerPage)}
             page={page}
             onChange={(event, value) => nextPage(event, value)}
             variant="outlined"
