@@ -1,4 +1,5 @@
 # Proofster
+A proof assistant platform automating preprocessing and normalization procedure before resolution proofs, drastically reduce human errors of doing calculation by hand
 
 ## Tech stack
 <strong>Frontend</strong>: Typescript (React, Redux Toolkit, Axios, MaterialUI, HTML, CSS)
@@ -9,7 +10,7 @@
   </a>
 </p>
 
-<strong>Core Microservices:</strong> (Formula, Workspace, Auth): Python (Django, PostgreSQL)
+<strong>Core Microservices:</strong> (Formula, Workspace, Auth): Python (Django, PostgreSQL, RabbitMQ)
 
 <p align="left">
   <a href="https://skillicons.dev">
@@ -17,7 +18,7 @@
   </a>
 </p>
 
-<strong>Algorithm Microservice</strong>: Golang (Gin, Goroutine, MongoDB)
+<strong>Algorithm Microservice</strong>: Golang (Gin, Goroutine, MongoDB, RabbitMQ)
 
 <p align="left">
   <a href="https://skillicons.dev">
