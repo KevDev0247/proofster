@@ -54,8 +54,8 @@ Mobile Responsive Features
 
 ![55](https://user-images.githubusercontent.com/58012125/226523114-6f7905b9-bde1-4c33-8217-28e34297e807.jpg)
 ![66](https://user-images.githubusercontent.com/58012125/226524327-cff66f81-10ed-441a-8684-d65aa1a5a273.jpg)
-![77](https://user-images.githubusercontent.com/58012125/226524526-beb90e0e-9c3e-445b-b00f-18763900ae4d.jpg)
-![88](https://user-images.githubusercontent.com/58012125/226524536-86157bb8-d7ab-4f7f-af0e-1e3e3960e98d.jpg)
+![77](https://user-images.githubusercontent.com/58012125/226530368-ed1e7ab8-148b-4ced-a601-62119527369e.jpg)
+![88](https://user-images.githubusercontent.com/58012125/226530376-822231c8-27f6-4efc-8e64-3d0b16302f26.jpg)
 ![99](https://user-images.githubusercontent.com/58012125/226524374-1519ade1-9560-4ce7-9eb5-b3caa24f5a50.jpg)
 ![111](https://user-images.githubusercontent.com/58012125/226524387-96320a94-ab4b-42c1-8b86-1943e09d5384.jpg)
 
