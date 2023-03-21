@@ -7,7 +7,7 @@ import {
   TableContainer, TableHead, TableRow
 } from '@mui/material';
 import AlgorithmControl from './AlgorithmControl';
-import { IFormulaResult, INormalized } from '../../models/normalized';
+import { IFormulaResult, IResult } from '../../models/result';
 import { getResultsCall } from '../../network/algorithmApi';
 import { cnfName, nnfName } from '../../constants';
 import { pnfName, preprocessName, defaultName } from '../../constants';
@@ -22,7 +22,7 @@ export default function AlgorithmSteps(
 
   const dispatch: AppDispatch = useAppDispatch();
 
-  const renderResults: INormalized[] = useSelector(
+  const renderResults: IResult[] = useSelector(
     (state: RootState) => state.algorithm.normalize.renderResults
   );
   const stopStage: number = useSelector(
@@ -53,7 +53,7 @@ export default function AlgorithmSteps(
   return (
     <>
       {renderResults
-        .map((result: INormalized, resultIndex: number) => (
+        .map((result: IResult, resultIndex: number) => (
           <Grid item xs={12} md={12}>
             <Card key={resultIndex} sx={{ boxShadow: 3 }}>
               <CardContent>
