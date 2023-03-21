@@ -6,23 +6,15 @@ A proof assistant platform automating preprocessing and normalization procedure 
 
 <p align="left">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=ts,react,redux,materialui,html" />
+    <img src="https://skillicons.dev/icons?i=ts,react,redux,materialui" />
   </a>
 </p>
 
-<strong>Core Microservices:</strong> (Formula, Workspace, Auth): Python (Django, PostgreSQL, RabbitMQ)
+<strong>Microservices:</strong> Python (Django, PostgreSQL, RabbitMQ), Golang (Gin, Goroutine, MongoDB, RabbitMQ)
 
 <p align="left">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=python,django,postgres,rabbitmq" />
-  </a>
-</p>
-
-<strong>Algorithm Microservice</strong>: Golang (Gin, Goroutine, MongoDB, RabbitMQ)
-
-<p align="left">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=go,mongodb,rabbitmq" />
+    <img src="https://skillicons.dev/icons?i=python,django,postgres,go,mongodb,rabbitmq" />
   </a>
 </p>
 
