@@ -5,13 +5,13 @@ import { Alert, Grid } from '@mui/material';
 import { useTheme, useMediaQuery, Theme } from '@mui/material';
 import { Button, CircularProgress } from '@mui/material';
 import { getMetadataCall } from '../../network/algorithmApi';
-import { 
-  setShowCacheWarning, 
-  setShowError 
+import {
+  setShowCacheWarning,
+  setShowError
 } from '../../slices/globalSlice';
-import { 
-  nextPreprocessStage, 
-  setShowValidation 
+import {
+  nextPreprocessStage,
+  setShowValidation
 } from '../../slices/algorithmSlice';
 import {
   nextNormalizeStage, resetStage, clearCache, setError,
@@ -25,7 +25,7 @@ import { IWorkspace } from '../../models/workspace';
 
 
 export default function AlgorithmControl(
-  props: { 
+  props: {
     isInitialStep: boolean,
     isSmDown: boolean
   }
@@ -68,14 +68,14 @@ export default function AlgorithmControl(
 
   const currentWorkspace: IWorkspace = useSelector(
     (state: RootState) => state.global.currentWorkspace
-  ); 
+  );
   useEffect(() => {
     if (currentWorkspace.id != "")
       dispatch(
         getMetadataCall(currentWorkspace.id)
       );
   }, [currentWorkspace]);
-  
+
 
   const execute = (e: React.SyntheticEvent): void => {
     e.preventDefault();
@@ -98,8 +98,8 @@ export default function AlgorithmControl(
       return;
     }
 
-    if ((metadata.all_normalized && selectedAlgorithm === 0) || 
-        (metadata.is_preprocessed && selectedAlgorithm === 1)) {
+    if ((metadata.all_normalized && selectedAlgorithm === 0) ||
+      (metadata.is_preprocessed && selectedAlgorithm === 1)) {
       dispatch(
         StepsService().fetchStepsIfAvailable({
           algorithm: selectedAlgorithm,
@@ -158,7 +158,7 @@ export default function AlgorithmControl(
           </Alert>
         </Grid>
       ) :
-        <Grid item xs={5.5} md={6} container>
+        <Grid item xs={5.5} sm={4} md={4} lg={4} container>
           <Button
             variant="contained"
             color="primary"
@@ -169,42 +169,39 @@ export default function AlgorithmControl(
               <CircularProgress color="secondary" size={20} />
             }
           >
-            {!metadata.is_transpiled 
+            {!metadata.is_transpiled
               ? 'Transpile'
               : isInitialStep ? 'Execute' : 'Next'
             }
           </Button>
         </Grid>
       }
-      {isSmDown ? (
-        <Grid item xs={4} container>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={clear}
-            disabled={disableButton}
-          >
-            Clear Cache
-          </Button>
-        </Grid>
-      ) : (
-        <Grid item xs={4} sm={4.5} md={4.5} lg={5} container justifyContent="flex-end">
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={clear}
-            disabled={disableButton}
-          >
-            Clear Cache
-          </Button>
-        </Grid>
-      )}
-      <Grid item xs={2.5} sm={1.5} md={1.5} lg={1} container justifyContent="flex-end">
+      <Grid item xs={6.5} sm={8} md={8} lg={8}
+        container
+        justifyContent="flex-end"
+      >
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={clear}
+          disabled={disableButton}
+          sx={{ 
+            height: isSmDown ? 66 : '0%',
+            width: isSmDown ? 76 : '0%'
+          }}
+        >
+          Clear Cache
+        </Button>
         <Button
           variant="outlined"
           color="primary"
           onClick={reset}
           disabled={disableButton}
+          sx={{ 
+            height: isSmDown ? 66 : '0%',
+            width: isSmDown ? 76 : '0%',
+            marginLeft: 2 
+          }}
         >
           Reset
         </Button>

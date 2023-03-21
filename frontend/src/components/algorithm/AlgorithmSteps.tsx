@@ -54,8 +54,8 @@ export default function AlgorithmSteps(
     <>
       {renderResults
         .map((result: IResult, resultIndex: number) => (
-          <Grid item xs={12} md={12}>
-            <Card key={resultIndex} sx={{ boxShadow: 3 }}>
+          <Grid key={resultIndex} item xs={12} md={12}>
+            <Card sx={{ boxShadow: 3 }}>
               <CardContent>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12} container spacing={2}>

@@ -101,14 +101,20 @@ export default function FormulaDisplay() {
                 </TableCell>
                 <Hidden smDown>
                   <TableCell size='small'>
-                    <Typography variant="body1" gutterBottom><strong>Name</strong></Typography>
+                    <Typography variant="body1" gutterBottom>
+                      <strong>Name</strong>
+                    </Typography>
                   </TableCell>
                   <TableCell size='small'>
-                    <Typography variant="body1" gutterBottom><strong>Type</strong></Typography>
+                    <Typography variant="body1" gutterBottom>
+                      <strong>Type</strong>
+                    </Typography>
                   </TableCell>
                 </Hidden>
                 <TableCell size='small'>
-                  <Typography variant="body1" gutterBottom><strong>Formula</strong></Typography>
+                  <Typography variant="body1" gutterBottom>
+                    <strong>Formula</strong>
+                  </Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -122,7 +128,8 @@ export default function FormulaDisplay() {
                           <IconButton
                             color="primary"
                             onClick={() => selectFormula(d)}
-                            disabled={isSaving || isDeleting}>
+                            disabled={isSaving || isDeleting}
+                          >
                             <Edit />
                           </IconButton>
                         </Grid>
@@ -130,7 +137,8 @@ export default function FormulaDisplay() {
                           <IconButton
                             color="primary"
                             onClick={() => removeFormula(d.id)}
-                            disabled={isSaving || isDeleting}>
+                            disabled={isSaving || isDeleting}
+                          >
                             <DeleteOutlinedIcon />
                           </IconButton>
                         </Grid>
@@ -161,14 +169,24 @@ export default function FormulaDisplay() {
         </TableContainer>
       </Grid>
       {formulaList.length === 0 && (
-        <Grid item xs={12} md={12} container justifyContent="center" alignItems="center" spacing={2}>
+        <Grid item xs={12} md={12} 
+          container 
+          justifyContent="center" 
+          alignItems="center" 
+          spacing={2}
+        >
           <Grid item>
             <Typography variant="body1">No formulas in this argument</Typography>
           </Grid>
         </Grid>
       )}
       {isLoadingTable && (
-        <Grid item xs={12} md={12} container justifyContent="center" alignItems="center" spacing={2}>
+        <Grid item xs={12} md={12} 
+          container 
+          justifyContent="center" 
+          alignItems="center" 
+          spacing={2}
+        >
           <Grid item>
             <CircularProgress color="primary" />
           </Grid>
