@@ -53,11 +53,11 @@ Stats and dashboard
 Mobile Responsive Features
 
 ![55](https://user-images.githubusercontent.com/58012125/226523114-6f7905b9-bde1-4c33-8217-28e34297e807.jpg)
-![66](https://user-images.githubusercontent.com/58012125/226523384-fc5de18c-b3aa-45bc-a95f-39933017a703.jpg)
-![77](https://user-images.githubusercontent.com/58012125/226523928-ecbee5af-862f-4249-b756-4e359f162bb1.jpg)
-![88](https://user-images.githubusercontent.com/58012125/226523615-1e56178f-787f-4f3e-a1d2-60029c25b2c3.jpg)
-![99](https://user-images.githubusercontent.com/58012125/226523942-a2d03096-4b9f-4e11-9d73-2b1f5f796cc5.jpg)
-![111](https://user-images.githubusercontent.com/58012125/226523949-f774c7ab-5d74-4bf8-a667-7629452ca223.jpg)
+![66](https://user-images.githubusercontent.com/58012125/226524327-cff66f81-10ed-441a-8684-d65aa1a5a273.jpg)
+![77](https://user-images.githubusercontent.com/58012125/226524351-18d711a3-6c80-47de-a133-dce3b52372cb.jpg)
+![88](https://user-images.githubusercontent.com/58012125/226524360-07e64ad1-d85a-4657-8f6f-344932031cc6.jpg)
+![99](https://user-images.githubusercontent.com/58012125/226524374-1519ade1-9560-4ce7-9eb5-b3caa24f5a50.jpg)
+![111](https://user-images.githubusercontent.com/58012125/226524387-96320a94-ab4b-42c1-8b86-1943e09d5384.jpg)
 
 
 
