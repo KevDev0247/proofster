@@ -11,25 +11,6 @@ services:
     volumes:
       - ./logs:/app/logs
     restart: unless-stopped
-    depends_on:
-      - redis
-      - mongo
-    networks:
-      - backend
-
-  mongo:
-    image: mongo
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    networks:
-      - backend
-
-  redis:
-    image: redis:6.2-bullseye
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
     networks:
       - backend
 
