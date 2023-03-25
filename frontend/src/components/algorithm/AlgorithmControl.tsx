@@ -186,8 +186,8 @@ export default function AlgorithmControl(
           onClick={clear}
           disabled={disableButton}
           sx={{ 
-            height: isSmDown ? 66 : '0%',
-            width: isSmDown ? 76 : '0%'
+            height: isSmDown ? 66 : 36,
+            width: isSmDown ? 76 : 136
           }}
         >
           Clear Cache
@@ -198,8 +198,8 @@ export default function AlgorithmControl(
           onClick={reset}
           disabled={disableButton}
           sx={{ 
-            height: isSmDown ? 66 : '0%',
-            width: isSmDown ? 76 : '0%',
+            height: isSmDown ? 66 : 36,
+            width: isSmDown ? 76 : 76,
             marginLeft: 2 
           }}
         >
