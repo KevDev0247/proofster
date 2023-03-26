@@ -1,0 +1,16 @@
+version: '1'
+
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    networks:
+      - backend
+
+networks:
+  backend:
