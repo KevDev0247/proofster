@@ -40,14 +40,16 @@ function App() {
               container
               alignItems="center"
             >
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={toggleDrawer}
-              >
-                <MenuIcon />
-              </IconButton>
+              {isSmDown && (
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={toggleDrawer}
+                >
+                  <MenuIcon />
+                </IconButton>                
+              )}
               {!isSmDown && (
                 <Typography variant="h6">
                   Proofster

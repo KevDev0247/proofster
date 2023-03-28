@@ -152,7 +152,7 @@ export default function AlgorithmControl(
     <>
       {((normalizeCurrent === stopStage && normalizeCurrent !== 0) ||
         (preprocessCurrent === stopStage && preprocessCurrent !== 0)) ? (
-        <Grid item xs={5.5} sm={6} md={6} container>
+        <Grid item xs={5.5} sm={4} md={4} lg={4} container>
           <Alert severity="success">
             Algorithm Completed!
           </Alert>
@@ -179,6 +179,7 @@ export default function AlgorithmControl(
       <Grid item xs={6.5} sm={8} md={8} lg={8}
         container
         justifyContent="flex-end"
+        alignContent="end"
       >
         <Button
           variant="outlined"
