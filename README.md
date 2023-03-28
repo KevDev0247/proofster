@@ -10,11 +10,11 @@ A proof assistant platform automating preprocessing and normalization procedure 
   </a>
 </p>
 
-<strong>Microservices:</strong> Python (Django, PostgreSQL), Golang (Gin, Goroutine, MongoDB), RabbitMQ, Docker
+<strong>Microservices:</strong> Python (Django, PostgreSQL), Golang (Gin, Goroutine, MongoDB), RabbitMQ, Docker, Kubernetes, GCP
 
 <p align="left">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=python,django,postgres,go,mongodb,rabbitmq,docker" />
+    <img src="https://skillicons.dev/icons?i=python,django,postgres,go,mongodb,rabbitmq,docker,kubernetes,gcp" />
   </a>
 </p>
 
