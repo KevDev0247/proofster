@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: formulas-service-deployment
+spec:
+  selector:
+    matchLabels:
+      app: formulas-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: formulas-service
+    spec:
+      containers:
+        - name: formulas-service
+          image: kevdev0247/proofster-formulas:v1.0
+          ports:
+            - containerPort: 8002
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: formulas-service
+spec:
+  selector:
+    app: formulas-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8002
+  type: LoadBalancer

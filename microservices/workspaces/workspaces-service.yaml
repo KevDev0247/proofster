@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workspaces-service-deployment
+spec:
+  selector:
+    matchLabels:
+      app: workspaces-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: workspaces-service
+    spec:
+      containers:
+        - name: workspaces-service
+          image: kevdev0247/proofster-workspaces:v1.0
+          ports:
+            - containerPort: 8001
+              name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workspaces-service
+spec:
+  selector:
+    app: workspaces-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8001
+  type: LoadBalancer
