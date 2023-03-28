@@ -18,7 +18,7 @@ A proof assistant platform automating preprocessing and normalization procedure 
   </a>
 </p>
 
-<strong>Domain Layer</strong>: Vanilla Python (AWS Lambda, AWS API Gateway, Recursive Algorithms, Binary Trees)
+<strong>Domain Layer</strong>: Vanilla Python (Recursive Algorithms, Binary Trees), AWS(Lambda, API Gateway)
 
 <p align="left">
   <a href="https://skillicons.dev">
