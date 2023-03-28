@@ -1,4 +1,4 @@
-import { NORMALIZER_API as ALGORITHM_API } from "../api";
+import { ALGORITHM_API } from "../api";
 import { AsyncThunk, createAsyncThunk } from "@reduxjs/toolkit";
 import { serverErrorAddOn } from "../constants";
 import { IGetStepsRequest, INormalizeRequest } from "../models/requests";
