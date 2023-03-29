@@ -16,13 +16,13 @@ func CORSMiddleware() gin.HandlerFunc {
 		// Check if the request method is OPTIONS
 		if c.Request.Method == "OPTIONS" {
 			// Set the allowed origin and status code
-			c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 			c.AbortWithStatus(http.StatusOK)
 			return
 		}
 
 		// Set the allowed origin for other requests
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 
 		// Call the next middleware or handler
 		c.Next()
