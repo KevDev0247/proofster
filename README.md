@@ -29,7 +29,7 @@ Please try to not change too much data in the existing workspaces, those have be
 </p>
 
 ## System Design
-<img width="2031" alt="Proofster" src="https://user-images.githubusercontent.com/58012125/228708706-2dddc6ee-c247-4bb1-9576-373953c77e71.png">
+<img width="1823" alt="Proofster" src="https://user-images.githubusercontent.com/58012125/228708949-61269909-232f-481d-823c-9c9ee1279ed4.png">
 
 ## Gallery
 Editor & Control Panel
