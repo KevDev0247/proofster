@@ -28,6 +28,9 @@ Please try to not change too much data in the existing workspaces, those have be
   </a>
 </p>
 
+## System Design
+<img width="2031" alt="Proofster" src="https://user-images.githubusercontent.com/58012125/228708706-2dddc6ee-c247-4bb1-9576-373953c77e71.png">
+
 ## Gallery
 Editor & Control Panel
 
