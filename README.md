@@ -29,7 +29,10 @@ Please try to not change too much data in the existing workspaces, those have be
 </p>
 
 ## System Design
-<img width="1823" alt="Proofster" src="https://user-images.githubusercontent.com/58012125/228708949-61269909-232f-481d-823c-9c9ee1279ed4.png">
+<img width="1823" alt="system" src="https://user-images.githubusercontent.com/58012125/228732237-cf90d03b-be02-4155-b161-9a4b88190d9e.png">
+
+## Lifecycle of A Formula (Sequence Diagram)
+<img width="3609" alt="sequence2" src="https://user-images.githubusercontent.com/58012125/228732347-030072f2-663d-494b-ba00-cf64ec3a49a4.png">
 
 ## Gallery
 Editor & Control Panel
