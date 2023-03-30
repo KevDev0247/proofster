@@ -32,7 +32,7 @@ Please try to not change too much data in the existing workspaces, those have be
 <img width="1823" alt="system" src="https://user-images.githubusercontent.com/58012125/228732237-cf90d03b-be02-4155-b161-9a4b88190d9e.png">
 
 ## Lifecycle of A Formula (Sequence Diagram)
-<img width="2971" alt="sequence2" src="https://user-images.githubusercontent.com/58012125/228738140-b9f8cd86-38fa-4341-9171-868ec3a65a85.png">
+<img width="2789" alt="sequence2" src="https://user-images.githubusercontent.com/58012125/228738268-9402738a-306d-41ed-8e4a-e695bfbf9a4e.png">
 
 ## Gallery
 Editor & Control Panel
