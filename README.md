@@ -31,6 +31,9 @@ Please try to not change too much data in the existing workspaces, those have be
 ## System Design
 <img width="1823" alt="system" src="https://user-images.githubusercontent.com/58012125/228732237-cf90d03b-be02-4155-b161-9a4b88190d9e.png">
 
+## Algorithm Execution Workflow (Sequence Diagram)
+<img width="3212" alt="sequence1" src="https://user-images.githubusercontent.com/58012125/229008812-253b6c0e-c79d-48ff-aa1b-d51e34acc628.png">
+
 ## Lifecycle of A Formula (Sequence Diagram)
 <img width="2777" alt="sequence2" src="https://user-images.githubusercontent.com/58012125/228739277-7b47d49d-8e53-405b-9ad9-05b19a6808a5.png">
 
