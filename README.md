@@ -2,7 +2,8 @@
 A proof assistant platform automating preprocessing and normalization procedure before resolution proofs, drastically reduce human errors of doing calculation by hand.
 
 Prod: http://proofster.herokuapp.com
-Please try to not change too much data in the existing workspaces, those have been set up for demo
+
+See the gallery below for UI/UX
 ## Tech stack
 <strong>Frontend</strong>: Typescript (React, Redux Toolkit, Axios, MaterialUI, HTML, CSS)
 
