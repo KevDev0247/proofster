@@ -30,7 +30,7 @@ See the gallery below for UI/UX
 </p>
 
 ## System Design
-<img width="1823" alt="system" src="https://user-images.githubusercontent.com/58012125/228732237-cf90d03b-be02-4155-b161-9a4b88190d9e.png">
+<img width="1821" alt="system" src="https://user-images.githubusercontent.com/58012125/229211362-8328f7b4-2818-4b51-b083-05d6417ec430.png">
 
 ## Algorithm Execution Workflow (Sequence Diagram)
 <img width="3028" alt="sequence1" src="https://user-images.githubusercontent.com/58012125/229009145-72e6c6e5-e21e-47e4-8fb9-0ef0e72bfab5.png">
