@@ -39,7 +39,7 @@ See the gallery below for UI/UX
 <img width="3028" alt="sequence1" src="https://user-images.githubusercontent.com/58012125/229009145-72e6c6e5-e21e-47e4-8fb9-0ef0e72bfab5.png">
 
 ## Lifecycle of A Formula (Sequence Diagram)
-<img width="2777" alt="sequence2" src="https://user-images.githubusercontent.com/58012125/228739277-7b47d49d-8e53-405b-9ad9-05b19a6808a5.png">
+<img width="2785" alt="sequence2" src="https://user-images.githubusercontent.com/58012125/229257634-575b99c5-24c7-4b90-bec7-eedf9380256f.png">
 
 ## Gallery
 Editor & Control Panel
