@@ -1,5 +1,5 @@
 # Proofster
-A proof assistant platform automating preprocessing and normalization procedure before resolution proofs, drastically reduce human errors of doing calculation by hand.
+A proof assistant platform automating preprocessing and normalization procedure before resolution proofs in the context of first order logic, drastically reduce human errors of doing calculation by hand.
 
 Prod: http://proofster.herokuapp.com
 
