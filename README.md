@@ -3,7 +3,8 @@ A proof assistant platform automating preprocessing and normalization procedure 
 
 Prod: http://proofster.herokuapp.com
 
-See the gallery below for UI/UX
+See the bottom section Gallery for UI/UX
+
 ## Tech stack
 <strong>Frontend</strong>: Typescript (React, Redux Toolkit, Axios, MaterialUI, HTML, CSS)
 
