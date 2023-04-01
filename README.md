@@ -1,7 +1,7 @@
 # Proofster
 A proof assistant platform automating preprocessing and normalization procedure before resolution proofs in the context of first order logic, drastically reduce human errors of doing calculation by hand.
 
-Prod: http://proofster.herokuapp.com
+Prod: http://proofster.herokuapp.com (Deployment is set up but currently not running due to increasing GKE Autopilot Cluster cost)
 
 See the bottom section Gallery for UI/UX
 
@@ -45,15 +45,15 @@ See the bottom section Gallery for UI/UX
 ## Gallery
 Editor & Control Panel
 
-![00](https://user-images.githubusercontent.com/58012125/226516883-ba7358c6-17ae-47cb-8cd1-b7d36655db32.jpg)
+![md1](https://user-images.githubusercontent.com/58012125/229315386-c3ee064d-59da-4fcd-bba1-00408d28ebda.png)
 
 Steps generation
 
-![11](https://user-images.githubusercontent.com/58012125/226516893-9d4bec00-2f58-481e-a328-1f0efcb4170b.jpg)
+![md2](https://user-images.githubusercontent.com/58012125/229315397-e7acccbf-1c27-4543-8b01-bfc23c0d7977.png)
 
 Stages propagation reaches end
 
-![22](https://user-images.githubusercontent.com/58012125/226516930-916f48ef-c623-4bad-a4d4-989b8e33ddb5.jpg)
+![md3](https://user-images.githubusercontent.com/58012125/229315401-507855bd-089f-4c96-be45-9030a70645e1.png)
 
 Stats and dashboard
 
