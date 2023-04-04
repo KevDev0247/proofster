@@ -3,7 +3,7 @@ A proof assistant platform automating preprocessing and normalization procedure 
 
 Prod Frontend: http://proofster.herokuapp.com 
 <br /> Microservices Docker Images: https://hub.docker.com/u/kevdev0247 
-<br /> (Deployment no longer active! currently migrating from GKE Autopilot to Regular Cluster to save cost)
+<br /> (GKE Deployment no longer active! currently migrating from GKE Autopilot to Regular Cluster to save cost)
 
 See the bottom section Gallery for UI/UX
 
