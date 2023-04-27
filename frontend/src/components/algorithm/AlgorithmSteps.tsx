@@ -59,7 +59,7 @@ export default function AlgorithmSteps(
               <CardContent>
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12} container spacing={2}>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={12} lg={12}>
                       <Alert variant="filled" severity="info" icon={false}>
                         <Typography variant="h6" component="h1">
                           {(() => {
@@ -79,7 +79,7 @@ export default function AlgorithmSteps(
                         </Typography>
                       </Alert>
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={12} lg={12}>
                       <Alert variant="outlined" severity="info" icon={false}>
                         <Typography variant="h6" component="h1">
                           {result.stage_name}
