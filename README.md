@@ -1,7 +1,9 @@
 # Proofster
 A proof assistant platform automating preprocessing and normalization procedure before resolution proofs in the context of first order logic, drastically reduce human errors of doing calculation by hand.
 
-Prod: http://proofster.herokuapp.com <br />(Deployment is set up but currently not running due to increasing GKE Autopilot Cluster cost)
+Prod Frontend: http://proofster.herokuapp.com 
+<br /> Microservices Docker Images: https://hub.docker.com/u/kevdev0247 
+<br /> (GKE Deployment no longer active! currently migrating from GKE Autopilot to Regular Cluster to save cost)
 
 See the bottom section Gallery for UI/UX
 
@@ -14,7 +16,7 @@ See the bottom section Gallery for UI/UX
   </a>
 </p>
 
-<strong>Microservices:</strong> Python (Django, PostgreSQL), Golang (Gin, Goroutine, MongoDB), RabbitMQ, Docker, Kubernetes, GCP
+<strong>Microservices:</strong> Python (Django, PostgreSQL), Go (Gin, Goroutine, MongoDB), RabbitMQ, Docker, Kubernetes, GCP
 
 <p align="left">
   <a href="https://skillicons.dev">
@@ -34,7 +36,7 @@ See the bottom section Gallery for UI/UX
 <img width="1821" alt="system" src="https://user-images.githubusercontent.com/58012125/229211362-8328f7b4-2818-4b51-b083-05d6417ec430.png">
 
 ## Data Structure (Sample Data Structure and UML Diagram)
-<img width="2687" alt="datastructure" src="https://user-images.githubusercontent.com/58012125/229257423-2e87247d-31a6-4d13-bfe9-f1faa6e0008e.png">
+<img width="2677" alt="datastructure" src="https://user-images.githubusercontent.com/58012125/229700951-155b2130-9150-4953-9aab-5bd805ef4b61.png">
 
 ## Algorithm Execution Workflow (Sequence Diagram)
 <img width="3028" alt="sequence1" src="https://user-images.githubusercontent.com/58012125/229009145-72e6c6e5-e21e-47e4-8fb9-0ef0e72bfab5.png">
