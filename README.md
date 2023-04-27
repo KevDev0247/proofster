@@ -16,7 +16,7 @@ See the bottom section Gallery for UI/UX
   </a>
 </p>
 
-<strong>Microservices:</strong> Python (Django, PostgreSQL), Golang (Gin, Goroutine, MongoDB), RabbitMQ, Docker, Kubernetes, GCP
+<strong>Microservices:</strong> Python (Django, PostgreSQL), Go (Gin, Goroutine, MongoDB), RabbitMQ, Docker, Kubernetes, GCP
 
 <p align="left">
   <a href="https://skillicons.dev">
