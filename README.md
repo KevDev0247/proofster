@@ -1,8 +1,7 @@
 # Proofster
 A proof assistant platform automating preprocessing and normalization procedure before resolution proofs in the context of first order logic, drastically reduce human errors of doing calculation by hand.
 
-Prod Frontend: http://proofster.herokuapp.com 
-<br /> Microservices Docker Images: https://hub.docker.com/u/kevdev0247 
+Microservices Docker Images: https://hub.docker.com/u/kevdev0247 
 <br /> (GKE Deployment no longer active! currently migrating from GKE Autopilot to Regular Cluster to save cost)
 
 See the bottom section Gallery for UI/UX
