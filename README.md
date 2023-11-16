@@ -23,7 +23,7 @@ See the bottom section Gallery for UI/UX
   </a>
 </p>
 
-<strong>Domain Layer</strong>: Vanilla Python (Recursive Algorithms, Binary Trees), AWS(Lambda, API Gateway)
+<strong>Domain Layer</strong>: Vanilla Python (Recursive Algorithms, Binary Trees), AWS (Lambda, API Gateway)
 
 <p align="left">
   <a href="https://skillicons.dev">
