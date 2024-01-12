@@ -98,3 +98,29 @@ Run
 npm start 
 </pre>
 Inside `~/Projects/proofster/frontend`
+
+## Trying it Out
+
+### Infix
+<pre>
+ ∀x  (  ¬  (  F(x)  )  )
+ ∀x  (  F(x)  ⇒  ¬  (  G(x)  )  )
+ ∀x  (  F(x)  ⇒  ¬  (  H(x)  )  )
+ ∀x  ∃y  (  (  F(y)  ∧  G(y)  )  ∨  ¬  (  F(x)  ⇒  G(x)  )  )
+</pre>
+
+### Postfix
+<pre>
+input FORM F y FORM G y AND FORM F x FORM G x -> OR EXIST y FORALL x
+input FORM F x FORM H x NOT -> FORALL x
+input FORM F x FORM G x NOT -> FORALL x
+input FORM F x NOT FORALL x
+</pre>
+
+### Natural
+<pre>
+FORALL x EXIST y ( ( FORM F y AND FORM G y ) OR NOT ( FORM F x -> FORM G x ) )
+FORALL x ( FORM F x -> NOT ( FORM H x ) )
+FORALL x ( FORM F x -> NOT ( FORM G x ) )
+FORALL x ( NOT ( FORM F x ) )
+</pre>
