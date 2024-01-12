@@ -103,10 +103,10 @@ Inside `~/Projects/proofster/frontend`
 
 ### Infix
 <pre>
- ∀x  (  ¬  (  F(x)  )  )
- ∀x  (  F(x)  ⇒  ¬  (  G(x)  )  )
- ∀x  (  F(x)  ⇒  ¬  (  H(x)  )  )
  ∀x  ∃y  (  (  F(y)  ∧  G(y)  )  ∨  ¬  (  F(x)  ⇒  G(x)  )  )
+ ∀x  (  F(x)  ⇒  ¬  (  H(x)  )  )
+ ∀x  (  F(x)  ⇒  ¬  (  G(x)  )  )
+ ∀x  (  ¬  (  F(x)  )  )
 </pre>
 
 ### Postfix
