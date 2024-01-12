@@ -78,7 +78,7 @@ go run main.go
 </pre>
 Inside `~/Projects/proofster/microservices/algorithm`
 
-### Workdspaces Service
+### Workspaces Service
 Run
 <pre>
 poetry run python manage.py runserver 0.0.0.0:8001
