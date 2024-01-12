@@ -69,5 +69,32 @@ Mobile Responsive Features
 ![99](https://user-images.githubusercontent.com/58012125/226524374-1519ade1-9560-4ce7-9eb5-b3caa24f5a50.jpg)
 ![111](https://user-images.githubusercontent.com/58012125/226524387-96320a94-ab4b-42c1-8b86-1943e09d5384.jpg)
 
+## Getting Started
 
+### Algorithm Service
+Run
+<pre>
+go run main.go
+</pre>
+Inside `~/Projects/proofster/microservices/algorithm`
 
+### Workdspaces Service
+Run
+<pre>
+poetry run python manage.py runserver 0.0.0.0:8001
+</pre>
+Inside `~/Projects/proofster/microservices/workspaces`
+
+### Formulas Service
+Run
+<pre>
+poetry run python manage.py runserver 0.0.0.0:8002
+</pre>
+Inside `~/Projects/proofster/microservices/formulas`
+
+### Frontend
+Run
+<pre>
+npm start 
+</pre>
+Inside `~/Projects/proofster/frontend`
